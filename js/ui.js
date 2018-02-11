@@ -1,42 +1,37 @@
-// *********************************************************************************************
-// *********************************************************************************************
-//
-// VeryAPI
-// Copyright 2016 Breato Ltd.
-//
-// User interface functions
-//
-// Requirements in index.html for successful operation:
-//  A div with an ID for each form
-//  Message box element at the end of index.html so that it is displayed above everything else
-//
-// *********************************************************************************************
-// *********************************************************************************************
+/**
+ * @file ui.js
+ * @author Basil Fisk
+ * @copyright Breato Ltd 2018
+ */
 
-var ui = (function (checks) {
-	"use strict";
+/**
+ * @namespace UserInterface
+ * @author Basil Fisk
+ * @copyright Breato Ltd 2018
+ * @property {integer} xxx ???????????
+ * @description <p>User interface functions.<br>
+ * Requirements in index.html for successful operation:<br><ul>
+ * <li>A div with an ID for each form</li>
+ * <li>Message box element at the end of index.html so that it is displayed above everything else</li>
+ * </ul></p>
+ */
 
-	var _defs = {},
-		_post,
-		_msgOK,
-		_valn = {};
+var UserInterface = {
+	_defs: {},
+	_post: undefined,
+	_msgOK: undefined,
+	_valn: {},
 
-	// ***************************************************************************************
-	//
-	//		INTERNAL FUNCTIONS
-	//
-	// ***************************************************************************************
-
-	// ---------------------------------------------------------------------------------------
-	// Validate the format of the supplied string
-	//
-	// Argument 1 : Expected format of string
-	// Argument 2 : Name of field being checked
-	// Argument 3 : String to be checked
-	//
-	// Return true or false
-	// ---------------------------------------------------------------------------------------
-	function check_format (format, title, value) {
+	/**
+	 * @method checkFormat
+	 * @author Basil Fisk
+	 * @param {string} format Object with min and max values.
+	 * @param {string} title Name of field being checked.
+	 * @param {string} value String to be checked.
+	 * @return True or false.
+	 * @description Validate the format of the supplied string.
+	 */
+	checkFormat: function (format, title, value) {
 		var pattern, error, regex;
 
 		// No validation required
@@ -51,7 +46,7 @@ var ui = (function (checks) {
 			// Error if format not recognised
 			if (pattern == undefined) {
 				console.error('Unrecognised validation format [' + format + ']');
-				message_build('UI002', [format]);
+				this.messageBuild('UI002', [format]);
 				return false;
 			}
 			else {
@@ -62,42 +57,42 @@ var ui = (function (checks) {
 				}
 				// Show an error message
 				else {
-					message_build('UI003', [title, error]);
+					this.messageBuild('UI003', [title, error]);
 					return false;
 				}
 			}
 		}
-	}
+	},
 
-	// ---------------------------------------------------------------------------------------
-	// If field is mandatory, check that a value has been entered
-	//
-	// Argument 1 : Mandatory flag (true|false)
-	// Argument 2 : Name of field being checked
-	// Argument 3 : String to be checked
-	//
-	// Return true or false
-	// ---------------------------------------------------------------------------------------
-	function check_mandatory (mandatory, title, value) {
+	/**
+	 * @method checkMandatory
+	 * @author Basil Fisk
+	 * @param {string} mandatory Mandatory flag (true|false).
+	 * @param {string} title Name of field being checked.
+	 * @param {string} value String to be checked.
+	 * @return True or false.
+	 * @description Check whether the value is true or false.
+	 */
+	checkMandatory: function (mandatory, title, value) {
 		if (mandatory && value === '') {
-			message_build('UI001', [title]);
+			this.messageBuild('UI001', [title]);
 			return false;
 		}
 		else {
 			return true;
 		}
-	}
+	},
 
-	// ---------------------------------------------------------------------------------------
-	// Validate the range of a number
-	//
-	// Argument 1 : Object with min and max values
-	// Argument 2 : Name of field being checked
-	// Argument 3 : String to be checked (the format should already have been validated)
-	//
-	// Return true or false
-	// ---------------------------------------------------------------------------------------
-	function check_range (range, title, value) {
+	/**
+	 * @method checkRange
+	 * @author Basil Fisk
+	 * @param {string} range Object with min and max values.
+	 * @param {string} title Name of field being checked.
+	 * @param {string} value String to be checked (the format should already have been validated).
+	 * @return True or false.
+	 * @description Validate the range of a number.
+	 */
+	checkRange: function (range, title, value) {
 		var error = '', min = true, max = true;
 
 		// Check minimum range
@@ -122,20 +117,20 @@ var ui = (function (checks) {
 		}
 		// Show an error message
 		else {
-			message_build('UI004', [title, error]);
+			this.messageBuild('UI004', [title, error]);
 			return false;
 		}
-	}
+	},
 
-	// ---------------------------------------------------------------------------------------
-	// Convert the text data from a field to the correct type
-	//
-	// Argument 1 : Type of data
-	// Argument 2 : Value to be converted
-	//
-	// Return converted value
-	// ---------------------------------------------------------------------------------------
-	function convert_data (type, value) {
+	/**
+	 * @method convertData
+	 * @author Basil Fisk
+	 * @param {string} type Type of data.
+	 * @param {string} value Value to be converted.
+	 * @return Converted value.
+	 * @description Convert the text data from a field to the correct type.
+	 */
+	convertData: function (type, value) {
 		switch (type) {
 			case 'integer':
 				return parseInt(value);
@@ -144,30 +139,31 @@ var ui = (function (checks) {
 			default:
 				return value;
 		}
-	}
+	},
 
-	// ---------------------------------------------------------------------------------------------
-	// Find index of element in UI object
-	//
-	// Argument 1 : Name of element
-	//
-	// Index in array or -1
-	// ---------------------------------------------------------------------------------------------
-	function find_element (name) {
+	/**
+	 * @method findElement
+	 * @author Basil Fisk
+	 * @param {string} name Name of element.
+	 * @return Index in array or -1.
+	 * @description Find index of element in UI object.
+	 */
+	findElement: function (name) {
 		var i;
 		for (i=0; i<_defs.length; i++) {
 			if (_defs[i].name === name) { return i; }
 		}
 		return -1;
-	}
+	},
 
-	// ---------------------------------------------------------------------------------------
-	// Build a message to be displayed in a dialogue box
-	//
-	// Argument 1 : Message code
-	// Argument 2 : Message parameter array
-	// ---------------------------------------------------------------------------------------
-	function message_build (code, prms) {
+	/**
+	 * @method messageBuild
+	 * @author Basil Fisk
+	 * @param {string} code Message code.
+	 * @param {array} prms Message parameters.
+	 * @description Build a message to be displayed in a dialogue box.
+	 */
+	messageBuild: function (code, prms) {
 		var msg, text, i, title;
 
 		// Find message and substitute parameters
@@ -182,17 +178,18 @@ var ui = (function (checks) {
 		title += ' [' + code + ']';
 
 		// Display the message
-		message_show(title, text);
-	}
+		this.messageShow(title, text);
+	},
 
-	// ---------------------------------------------------------------------------------------
-	// Display a message in a dialogue box
-	//
-	// Argument 1 : Title of message box
-	// Argument 2 : Message to be displayed
-	// Argument 3 : Function to be run after OK button is pressed (optional)
-	// ---------------------------------------------------------------------------------------
-	function message_show (title, msg, callback) {
+	/**
+	 * @method messageShow
+	 * @author Basil Fisk
+	 * @param {string} title Title of message box.
+	 * @param {string} msg Message to be displayed.
+	 * @param {function} callback Function to be run after OK button is pressed (optional).
+	 * @description Display a message in a dialogue box.
+	 */
+	messageShow: function (title, msg, callback) {
 		var div = '';
 
 		// Save the function
@@ -222,15 +219,16 @@ var ui = (function (checks) {
 		$('#messageBox').remove();
 		$('body').append(div);
 		$('#messageBox').modal('show');
-	}
+	},
 
-	// ---------------------------------------------------------------------------------------------
-	// Display the hostname and an optional name in the title bar
-	//      {optional} - VeryAPI [{hostname}]
-	//
-	// Argument 1 : Name (optional)
-	// ---------------------------------------------------------------------------------------------
-	function page_title (name) {
+	/**
+	 * @method pageTitle
+	 * @author Basil Fisk
+	 * @param {string} name Name (optional).
+	 * @description Display the hostname and an optional name in the title bar.<br>
+	 * {optional} - VeryAPI [{hostname}]
+	 */
+	pageTitle: function (name) {
 		var title, host;
 
 		// Add divider after optional name
@@ -253,8 +251,15 @@ var ui = (function (checks) {
 				break;
 		}
 		$('#pageTitle').text(title);
-	}
+	},
 
+	/**
+	 * @method pageTitle
+	 * @author Basil Fisk
+	 * @param {string} name Name (optional).
+	 * @description Display the hostname and an optional name in the title bar.<br>
+	 * {optional} - VeryAPI [{hostname}]
+	 */
 	// ---------------------------------------------------------------------------------------
 	// Run the set of checks defined for a field
 	//
@@ -271,7 +276,7 @@ var ui = (function (checks) {
 		mand = (checks.mandatory === undefined) ? false : checks.mandatory;
 
 		// If field is mandatory, check that a value has been entered
-		if (!check_mandatory(mand, title, value)) {
+		if (!this.checkMandatory(mand, title, value)) {
 			return false;
 		}
 		// Field is optional
@@ -283,12 +288,12 @@ var ui = (function (checks) {
 
 			// Value entered, so carry out rest of checks
 			if (checks.format) {
-				if (!check_format(checks.format, title, value)) {
+				if (!this.checkFormat(checks.format, title, value)) {
 					return false;
 				}
 			}
 			if (checks.range) {
-				if (!check_range(checks.range, title, value)) {
+				if (!this.checkRange(checks.range, title, value)) {
 					return false;
 				}
 			}
@@ -454,7 +459,7 @@ var ui = (function (checks) {
 			var index, form, title, fields, names, i, div = '';
 
 			// Locate UI element
-			index = find_element(form);
+			index = this.findElement(form);
 
 			// Read fields and their names
 			title = _defs[index].title;
@@ -527,7 +532,7 @@ var ui = (function (checks) {
 			var index, title, fields, names, i, elem, value, div = '';
 
 			// Locate UI element
-			index = find_element(form);
+			index = this.findElement(form);
 
 			// Read fields and their names
 			title = _defs[index].title;
@@ -726,7 +731,7 @@ var ui = (function (checks) {
 		// Argument 3 : Function to be run after OK button is pressed (optional)
 		// ---------------------------------------------------------------------------------------
 	//        messageBox: function (title, text, callback) {
-	//            message_show(title, text, callback);
+	//            this.messageShow(title, text, callback);
 	//        },
 		// ---------------------------------------------------------------------------------------
 		// Display a message in a dialogue box
@@ -753,7 +758,7 @@ var ui = (function (checks) {
 
 			// Display the message
 	//			console.log(text);
-			message_show(title, text, callback);
+			this.messageShow(title, text, callback);
 		},
 
 		// ---------------------------------------------------------------------------------------
@@ -772,7 +777,7 @@ var ui = (function (checks) {
 		// Argument 1 : Name (optional)
 		// ---------------------------------------------------------------------------------------------
 		pageTitle: function (name) {
-			page_title(name);
+			this.pageTitle(name);
 		},
 
 		// ---------------------------------------------------------------------------------------
@@ -842,7 +847,7 @@ var ui = (function (checks) {
 										return;
 									}
 									// Convert value to the correct type
-									temp[name].push(convert_data(fields[name].type, elem[e]));
+									temp[name].push(this.convertData(fields[name].type, elem[e]));
 								}
 							}
 							// Field holds a single value (default)
@@ -852,7 +857,7 @@ var ui = (function (checks) {
 									return;
 								}
 								// Convert value to the correct type
-								temp[name] = convert_data(fields[name].type, text);
+								temp[name] = this.convertData(fields[name].type, text);
 							}
 						}
 						// Nothing in the 'options.checks' section, so treat value as text
@@ -945,7 +950,7 @@ var ui = (function (checks) {
 									return;
 								}
 								// Convert value to the correct type
-								temp[name].push(convert_data(fields[name].type, elem[e]));
+								temp[name].push(this.convertData(fields[name].type, elem[e]));
 							}
 						}
 						// Field holds a single value (default)
@@ -955,7 +960,7 @@ var ui = (function (checks) {
 								return;
 							}
 							// Convert value to the correct type
-							temp[name] = convert_data(fields[name].type, text);
+							temp[name] = this.convertData(fields[name].type, text);
 						}
 					}
 					// Nothing in the 'options.checks' section, so treat value as text
@@ -1115,7 +1120,7 @@ console.log(obj);
 			var index, body = '', i, n, row, rowid, cell = {};
 
 			// Locate UI element
-			index = find_element(id);
+			index = this.findElement(id);
 
 			// Build the container
 			body += '<div class="modal-dialog" role="document" style="width:50%">'; // TODO Make a parameter
@@ -1203,7 +1208,7 @@ console.log(obj);
 		// Return true or false
 		// ---------------------------------------------------------------------------------------
 		userAccess: function (name) {
-			return (find_element(name) > -1) ? true : false;
+			return (this.findElement(name) > -1) ? true : false;
 		},
 
 		// ---------------------------------------------------------------------------------------
@@ -1271,7 +1276,7 @@ console.log(obj);
 			$('body').append(html);
 
 			// Show the page title
-			page_title();
+			this.pageTitle();
 		},
 
 		// ---------------------------------------------------------------------------------------

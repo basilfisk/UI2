@@ -1,26 +1,25 @@
 /**
-* @file function.js
-* @author Basil Fisk
-* @copyright Breato Ltd 2018
-* @description User defined functions for controlling the operation of forms in UI2.
-*/
+ * @file functions.js
+ * @author Basil Fisk
+ * @copyright Breato Ltd 2018
+ */
 
 /**
- * @constructor Functions
+ * @namespace UserFunctions
  * @author Basil Fisk
- * @description Functions for controlling the operation of forms in UI2.
+ * @property {integer} xxx ???????????
+ * @description User defined functions for controlling the operation of forms in UI2.
  */
-class Functions {
-	constructor () {
-	}
+var UserFunctions = {
+	xxx: 0,
 
 	/**
-	 * @method init
-	 * @memberof Functions
+	 * @method groupUpsert
+	 * @author Basil Fisk
 	 * @param {object} data Data object read from the form.
-	 * @description Add a new group to the company.
+	 * @description Functions for controlling the operation of forms in UI2.
 	 */
-	groupUpsert (data) {
+	groupUpsert: function (data) {
 		var obj = {};
 
 		obj.id = admin.company._id;
@@ -30,6 +29,6 @@ class Functions {
 
 		api_call('companyGroupUpsert', obj, company_group_table_load);
 	}
-}
+};
 
-exports.module Functions;
+UserFunctions.init(); // ???????????????
