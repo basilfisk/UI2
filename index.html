@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>VeryAPI</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Downloaded libraries -->
+	<link rel="stylesheet" href="packages/bootstrap.min.css">
+	<link rel="stylesheet" href="packages/bootstrap-datetimepicker.css">
+	<script src="packages/jquery.min.js"></script>
+	<script src="packages/moment.min.js"></script>
+	<script src="packages/bootstrap.min.js"></script>
+	<script src="packages/bootstrap-datetimepicker.js"></script>
+	<!--
+	<link rel="stylesheet" href="packages/bootstrap-multiselect.css">
+	<script src="packages/bootstrap-multiselect.js"></script>
+	-->
+
+	<!-- User interface functions -->
+	<script src="js/api.js"></script>
+	<script src="js/ui.js"></script>
+
+	<!-- Configuration functions -->
+	<script src="js/config.js"></script>
+	<script src="js/messages.js"></script>
+
+	<!-- Application definitions -->
+	<script src="data/functions.js"></script>
+	<script src="data/forms.js"></script>
+
+	<!-- Form definitions OLD -->
+	<script src="app/console.js"></script>
+	<script src="app/forms.js"></script>
+	<script src="app/reports.js"></script>
+</head>
+
+<body onload="onStart();">
+
+	<!-- ****************************************************************************************************
+			REPORTS
+	***************************************************************************************************** -->
+
+	<!-- Event summary -->
+	<div class="modal fade" id="reportEventSummary" tabindex="-1" role="dialog">
+	    <div class="modal-dialog" role="document" style="width:75%;">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					<br/>
+					<h4>Event Summary
+						<button type="button" class="btn btn-info btn-sm pull-right" onclick="event_summary('default'); return false;"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+					</h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal bv-form">
+						<table class="table table-striped table-condensed table-bordered" id="reportEventSummary-rows">
+                            <thead></thead>
+							<tbody></tbody>
+                        </table>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<!-- List of recent errors -->
+	<div class="modal fade" id="reportRecentErrors" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="width:75%;">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					<br/>
+					<h4>Recent Errors
+						<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="collapse" data-target="#reportRecentErrorsFilter"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span></button>
+						<button type="button" class="btn btn-info btn-sm pull-right" onclick="recent_errors('default'); return false;"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+					</h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal bv-form">
+						<div id="reportRecentErrorsFilter" class="collapse">
+							<div class="row">
+								<label for="reportRecentErrorsLimit" class="col-md-2 control-label"># Records:</label>
+								<div class="col-md-2">
+									<input type="text" class="form-control" id="reportRecentErrorsLimit" placeholder="Integer">
+								</div>
+								<button type="submit" class="btn btn-info btn-sm" onclick="set_filter_values('reportRecentErrors'); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+							</div>
+						</div>
+						<div class="row">
+							<p>&nbsp;</p>
+						</div>
+						<table class="table table-striped table-condensed table-bordered" id="reportRecentErrors-rows">
+                            <thead></thead>
+							<tbody></tbody>
+                        </table>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<!-- List of recent transactions -->
+	<div class="modal fade" id="reportRecentTrans" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document" style="width:75%;">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					<br/>
+					<h4>Recent Transactions
+						<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="collapse" data-target="#reportRecentTransFilter"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span></button>
+						<button type="button" class="btn btn-info btn-sm pull-right" onclick="recent_trans('default'); return false;"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+					</h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal bv-form">
+						<div id="reportRecentTransFilter" class="collapse">
+							<div class="row">
+								<div class='col-sm-3'>
+									<label for="reportRecentTransStart" class="col-sm-4 control-label">Start Time:</label>
+									<div class="col-sm-8 input-group date" id="reportRecentTransStart">
+										<input type="text" class="form-control" id="reportRecentTransStartDate" />
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+								<script type="text/javascript">
+									$(function () {
+										$('#reportRecentTransStart').datetimepicker({
+											locale: 'en',
+											format: 'DD/MM/YYYY HH:mm:ss'
+										});
+									});
+								</script>
+								<div class='col-sm-3'>
+									<label for="reportRecentTransEnd" class="col-sm-4 control-label">End Time:</label>
+									<div class="col-sm-8 input-group date" id="reportRecentTransEnd">
+										<input type="text" class="form-control" id="reportRecentTransEndDate" />
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+								<script type="text/javascript">
+									$(function () {
+										$('#reportRecentTransEnd').datetimepicker({
+											locale: 'en',
+											format: 'DD/MM/YYYY HH:mm:ss'
+										});
+									});
+								</script>
+								<div class='col-sm-3'>
+									<label for="reportRecentTransLimit" class="col-sm-4 control-label"># Records:</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="reportRecentTransLimit" placeholder="Integer">
+									</div>
+								</div>
+								<button type="submit" class="btn btn-info btn-sm" onclick="set_filter_values('reportRecentTrans'); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+							</div>
+						</div>
+						<div class="row">
+							<p>&nbsp;</p>
+						</div>
+						<table class="table table-striped table-condensed table-bordered" id="reportRecentTrans-rows">
+                            <thead></thead>
+							<tbody></tbody>
+                        </table>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<!-- List of external usage statistics -->
+	<div class="modal fade" id="reportUsageStats" tabindex="-1" role="dialog">
+	    <div class="modal-dialog" role="document" style="width:75%;">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					<br/>
+					<h4>Usage Statistics
+						<button type="button" class="btn btn-info btn-sm pull-right" onclick="usage_stats('default'); return false;"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+					</h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal bv-form">
+						<table class="table table-striped table-condensed table-bordered" id="reportUsageStats-rows">
+                            <thead></thead>
+							<tbody></tbody>
+                        </table>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<!-- ****************************************************************************************************
+			BREAK-OUT REPORTS THAT ARE DISPLAYED ABOVE OTHER REPORTS
+	***************************************************************************************************** -->
+
+	<!-- List of transactions with the selected message code -->
+	<div class="modal fade" id="codes" tabindex="-1" role="dialog">
+	    <div class="modal-dialog" role="document" style="width:75%;">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					<br/>
+					<h4>List of Transactions with the same Message Code</h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal bv-form">
+						<table class="table table-striped table-condensed table-bordered" id="codes-rows">
+                            <thead></thead>
+							<tbody></tbody>
+                        </table>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<!-- List of transactions with the selected command -->
+	<div class="modal fade" id="commands" tabindex="-1" role="dialog">
+	    <div class="modal-dialog" role="document" style="width:75%;">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					<br/>
+					<h4>List of Transactions with the same Package</h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal bv-form">
+						<table class="table table-striped table-condensed table-bordered" id="commands-rows">
+                            <thead></thead>
+							<tbody></tbody>
+                        </table>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<!-- List of transactions with the selected function -->
+	<div class="modal fade" id="functions" tabindex="-1" role="dialog">
+	    <div class="modal-dialog" role="document" style="width:75%;">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					<br/>
+					<h4>List of Transactions with the same Function</h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal bv-form">
+						<table class="table table-striped table-condensed table-bordered" id="functions-rows">
+                            <thead></thead>
+							<tbody></tbody>
+                        </table>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<!-- List of transactions in a selected session -->
+	<div class="modal fade" id="sessions" tabindex="-1" role="dialog">
+	    <div class="modal-dialog" role="document" style="width:75%;">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal">&times;</button>
+					<br/>
+					<h4>List of Transactions in the same Session</h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal bv-form">
+						<table class="table table-striped table-condensed table-bordered" id="sessions-rows">
+                            <thead></thead>
+							<tbody></tbody>
+                        </table>
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+</body>
+</html>

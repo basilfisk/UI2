@@ -1,0 +1,1585 @@
+[
+	{	"name" : "admin",
+		"menu": {
+			"menu" : "main",
+			"title": "Admin",
+			"order": 1
+		},
+		"access": ["superuser"]
+	},
+	{	"name" : "forms",
+		"menu": {
+			"menu" : "main",
+			"title": "Data",
+			"order": 2
+		},
+		"access": ["superuser","manager","user"]
+	},
+	{	"name" : "reports",
+		"menu": {
+			"menu" : "main",
+			"title": "Reports",
+			"order": 3
+		},
+		"access": ["superuser","manager","user"]
+	},
+	{	"name" : "ZZZaboutForm",
+		"title": "Information About the Current User",
+		"menu": {
+			"menu" : "main",
+			"title": "About",
+			"order": 4,
+			"select": "about_show()"
+		},
+		"access": ["superuser","manager","user"],
+		"fields" : {
+			"aboutUsername": {
+				"element": "username",
+				"title": "User Name",
+				"type": "text",
+				"visible": true,
+				"edit": false
+			},
+			"aboutCompany": {
+				"element": "company",
+				"title": "Company",
+				"type": "text",
+				"visible": true,
+				"edit": false
+			},
+			"aboutGroup": {
+				"element": "group",
+				"title": "Group",
+				"type": "text",
+				"visible": true,
+				"edit": false
+			},
+			"aboutRole": {
+				"element": "role",
+				"title": "Role",
+				"type": "text",
+				"visible": true,
+				"edit": false
+			},
+			"aboutClients": {
+				"element": "clients",
+				"title": "Clients",
+				"type": "text",
+				"visible": true,
+				"edit": false
+			},
+			"aboutPackages": {
+				"element": "packages",
+				"title": "Packages",
+				"type": "text",
+				"visible": true,
+				"edit": false
+			},
+			"aboutJWT": {
+				"element": "jwt",
+				"title": "JSON Web Token",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"display": {
+						"size": 8
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "commandAddForm",
+		"title" : "Add Command",
+		"buttons": {
+			"add": true
+		},
+		"access": ["superuser","manager","user"],
+		"fields" : {
+			"commandAddName": {
+				"element": "name",
+				"title": "Command Name",
+				"description": "Enter name of command",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"commandAddService": {
+				"element": "service",
+				"title": "Service Name",
+				"description": "Enter name of service",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "commandEditForm",
+		"title" : "Edit Command",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager","user"],
+		"fields" : {
+			"commandEditId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"commandEditName": {
+				"element": "name",
+				"title": "Command Name",
+				"description": "Enter name of command",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"commandEditService": {
+				"element": "service",
+				"title": "Service Name",
+				"description": "Enter name of service",
+				"type": "list",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "commandEditCommandForm",
+		"title" : "Edit Command Text",
+		"buttons": {
+			"save": true,
+			"delete": true
+		},
+		"access": ["superuser","manager","user"],
+		"fields" : {
+			"commandEditCommandId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"commandEditCommandVersion": {
+				"element": "version",
+				"title": "Version",
+				"description": "Enter version number of command",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			},
+			"commandEditCommandText": {
+				"element": "command",
+				"title": "Command",
+				"description": "Enter command",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"size": 20
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "commandEditParametersForm",
+		"title" : "Edit Parameters",
+		"buttons": {
+			"save": true,
+			"delete": true
+		},
+		"access": ["superuser","manager","user"],
+		"fields" : {
+			"commandEditParametersId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"commandEditParametersVersion": {
+				"element": "version",
+				"title": "Version",
+				"description": "Enter version number of parameters",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			},
+			"commandEditParametersText": {
+				"element": "parameters",
+				"title": "Parameters",
+				"description": "Enter parameters",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"size": 20
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "companyAddForm",
+		"title" : "Add Company",
+		"buttons": {
+			"add": true
+		},
+		"access": ["superuser"],
+		"fields" : {
+			"companyAddName": {
+				"element": "name",
+				"title": "Company Name",
+				"description": "Enter name of company",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "companyEditForm",
+		"title": "Manage Company",
+		"access": ["superuser","manager"],
+		"buttons": {
+			"save": true
+		},
+		"fields" : {
+			"companyEditId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"companyEditName": {
+				"element": "name",
+				"title": "Company Name",
+				"description": "Enter name of company",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			}
+		}
+	},
+	{	"ZZZname" : "companyGroupAddForm",
+		"title" : "Add Company Group",
+		"buttons": {
+			"add": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"companyGroupAddName": {
+				"element": "groups.name",
+				"title": "Group",
+				"description": "Enter name of group",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"companyGroupAddDesc": {
+				"element": "groups.description",
+				"title": "Description",
+				"description": "Enter description of group",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"companyGroupAddPlan": {
+				"element": "groups.plan",
+				"title": "Plan",
+				"description": "Select plan",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "ZZZcompanyGroupEditForm",
+		"title" : "Edit Company Group",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"companyGroupEditId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"companyGroupEditName": {
+				"element": "groups.name",
+				"title": "Group Name",
+				"description": "Enter name of group",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"companyGroupEditDesc": {
+				"element": "groups.description",
+				"title": "Description",
+				"description": "Enter description of group",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"companyGroupEditPlan": {
+				"element": "groups.plan",
+				"title": "Plan",
+				"description": "Select plan",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "connectorAddForm",
+		"title" : "Add Connector",
+		"buttons": {
+			"add": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"connectorAddName": {
+				"element": "name",
+				"title": "Connector Name",
+				"description": "Enter name of connector",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorAddService": {
+				"element": "service",
+				"title": "Service",
+				"description": "Select type of connector",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "connectorEditForm-bash",
+		"title" : "Edit Bash Connector Details",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"connectorBashId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"connectorBashName": {
+				"element": "name",
+				"title": "Connector Name",
+				"description": "Enter name of connector",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorBashRoot": {
+				"element": "config.root",
+				"title": "Root Directory",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "filename"
+					}
+				}
+			},
+			"connectorBashOutputLimit": {
+				"element": "config.output.limit",
+				"title": "Output Limit",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			},
+			"connectorBashOutputPadding": {
+				"element": "config.output.padding",
+				"title": "Output Padding",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumericSpecial"
+					}
+				}
+			},
+			"connectorBashOwnerUid": {
+				"element": "config.owner.uid",
+				"title": "Owner User ID",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumericSpecial"
+					}
+				}
+			},
+			"connectorBashOwnerGid": {
+				"element": "config.owner.gid",
+				"title": "Owner Group ID",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumericSpecial"
+					}
+				}
+			},
+			"connectorBashPermsFile": {
+				"element": "config.perms.file",
+				"title": "File Permissions",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 444
+						}
+					}
+				}
+			},
+			"connectorBashPermsDir": {
+				"element": "config.perms.directory",
+				"title": "Directory Permissions",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 444
+						}
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "connectorEditForm-file",
+		"title" : "Edit File Connector Details",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"connectorFileId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"connectorFileName": {
+				"element": "name",
+				"title": "Connector Name",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorFileRoot": {
+				"element": "config.root",
+				"title": "Root Directory",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "filename"
+					}
+				}
+			},
+			"connectorFileOwnerUid": {
+				"element": "config.owner.uid",
+				"title": "Owner User ID",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			},
+			"connectorFileOwnerGid": {
+				"element": "config.owner.gid",
+				"title": "Owner Group ID",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "connectorEditForm-mail",
+		"title" : "Edit E-Mail Connector Details",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"connectorMailId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"connectorMailName": {
+				"element": "name",
+				"title": "Connector Name",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorMailHost": {
+				"element": "config.host",
+				"title": "Server Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "url"
+					}
+				}
+			},
+			"connectorMailPort": {
+				"element": "config.port",
+				"title": "Server Port",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1,
+							"max": 65535
+						}
+					}
+				}
+			},
+			"connectorMailSecure": {
+				"element": "config.secure",
+				"title": "Secure Mail Server",
+				"type": "checkbox",
+				"visible": true,
+				"edit": true
+			},
+			"connectorMailDebug": {
+				"element": "config.debug",
+				"title": "Debugging Enabled",
+				"type": "checkbox",
+				"visible": true,
+				"edit": true
+			},
+			"connectorMailIgnore": {
+				"element": "config.ignoreTLS",
+				"title": "Ignore TLS",
+				"type": "checkbox",
+				"visible": true,
+				"edit": true
+			},
+			"connectorMailAuthUsername": {
+				"element": "config.auth.user",
+				"title": "User Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "email"
+					}
+				}
+			},
+			"connectorMailAuthPassword": {
+				"element": "config.auth.pass",
+				"title": "Password",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "password"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "connectorEditForm-mongo",
+		"title" : "Edit MongoDB Connector Details",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"connectorMongoId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"connectorMongoName": {
+				"element": "name",
+				"title": "Connector Name",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorMongoHost": {
+				"element": "config.host",
+				"title": "Server Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "url"
+					}
+				}
+			},
+			"connectorMongoPort": {
+				"element": "config.port",
+				"title": "Server Port",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1,
+							"max": 65535
+						}
+					}
+				}
+			},
+			"connectorMongoDatabase": {
+				"element": "config.db",
+				"title": "Database",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "connectorEditForm-pgsql",
+		"title" : "Edit PostgreSQL Connector Details",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"connectorPgsqlId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"connectorPgsqlName": {
+				"element": "name",
+				"title": "Connector Name",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorPgsqlHost": {
+				"element": "config.host",
+				"title": "Server Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "url"
+					}
+				}
+			},
+			"connectorPgsqlPort": {
+				"element": "config.port",
+				"title": "Server Port",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1,
+							"max": 65535
+						}
+					}
+				}
+			},
+			"connectorPgsqlDatabase": {
+				"element": "config.db",
+				"title": "Database",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumericSpecial"
+					}
+				}
+			},
+			"connectorPgsqlUsername": {
+				"element": "config.user",
+				"title": "User Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			},
+			"connectorPgsqlPassword": {
+				"element": "config.password",
+				"title": "Password",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "password"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "connectorEditForm-structure",
+		"title" : "Edit Structured Query Connector Details",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"connectorStructureId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"connectorStructureName": {
+				"element": "name",
+				"title": "Connector Name",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorStructureHost": {
+				"element": "config.host",
+				"title": "Server Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "url"
+					}
+				}
+			},
+			"connectorStructurePort": {
+				"element": "config.port",
+				"title": "Server Port",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1,
+							"max": 65535
+						}
+					}
+				}
+			},
+			"connectorStructureDatabase": {
+				"element": "config.db",
+				"title": "Database",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumericSpecial"
+					}
+				}
+			},
+			"connectorStructureUsername": {
+				"element": "config.user",
+				"title": "User Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			},
+			"connectorStructurePassword": {
+				"element": "config.password",
+				"title": "Password",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "password"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "connectorEditForm-vsaas",
+		"title" : "Edit VisualSaaS Connector Details",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"connectorVsaasId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"connectorVsaasName": {
+				"element": "name",
+				"title": "Connector Name",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorVsaasHost": {
+				"element": "config.host",
+				"title": "Server Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "url"
+					}
+				}
+			},
+			"connectorVsaasPort": {
+				"element": "config.port",
+				"title": "Server Port",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1,
+							"max": 65535
+						}
+					}
+				}
+			},
+			"connectorVsaasDatabase": {
+				"element": "config.db",
+				"title": "Database",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumericSpecial"
+					}
+				}
+			},
+			"connectorVsaasUsername": {
+				"element": "config.user",
+				"title": "User Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			},
+			"connectorVsaasPassword": {
+				"element": "config.password",
+				"title": "Password",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "password"
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "loginForm",
+		"title": "Login to the VeryAPI Console",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager","user"],
+		"fields" : {
+			"username": {
+				"element": "username",
+				"title": "User Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			},
+			"password": {
+				"element": "password",
+				"title": "Password",
+				"type": "password",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "password"
+					}
+				}
+			}
+		}
+	},
+	{	"ZZZname" : "logout",
+		"menu": {
+			"menu" : "main",
+			"title": "Logout",
+			"order": 0,
+			"select": "onStart()"
+		},
+		"access": ["superuser","manager","user"]
+	},
+	{	"name" : "packageAddForm",
+		"title": "Add Package",
+		"buttons": {
+			"add": true
+		},
+		"access": ["superuser","manager","user"],
+		"fields" : {
+			"packageAddName": {
+				"element": "name",
+				"title": "Package Name",
+				"description": "Enter name of package",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"packageAddCommand": {
+				"element": "command",
+				"title": "Command Name",
+				"description": "Enter name of command",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"packageAddConnector": {
+				"element": "connector",
+				"title": "Connector Name",
+				"description": "Enter name of connector",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"packageAddCommandVer": {
+				"element": "version.cmd",
+				"title": "Command Version",
+				"description": "Enter command version",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			},
+			"packageAddParameterVer": {
+				"element": "version.prms",
+				"title": "Parameter Version",
+				"description": "Enter parameter version",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "packageEditForm",
+		"title": "Edit Package",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager","user"],
+		"fields" : {
+			"packageEditId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"packageEditName": {
+				"element": "name",
+				"title": "Package Name",
+				"description": "Enter name of package",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"packageEditConnector": {
+				"element": "connector",
+				"title": "Connector Name",
+				"description": "Enter name of connector",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"packageEditCommand": {
+				"element": "command",
+				"title": "Command Name",
+				"description": "Enter name of command",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"packageEditCommandVer": {
+				"element": "version.cmd",
+				"title": "Command Version",
+				"description": "Enter command version",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			},
+			"packageEditParameterVer": {
+				"element": "version.prms",
+				"title": "Parameter Version",
+				"description": "Enter parameter version",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "userAddForm",
+		"title": "Add User",
+		"buttons": {
+			"add": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"userAddUsername": {
+				"element": "username",
+				"title": "User Name",
+				"description": "Enter name of user",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			},
+			"userAddPassword": {
+				"element": "password",
+				"title": "Password",
+				"description": "Enter password",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "password"
+					}
+				}
+			},
+			"userAddGroup": {
+				"element": "group",
+				"title": "Group",
+				"description": "Select group",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"userAddRole": {
+				"element": "role",
+				"title": "Role",
+				"description": "Select role",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"userAddClients": {
+				"element": "clients",
+				"title": "Clients",
+				"description": "Select clients",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": false,
+						"format": "ipv4"
+					},
+					"content": {
+						"type": "array",
+						"separator": ","
+					}
+				}
+			},
+			"userAddPackages": {
+				"element": "packages",
+				"title": "Packages",
+				"description": "Select packages",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "multiple",
+						"size": 5
+					}
+				}
+			}
+		}
+	},
+	{	"name" : "userEditForm",
+		"title": "Edit User",
+		"buttons": {
+			"save": true
+		},
+		"access": ["superuser","manager"],
+		"fields" : {
+			"userEditId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"userEditUsername": {
+				"element": "username",
+				"title": "User Name",
+				"description": "Enter name of user",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			},
+			"userEditPassword": {
+				"element": "password",
+				"title": "Password",
+				"description": "Enter password",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "password"
+					}
+				}
+			},
+			"userEditGroup": {
+				"element": "group",
+				"title": "Group",
+				"description": "Select group",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"userEditRole": {
+				"element": "role",
+				"title": "Role",
+				"description": "Select role",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"userEditClients": {
+				"element": "clients",
+				"title": "Clients",
+				"description": "Select clients",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": false,
+						"format": "ipv4"
+					},
+					"content": {
+						"type": "array",
+						"separator": ","
+					}
+				}
+			},
+			"userEditPackages": {
+				"element": "packages",
+				"title": "Packages",
+				"description": "Select packages",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "multiple",
+						"size": 5
+					}
+				}
+			},
+			"userEditJWT": {
+				"element": "jwt",
+				"title": "JSON Web Token",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"display": {
+						"size": 8
+					}
+				}
+			}
+		}
+	},
+	{	"name": "reportUsageStats",
+		"menu": {
+			"menu" : "reports",
+			"title": "Usage Statistics",
+			"order": 0,
+			"select": "usage_stats('default')"
+		},
+		"access": ["superuser","manager","user"]
+	},
+	{	"name": "reportEventSummary",
+		"menu": {
+			"menu" : "reports",
+			"title": "Event Summary",
+			"order": 1,
+			"select": "event_summary('default')"
+		},
+		"access": ["superuser"]
+	},
+	{	"name": "reportRecentTrans",
+		"menu": {
+			"menu" : "reports",
+			"title": "Recent Transactions",
+			"order": 2,
+			"select": "recent_trans('default')"
+		},
+		"access": ["superuser","manager","user"]
+	},
+	{	"name": "reportRecentErrors",
+		"menu": {
+			"menu" : "reports",
+			"title": "Recent Errors",
+			"order": 3,
+			"select": "recent_errors('default')"
+		},
+		"access": ["superuser","manager","user"]
+	}
+]
