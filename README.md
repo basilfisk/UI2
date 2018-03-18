@@ -36,3 +36,11 @@ data/functions.js | ????
 data/forms.js | ???
 
 To display the application, `index.html` calls the `onStart()` function from the *???* file.
+
+## JSON Forms
+
+https://github.com/joshfire/jsonform
+
+https://github.com/joshfire/jsonform/wiki
+
+http://ulion.github.io/jsonform/playground/?example=factory-sleek
