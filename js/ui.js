@@ -7,7 +7,6 @@
 /**
  * @namespace UserInterface
  * @author Basil Fisk
- * @copyright Breato Ltd 2018
  * @property {integer} xxx ???????????
  * @description <p>User interface functions.<br>
  * Requirements in index.html for successful operation:<br><ul>
@@ -16,16 +15,15 @@
  * </ul></p>
  */
 
-var UserInterface = {
-	_defs: {},
+//var UserInterface = {
+var ui = {
 	_post: undefined,
 	_msgOK: undefined,
-	_valn: {},
 
 	/**
 	 * @method _checkFormat
 	 * @author Basil Fisk
-	 * @param {string} format Object with min and max values.
+	 * @param {object} format Object with min and max values.
 	 * @param {string} title Name of field being checked.
 	 * @param {string} value String to be checked.
 	 * @return True or false.
@@ -40,8 +38,8 @@ var UserInterface = {
 		}
 		else {
 			// Pick pattern to be used for validation
-			pattern = this._valn[format].pattern;
-			error = this._valn[format].description;
+			pattern = validationChecks[format].pattern;
+			error = validationChecks[format].description;
 
 			// Error if format not recognised
 			if (pattern == undefined) {
@@ -144,17 +142,17 @@ var UserInterface = {
 	/**
 	 * @method _findElement
 	 * @author Basil Fisk
-	 * @param {string} name Name of element.
+	 * @param {string} id ID of element.
 	 * @return Index in array or -1.
 	 * @description Find index of element in UI object.
 	 */
-	_findElement: function (name) {
+/*	_findElement: function (id) {
 		var i;
 		for (i=0; i<_defs.length; i++) {
-			if (_defs[i].name === name) { return i; }
+			if (_defs[i].id === id) { return i; }
 		}
 		return -1;
-	},
+	},*/
 
 	/**
 	 * @method _messageBuild
@@ -224,33 +222,17 @@ var UserInterface = {
 	/**
 	 * @method _pageTitle
 	 * @author Basil Fisk
-	 * @param {string} name Name (optional).
-	 * @description Display the hostname and an optional name in the title bar.<br>
-	 * {optional} - VeryAPI [{hostname}]
+	 * @return An HTML DIV element holding the formatted title.
+	 * @description Display the page title.
 	 */
-	_pageTitle: function (name) {
-		var title, host;
-
-		// Add divider after optional name
-		title = (name) ? name + ' - ' : '';
-
-		// window.location.hostname gives dev.very-api.net
-		host = window.location.hostname.split('.').shift();
-		switch (host) {
-			case 'dev':
-				title += 'VeryAPI [Dev]';
-				break;
-			case 'test':
-				title += 'VeryAPI [Test]';
-				break;
-			case 'live':
-				title += 'VeryAPI';
-				break;
-			default:
-				title += 'VeryAPI [Unknown]';
-				break;
-		}
-		$('#pageTitle').text(title);
+	_pageTitle: function () {
+		var div = '';
+		div += '<div';
+		div += (_defs.title.class) ? ' class="' + _defs.title.class + '"' : '';
+		div += '>';
+		div += _defs.title.text;
+		div += '</div>';
+		return div;
 	},
 
 	/**
@@ -326,7 +308,7 @@ var UserInterface = {
 	 * @return A div with the field structure.
 	 * @description Add the fields to the form.
 	 */
-		_showField: function (name, defs, value, list) {
+	_showField: function (name, defs, value, list) {
 		var divot = '', i, desc, title, readonly, disabled, checked, multi, selected;
 
 		// Default for description and title
@@ -442,22 +424,19 @@ var UserInterface = {
 		_post(form + '-delete', data);
 	},
 
-	// ---------------------------------------------------------------------------------------
-	// Display a form for adding data
-	//
-	// Argument 1 : Name of form
-	// Argument 2 : Object holding list for dropdown field
-	//					{field: [values], ...}
-	// ---------------------------------------------------------------------------------------
-	formAdd: function (form, list) {
-		var index, form, title, fields, names, i, div = '';
+	/**
+	 * @method formAdd
+	 * @author Basil Fisk
+	 * @param {string} id ID of form to be displayed.
+	 * @param {object} list Object holding lists for dropdown fields.
+	 * {field: [values], ...}
+	 * @description Display a form for adding data.
+	 */
+	formAdd: function (id, list) {
+		var title, fields, names, i, div = '';
 
-		// Locate UI element
-		index = this._findElement(form);
-
-		// Read fields and their names
-		title = _defs[index].title;
-		fields = _defs[index].fields;
+		title = _defs[id].title;
+		fields = _defs[id].fields;
 		names = Object.keys(fields);
 
 		// Build form container
@@ -478,11 +457,11 @@ var UserInterface = {
 		for (i=0; i<names.length; i++) {
 			switch (fields[names[i]].type) {
 				case 'list':
-//        			    div += _showField(names[i], fields[names[i]], '', list[names[i]]);
-					div += _showField(names[i], fields[names[i]], '', _sortArrayObjects(list[names[i]], 'text'));
+//					div += this._showField(names[i], fields[names[i]], '', list[names[i]]);
+					div += this._showField(names[i], fields[names[i]], '', _sortArrayObjects(list[names[i]], 'text'));
 					break;
 				default:
-					div += _showField(names[i], fields[names[i]], '');
+					div += this._showField(names[i], fields[names[i]], '');
 			}
 		}
 
@@ -490,11 +469,12 @@ var UserInterface = {
 		div += '</form></div>';
 
 		// Add button in form footer
-		if (_defs[index].buttons && _defs[index].buttons.add) {
+		if (_defs[id].buttons && _defs[id].buttons.add) {
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-//            	div += '<button type="button" class="btn btn-success" data-dismiss="modal" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
-			div += '<button type="button" class="btn btn-success" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+//			div += '<button type="button" class="btn btn-success" data-dismiss="modal" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+//			div += '<button type="button" class="btn btn-success" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+			div += '<button type="button" class="btn btn-success" onClick="ui.saveData(' + id + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
 			div += '</div></div>';
 		}
 
@@ -502,7 +482,7 @@ var UserInterface = {
 		div += '</div></div>';
 
 		// Remove existing form, then add new form and display
-		_showContainer(form, div);
+		this._showContainer(id, div);
 	},
 
 	// ---------------------------------------------------------------------------------------
@@ -514,23 +494,21 @@ var UserInterface = {
 		$('#' + form).modal('hide');
 	},
 
-	// ---------------------------------------------------------------------------------------
-	// Display a form for editing data
-	//
-	// Argument 1 : Name of form
-	// Argument 2 : Data to be shown in fields for editing
-	// Argument 3 : Object holding list for dropdown field
-	//					{field: [values], ...}
-	// ---------------------------------------------------------------------------------------
-	formEdit: function (form, data, list) {
-		var index, title, fields, names, i, elem, value, div = '';
-
-		// Locate UI element
-		index = this._findElement(form);
+	/**
+	 * @method formEdit
+	 * @author Basil Fisk
+	 * @param {id} id ID of the form.
+	 * @param {object} data Data to be shown in fields for editing.
+	 * @param {object} list Object holding lists for dropdown fields.
+	 * {field: [values], ...}
+	 * @description Display a form for editing data.
+	 */
+	formEdit: function (id, data, list) {
+		var title, fields, names, i, elem, value, div = '';
 
 		// Read fields and their names
-		title = _defs[index].title;
-		fields = _defs[index].fields;
+		title = _defs[id].title;
+		fields = _defs[id].fields;
 		names = Object.keys(fields);
 
 		// Build form container
@@ -578,11 +556,11 @@ var UserInterface = {
 			// Add field
 			switch (fields[names[i]].type) {
 				case 'list':
-//        			    div += _showField(names[i], fields[names[i]], value, list[names[i]]);
-					div += _showField(names[i], fields[names[i]], value, _sortArrayObjects(list[names[i]], 'text'));
+//					div += this._showField(names[i], fields[names[i]], value, list[names[i]]);
+					div += this._showField(names[i], fields[names[i]], value, _sortArrayObjects(list[names[i]], 'text'));
 					break;
 				default:
-					div += _showField(names[i], fields[names[i]], value);
+					div += this._showField(names[i], fields[names[i]], value);
 			}
 		}
 
@@ -590,15 +568,20 @@ var UserInterface = {
 		div += '</form></div>';
 
 		// Save and/or delete buttons in form footer
-		if (_defs[index].buttons) {
+//		if (_defs[index].buttons) {
+console.log(_defs[id].buttons);
+		if (_defs[id].buttons) {
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-			if (_defs[index].buttons && _defs[index].buttons.delete) {
+//			if (_defs[index].buttons && _defs[index].buttons.delete) {
+			if (_defs[id].buttons.delete) {
 				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" onClick="ui.deleteData(' + index + '); return false;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
 			}
-			if (_defs[index].buttons && _defs[index].buttons.save) {
-//            	    div += '<button type="button" class="btn btn-success" data-dismiss="modal" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
-				div += '<button type="button" class="btn btn-success" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
+//			if (_defs[index].buttons && _defs[index].buttons.save) {
+			if (_defs[id].buttons.save) {
+//				div += '<button type="button" class="btn btn-success" data-dismiss="modal" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
+//				div += '<button type="button" class="btn btn-success" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
+				div += '<button type="button" class="btn btn-success" onClick="ui.saveData(' + id + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
 			}
 			div += '</div></div>';
 		}
@@ -607,7 +590,8 @@ var UserInterface = {
 		div += '</div></div>';
 
 		// Remove existing form, then add new form and display
-		_showContainer(form, div);
+//		this._showContainer(form, div);
+		this._showContainer(id, div);
 	},
 
 	// ---------------------------------------------------------------------------------------
@@ -676,10 +660,10 @@ var UserInterface = {
 			// Add field
 			switch (fields[names[i]].type) {
 				case 'list':
-					div += _showField(names[i], fields[names[i]], value, _sortArrayObjects(list[names[i]], 'text'));
+					div += this._showField(names[i], fields[names[i]], value, _sortArrayObjects(list[names[i]], 'text'));
 					break;
 				default:
-					div += _showField(names[i], fields[names[i]], value);
+					div += this._showField(names[i], fields[names[i]], value);
 			}
 		}
 
@@ -714,7 +698,80 @@ var UserInterface = {
 		div += '</div></div>';
 
 		// Remove existing form, then add new form and display
-		_showContainer(id, div);
+		this._showContainer(id, div);
+	},
+
+	/**
+	 * @method init
+	 * @author Basil Fisk
+	 * @param {object} forms User's UI definition.
+	 * @param {function} callback User's post-processing function. ?????? TODO triggered when
+	 * @description Parse the user's UI data structures for building the menus, forms and reports.
+	 */
+	init: function (forms, callback) {
+		var i, keys, menu = {}, main, n, option, div = '';
+
+		// Save form definitions and post-processing function
+		_defs = forms;
+		_post = callback;
+
+		// Open the container for the menus and titles
+		div += '<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">';
+		div += '<ul class="nav navbar-nav">';
+
+		// Show the menu options for the user
+		keys = Object.keys(_defs);
+		for (i=0; i<keys.length; i++) {
+			// Is this entry part of the menu
+			if (_defs[keys[i]].menu) {
+				// Create an empty menu object for a new menu
+				if(!menu[_defs[keys[i]].menu.menu]) {
+					menu[_defs[keys[i]].menu.menu] = [];
+				}
+				// Add a menu option
+				menu[_defs[keys[i]].menu.menu][_defs[keys[i]].menu.order] = {
+					name: keys[i],
+					title: _defs[keys[i]].menu.title || _defs[keys[i]].title,
+					action: _defs[keys[i]].menu.select
+				};
+			}
+		}
+
+		// Build the menu
+		main = Object.keys(menu);
+		if (main.length > 0) {
+			div += '<ul class="nav navbar-nav">';
+			for (i=0; i<menu.main.length; i++) {
+				// Skip if the menu option is not available
+				if (menu.main[i] !== undefined) {
+					// Option on main menu
+					if (main.indexOf(menu.main[i].name) === -1) {
+						div += '<li id="' + menu.main[i].name + '-option" class="option"><a href="#' + menu.main[i].name + '" onClick="' + menu.main[i].action + '; return false;">' + menu.main[i].title + '</a></li>';
+					}
+					// Menu of options
+					else {
+						div += '<li id="' + menu.main[i].name + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + menu.main[i].name + '" href="#">' + menu.main[i].title + '<span class="caret"></span></a>';
+						div += '<ul class="dropdown-menu">';
+						option = menu.main[i].name;
+						for (n=0; n<menu[option].length; n++) {
+							// Skip if the menu option is not available
+							if (menu[option][n] !== undefined) {
+								div += '<li id="' + menu[option][n].name + '-option" class="option"><a href="#' + menu[option][n].name + '" onClick="' + menu[option][n].action + '; return false;">' + menu[option][n].title + '</a></li>';
+							}
+						}
+						div += '</ul>';
+						div += '</li>';
+					}
+				}
+			}
+			div += '</ul>';
+		}
+		
+		// Create page title and add to body
+		div += '</ul>';
+		div += this._pageTitle();
+		div += '</div>';
+		$('body').append(div);
 	},
 
 	// ---------------------------------------------------------------------------------------
@@ -765,23 +822,24 @@ var UserInterface = {
 		}
 	},
 
-	// ---------------------------------------------------------------------------------------
-	// Initialise the form post-processing script
-	// ---------------------------------------------------------------------------------------
-	postProcess: function (callback) {
-		_post = callback;
-	},
-
+	/**
+	 * @method saveData
+	 * @author Basil Fisk
+	 * @param {object} data User's UI definition.
+	 * @description User's UI data for building the menus, forms and reports.
+	 */
 	// ---------------------------------------------------------------------------------------
 	// Validate and save the data on a form
 	//
 	// Argument 1 : Index of UI form
 	// ---------------------------------------------------------------------------------------
-	saveData: function (index) {
+//	saveData: function (index) {
+	saveData: function (id) {
 		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
 
 		// Read fields and their names
-		fields = _defs[index].fields;
+//		fields = _defs[index].fields;
+		fields = _defs[id].fields;
 		names = Object.keys(fields);
 
 		// Read and validate each field
@@ -871,8 +929,10 @@ var UserInterface = {
 		}
 
 		// Hide the form and save the data
-		$('#' + _defs[index].name).modal('hide');
-		_post(_defs[index].name, data);
+//		$('#' + _defs[index].id).modal('hide');
+//		_post(_defs[index].id, data);
+		$('#' + id).modal('hide');
+		_post(id, data);
 	},
 
 	// ---------------------------------------------------------------------------------------
@@ -1085,7 +1145,7 @@ console.log(obj);
 		body += '</div></div></div>';
 
 		// Remove existing table, then add new table and display
-		_showContainer(id, body);
+		this._showContainer(id, body);
 	},
 
 	// ---------------------------------------------------------------------------------------
@@ -1105,7 +1165,7 @@ console.log(obj);
 		var index, body = '', i, n, row, rowid, cell = {};
 
 		// Locate UI element
-		index = this._findElement(id);
+//		index = this._findElement(id);
 
 		// Build the container
 		body += '<div class="modal-dialog" role="document" style="width:50%">'; // TODO Make a parameter
@@ -1115,11 +1175,14 @@ console.log(obj);
 		body += '<div class="modal-header">';
 		body += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
 		body += '<br/>';
-		body += '<h4>' + _defs[index].title;
+//		body += '<h4>' + _defs[index].title;
+		body += '<h4>' + _defs[id].title;
 
 		// Display an Add button, if specified
-		if (_defs[index].add) {
-			body += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + _defs[index].add + '; return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+//		if (_defs[index].add) {
+		if (_defs[id].add) {
+//			body += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + _defs[index].add + '; return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+			body += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + _defs[id].add + '; return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
 		}
 		body += '</h4>';
 		body += '</div>';
@@ -1132,8 +1195,10 @@ console.log(obj);
 		// Build the table header
 		body += '<thead>';
 		body += '<tr>';
-		for (i=0; i<_defs[index].columns.length; i++) {
-			body += '<th>' + _defs[index].columns[i] + '</th>';
+//		for (i=0; i<_defs[index].columns.length; i++) {
+//			body += '<th>' + _defs[index].columns[i] + '</th>';
+		for (i=0; i<_defs[id].columns.length; i++) {
+			body += '<th>' + _defs[id].columns[i] + '</th>';
 		}
 		body += '</tr>';
 		body += '</thead>';
@@ -1182,7 +1247,7 @@ console.log(obj);
 		body += '</div></div></div>';
 
 		// Remove existing table, then add new table and display
-		_showContainer(id, body);
+		this._showContainer(id, body);
 	},
 
 	// ---------------------------------------------------------------------------------------
@@ -1193,142 +1258,7 @@ console.log(obj);
 	// Return true or false
 	// ---------------------------------------------------------------------------------------
 	userAccess: function (name) {
-		return (this._findElement(name) > -1) ? true : false;
-	},
-
-	// ---------------------------------------------------------------------------------------
-	// User's UI data for building the menus, forms and reports
-	//
-	// Argument 1 : User's UI definition
-	// ---------------------------------------------------------------------------------------
-	userData: function (data) {
-		var i, menu = {}, div = '', main, n, option, html = '';
-
-		// Save the UI documents
-		_defs = {};
-		_defs = data;
-
-		// Show the menu options for the user
-		for (i=0; i<_defs.length; i++) {
-			// Is this entry part of the menu
-			if (_defs[i].menu) {
-				// Create an empty menu object for a new menu
-				if(!menu[_defs[i].menu.menu]) {
-					menu[_defs[i].menu.menu] = [];
-				}
-				// Add a menu option
-				menu[_defs[i].menu.menu][_defs[i].menu.order] = {
-					name: _defs[i].name,
-					title: _defs[i].menu.title || _defs[i].title,
-					action: _defs[i].menu.select
-				};
-			}
-		}
-
-		// Build the menu
-		main = Object.keys(menu);
-		if (main.length > 0) {
-			for (i=0; i<menu.main.length; i++) {
-				// Skip if the menu option is not available
-				if (menu.main[i] !== undefined) {
-					// Option on main menu
-					if (main.indexOf(menu.main[i].name) === -1) {
-						div += '<li id="' + menu.main[i].name + '-option" class="option"><a href="#' + menu.main[i].name + '" onClick="' + menu.main[i].action + '; return false;">' + menu.main[i].title + '</a></li>';
-					}
-					// Menu of options
-					else {
-						div += '<li id="' + menu.main[i].name + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + menu.main[i].name + '" href="#">' + menu.main[i].title + '<span class="caret"></span></a>';
-						div += '<ul class="dropdown-menu">';
-						option = menu.main[i].name;
-						for (n=0; n<menu[option].length; n++) {
-							// Skip if the menu option is not available
-							if (menu[option][n] !== undefined) {
-								div += '<li id="' + menu[option][n].name + '-option" class="option"><a href="#' + menu[option][n].name + '" onClick="' + menu[option][n].action + '; return false;">' + menu[option][n].title + '</a></li>';
-							}
-						}
-						div += '</ul>';
-						div += '</li>';
-					}
-				}
-			}
-		}
-
-		// Complete the container for the menu, then add to 'body'
-		html += '<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">';
-		html += '<ul class="nav navbar-nav">' + div + '</ul>';
-		html += '<div class="navbar-brand pull-right" id="pageTitle"></div>';
-		html += '</div>';
-		$('body').append(html);
-
-		// Show the page title
-		this._pageTitle();
-	},
-
-	// ---------------------------------------------------------------------------------------
-	// Load the validation checks
-	//
-	// Argument 1 : Object of checks containing keyed by check name
-	//                  pattern:     The regxep used for the validation
-	//                  description: A description of the check, shown when the check fails
-	// ---------------------------------------------------------------------------------------
-//        validation: function (checks) {
-//            _valn = checks;
-//        }
-	// ---------------------------------------------------------------------------------------
-	// Define the validation tests to be carried out by the UI script
-	// ---------------------------------------------------------------------------------------
-	validation: function () {
-		_valn = {
-			"alphaLower": {
-				"pattern": "[a-z]+$",
-				"description": "Lower case alphabetic string"
-			},
-			"alphaMixed": {
-				"pattern": "[a-zA-Z]+$",
-				"description": "Mixed case alphabetic string"
-			},
-			"alphaUpper": {
-				"pattern": "[A-Z]+$",
-				"description": "Upper case alphabetic string"
-			},
-			"alphaNumeric": {
-				"pattern": "^\\w+$",
-				"description": "Alphanumeric string"
-			},
-			"alphaNumericSpecial": {
-				"pattern": "^[\\w \\-_]+$",
-				"description": "Alphanumeric string, including space, hyphen and underscore"
-			},
-			"email": {
-				"pattern": "[a-z0-9!#$%&\"*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\"*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-				"description": "must be an email address"
-			},
-			"filename": {
-				"pattern": "^[\\w\/\\-_]+$",
-				"description": "Alphanumeric string, including forward slash, hyphen and underscore"
-			},
-			"float": {
-				"pattern": "^-*\\d*\\.\\d+$",
-				"description": "Floatng point"
-			},
-			"integer": {
-				"pattern": "^-*\\d+$",
-				"description": "Integer"
-			},
-			"ipv4": {
-				"pattern": "^\\*$|^(?!0)(?!.*\\.$)((1?\\d?\\d|25[0-5]|2[0-4]\\d)(\\.|$)){4}$",
-				"description": "IP v4 address or * for any client"
-			},
-			"password": {
-				"pattern": "^[\\w \\-_]+$",
-				"description": "Password, with alphanumeric, space, hyphen and underscore characters"
-			},
-			"url": {
-				"pattern": "^[\\w\/\\.\\-_]+$",
-				"description": "URL"
-			}
-		};
+//		return (this._findElement(name) > -1) ? true : false;
+		return true;
 	}
 };
-
-UserInterface.init();

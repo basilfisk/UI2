@@ -1,38 +1,43 @@
-// *********************************************************************************************
-// *********************************************************************************************
-//
-// VeryAPI
-// Copyright 2016 Breato Ltd.
-//
-// API
-//
-// *********************************************************************************************
-// *********************************************************************************************
+/**
+ * @file api.js
+ * @author Basil Fisk
+ * @copyright Breato Ltd 2018
+ */
 
-// ---------------------------------------------------------------------------------------
-// Send a JWT protected command to the API then invoke a callback
-//
-// Argument 1 : Command to be run
-// Argument 2 : Object of parameters to the command in JSON format
-// Argument 3 : Callback function to be run after data returned
-// ---------------------------------------------------------------------------------------
-function api_call (command, json, callback) {
-	var url, options;
+/**
+ * @namespace API
+ * @author Basil Fisk
+ * @description Send a JWT protected command to the API then invoke a callback.
+ */
 
-	url = system.api.host + ':' + system.api.port + '/1/' + command;
-	options = {
-		type: 'GET',
-		dataType: 'json',
-		data: JSON.stringify(json),
-//		headers: { "Authorization": "Bearer " + me.jwt },	// THIS DOUBLES UP THE PROCESSING IN admin.js !!!!!!!!!
-		error: function (err) {
-//			message('CON010', [system.api.host, system.api.port, command]);
-			ui.messageBox('CON010', [system.api.host, system.api.port, command]);
-		},
-		success: function (result) {
-			callback('result', result);
-		}
-	};
+var API = {
 
-	$.ajax(url, options);
-}
+	/**
+	 * @method _apiCall
+	 * @author Basil Fisk
+	 * @param {string} command Command to be run.
+	 * @param {object} json Object of parameters to the command in JSON format.
+	 * @param {function} callback Callback function to be run after data returned.
+	 * @description Send a JWT protected command to the API then invoke a callback.
+	 */
+	_apiCall: function (command, json, callback) {
+		var url, options;
+
+		url = system.api.host + ':' + system.api.port + '/1/' + command;
+		options = {
+			type: 'GET',
+			dataType: 'json',
+			data: JSON.stringify(json),
+	//		headers: { "Authorization": "Bearer " + me.jwt },	// THIS DOUBLES UP THE PROCESSING IN admin.js !!!!!!!!!
+			error: function (err) {
+	//			message('CON010', [system.api.host, system.api.port, command]);
+				ui.messageBox('CON010', [system.api.host, system.api.port, command]);
+			},
+			success: function (result) {
+				callback('result', result);
+			}
+		};
+
+		$.ajax(url, options);
+	}
+};

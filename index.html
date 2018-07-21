@@ -5,38 +5,53 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!-- Downloaded libraries -->
+	<!-- Glyph icons -->
+	@font-face{
+		font-family: "glyphicons-halflings-regular";
+		src: url('fonts/glyphicons-halflings-regular.ttf') format('truetype');
+	}
+	@font-face{
+		font-family: "glyphicons-halflings-regular";
+		src: url('fonts/glyphicons-halflings-regular.woff'), url('fonts/glyphicons-halflings-regular.woff2') format('woff');
+	}
+
+	<!-- 3rd party stylesheets and libraries -->
 	<link rel="stylesheet" href="packages/bootstrap.min.css">
-	<link rel="stylesheet" href="packages/bootstrap-datetimepicker.css">
-	<script src="packages/jquery.min.js"></script>
-	<script src="packages/moment.min.js"></script>
-	<script src="packages/bootstrap.min.js"></script>
-	<script src="packages/bootstrap-datetimepicker.js"></script>
-	<!--
 	<link rel="stylesheet" href="packages/bootstrap-multiselect.css">
+	<link rel="stylesheet" href="packages/bootstrap-datetimepicker.css">
+	<script src="packages/moment.min.js"></script>
+	<script src="packages/jquery.min.js"></script>
+	<script src="packages/bootstrap.min.js"></script>
 	<script src="packages/bootstrap-multiselect.js"></script>
+	<script src="packages/bootstrap-datetimepicker.js"></script>
+
+	<!-- Application definitions -->
+	<script src="data/definition.js"></script>
+	<script src="data/functions.js"></script>
+	<script src="data/veryapi.js"></script>
+	<!--
+	<script src="data/functions.js"></script>
+	<script src="data/forms.js"></script>
 	-->
 
 	<!-- User interface functions -->
 	<script src="js/api.js"></script>
 	<script src="js/ui.js"></script>
+	<script src="js/validation.js"></script>
 
 	<!-- Configuration functions -->
-	<script src="js/config.js"></script>
-	<script src="js/messages.js"></script>
-
-	<!-- Application definitions -->
-	<script src="data/functions.js"></script>
-	<script src="data/forms.js"></script>
+	<script src="etc/config.js"></script>
+	<script src="etc/messages.js"></script>
 
 	<!-- Form definitions OLD -->
+	<!--
 	<script src="app/console.js"></script>
 	<script src="app/forms.js"></script>
 	<script src="app/reports.js"></script>
+	-->
 </head>
 
-<body onload="onStart();">
-
+<body onload="veryapi.init();">
 	<!-- ****************************************************************************************************
 			REPORTS
 	***************************************************************************************************** -->
@@ -282,6 +297,5 @@
 	        </div>
 	    </div>
 	</div>
-
 </body>
 </html>

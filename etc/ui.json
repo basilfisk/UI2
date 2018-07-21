@@ -1122,7 +1122,7 @@
 			}
 		}
 	},
-	{	"name" : "loginForm",
+	{	"ZZZname" : "login",
 		"title": "Login to the VeryAPI Console",
 		"buttons": {
 			"save": true

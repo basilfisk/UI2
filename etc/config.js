@@ -2,7 +2,7 @@ var system = {
     "api" : {
         "host" : "https://live.very-api.net",
         "port" : "19202"
-    },
+	},
 	"filters": {
 		"codes": {
 			"limit": 500

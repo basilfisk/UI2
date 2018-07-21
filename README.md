@@ -1,3 +1,11 @@
+# Installation
+
+To install the application.
+
+~~~
+
+~~~
+
 # Using the Application
 
 To display the application.
@@ -44,3 +52,18 @@ https://github.com/joshfire/jsonform
 https://github.com/joshfire/jsonform/wiki
 
 http://ulion.github.io/jsonform/playground/?example=factory-sleek
+
+## Flow Through Functions
+
+|Function|Description|
+|---|---|
+|veryapi.init|Initiated from the `onload` event on the body element of `index.html`|
+|ui.init|Initialize the UI manager and build the menus|
+|ui.formEdit||
+
+## UI Internal Data Objects
+
+|Data Object|Description|
+|---|---|
+|_defs|User's form definitions|
+|_post|User's post-processing function....??|
