@@ -5,7 +5,7 @@
 		"host": "cluster0-shard-00-00-upnth.gcp.mongodb.net:27017,cluster0-shard-00-01-upnth.gcp.mongodb.net:27017,cluster0-shard-00-02-upnth.gcp.mongodb.net:27017",
 		"replicaset": "Cluster0-shard-0",
 		"authdb": "admin",
-		"database": "qott-quipteldev",
+		"db": "qott_quipteldev",
 		"username": "fmh_user",
 		"password": "FMH_Us3r"
 	},

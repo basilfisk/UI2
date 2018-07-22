@@ -10,7 +10,6 @@
 // *********************************************************************************************
 "use strict";
 
-//var	amqp = require('amqplib/callback_api'),
 var	fs = require('fs'),
 	http = require('http'),
 	https = require('https'),
@@ -18,9 +17,7 @@ var	fs = require('fs'),
 	moment = require('moment'),
 	mongo = require('mongodb').MongoClient,
 	shortid = require('shortid'),
-//	io = require('socket.io')(),
-//	redis = require('redis'),
-	redisClient, webSocket, admin = {}, mongoDB;
+	admin = {}, mongoDB;
 
 // Trap any uncaught exceptions
 // Write error stack to STDERR, then exit process as state may be inconsistent
@@ -31,14 +28,14 @@ process.on('uncaughtException', function(err) {
 });
 
 // Read configuration file, then open connection to Redis
-load_config_file();
+loadConfigFile();
 
 
 
 // ---------------------------------------------------------------------------------------------
 // Check that the authorisation key is valid
 // ---------------------------------------------------------------------------------------------
-function admin_server () {
+function adminServer () {
 	var options, server;
 
 	// Create the server
@@ -76,7 +73,7 @@ function admin_server () {
 		// Stop if no command parameters have been provided
 		if (url.length !== 2) {
 			msg = log('ADM039', []);
-			send_response(session, msg);
+			sendResponse(session, msg);
 			return;
 		}
 
@@ -84,7 +81,7 @@ function admin_server () {
 		flds = url[0].split('/');
 		if (flds.length !== 3) {
 			msg = log('ADM029', []);
-			send_response(session, msg);
+			sendResponse(session, msg);
 			return;
 		}
 		session.command = flds[2];
@@ -99,12 +96,12 @@ function admin_server () {
 		try {
 			session.params = JSON.parse(str);
 			log('ADM030', [str]);
-			run_request(session);
+			runRequest(session);
 		}
 		// JSON format error
 		catch (err) {
 			msg = log('ADM031', [err.message, str]);
-			send_response(session, msg);
+			sendResponse(session, msg);
 			return;
 		}
 
@@ -143,17 +140,17 @@ function admin_server () {
 // Argument 2 : Object holding user's details
 // Argument 3 : Function to be called after JWT has been created
 // ---------------------------------------------------------------------------------------
-function jwt_create (session, user, callback) {
+function jwtCreate (session, user, callback) {
 	var	access = {};
 
 	// Read connector name and type of service for all connectors for user's company
-	mongoDB.collection('connector').find({"company":user.company},{"name":1,"service":1}).toArray( function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_connector').find({"company":user.company},{"name":1,"service":1}).toArray( function(err, result) {
 		var connectors = {}, i;
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM024', ['connector', err]);
-			send_response(session, msg);
+			msg = log('ADM024', ['connector', err.message]);
+			sendResponse(session, msg);
 		}
 		else {
 			// Create object linking connector to service, then read user's packages
@@ -162,13 +159,13 @@ function jwt_create (session, user, callback) {
 			}
 
 			// Read the packages available to the user
-			mongoDB.collection('package').find({"company":user.company,"name":{$in:user.packages}}).sort({"name":1, "command":1}).toArray( function(err, result) {
+			mongoDB.db(admin.mongo.db).collection('va_package').find({"company":user.company,"name":{$in:user.packages}}).sort({"name":1, "command":1}).toArray( function(err, result) {
 				var msg, access = {}, i, unique, pkg = [], cmd;
 
 				// Error trying to retrieve data
 				if (err) {
-					msg = log('ADM024', ['package', err]);
-					send_response(session, msg);
+					msg = log('ADM024', ['package', err.message]);
+					sendResponse(session, msg);
 				}
 				else {
 					// User info to be included in token
@@ -212,7 +209,7 @@ function jwt_create (session, user, callback) {
 // ---------------------------------------------------------------------------------------------
 // Read the configuration file to locate the Redis database to be used
 // ---------------------------------------------------------------------------------------------
-function load_config_file () {
+function loadConfigFile () {
 	var buffer, line;
 
 	// Read the configuration file
@@ -230,110 +227,23 @@ function load_config_file () {
 	// Open a connection to MongoDB
 	// $USER:$PASS@$HOST/$DATA?ssl=true\&replicaSet=$RSET\&authSource=$AUTH
 	admin.mongo.url = 'mongodb://' + admin.mongo.username + ':' + admin.mongo.password +
-					  '@' + admin.mongo.host + '/' + admin.mongo.database +
+//					  '@' + admin.mongo.host + '/' + admin.mongo.database +
+					  '@' + admin.mongo.host + '/' +
 					  '?ssl=true&replicaSet=' + admin.mongo.replicaset +
 					  '&authSource=' + admin.mongo.authdb;
+	mongo.connect(admin.mongo.url, function(err, db) {
+		if (err) {
+			log('ADM017', [admin.mongo.url, err.message]);
+		}
+		else {
+			// Save the database pointer for later use
+			mongoDB = db;
 
-	open_mongo();
-
-	// Redis access details
-/*	options.host = config.redis.host;
-	options.port = config.redis.port;
-
-	// Open a connection to the Redis server
-	redisClient = redis.createClient(options);
-
-	// Connected OK
-	redisClient.on('connect', function() {
-		load();
+			// Start the admin server and accept connections
+			adminServer();
+		}
 	});
-
-	// Error accessing Redis
-	redisClient.on('error', function (err) {
-		log_error("load_config_file", "Error accessing Redis: " + err.message);
-	});*/
 }
-
-
-
-// ---------------------------------------------------------------------------------------------
-// Start the load processes
-// ---------------------------------------------------------------------------------------------
-/*function load () {
-	var ssl_ok = false;
-
-	// Read data from Redis
-	admin.mq = {};
-	redisClient.hget('admin', 'logfile', saveAdmin);
-	redisClient.hgetall('adminPorts', saveAdminPorts);
-	redisClient.hget('jwt', 'secret', saveJwt);
-	redisClient.hgetall('messages', saveMessages);
-	redisClient.hgetall('mongo', saveMongo);
-	redisClient.hgetall('mq', saveMq);
-	redisClient.hgetall('ssl', saveSsl);
-
-	function saveAdmin (err, result) {
-	admin.log = result;
-		check();
-	}
-
-	function saveAdminPorts (err, result) {
-		admin.liveFeed = result.livefeed;
-		admin.server = result.server;
-		check();
-	}
-
-	function saveJwt (err, result) {
-		admin.jwtSecret = result;
-		check();
-	}
-
-	function saveMessages (err, result) {
-		var regexp, keys, i;
-		regexp = new RegExp('^ADM');
-		admin.messages = {};
-		keys = Object.keys(result);
-		for (i=0; i<keys.length; i++) {
-			if (keys[i].search(regexp) === 0) {
-				admin.messages[keys[i]] = JSON.parse(result[keys[i]]);
-			}
-		}
-		check();
-	}
-
-	function saveMongo (err, result) {
-		admin.mongo = result;
-		check();
-	}
-
-	function saveMq (err, result) {
-		admin.mq = {
-			host: result.host,
-			event: result.event2console,
-			notify: result.console2api
-		};
-		check();
-	}
-
-	function saveSsl (err, result) {
-		if (result !== null) {
-			admin.ssl = {
-				ca: fs.readFileSync(result.ca, 'utf8'),
-				cert: fs.readFileSync(result.cert, 'utf8'),
-				key: fs.readFileSync(result.key, 'utf8')
-			};
-		}
-		ssl_ok = true;
-		check();
-	}
-
-	// Continue if all data returned
-	function check () {
-		if (admin.jwtSecret && admin.log && admin.messages && admin.mongo && admin.mq && admin.server && ssl_ok) {
-			open_mongo();
-		}
-	}
-}*/
 
 
 
@@ -349,7 +259,7 @@ function load_config_file () {
 //				result.text		= Message text
 // ---------------------------------------------------------------------------------------------
 function log (code, params) {
-	var message, text, i, line, file, res = {};
+	var message, text, i, line, res = {};
 
 	// Skip if message level is under the configured level
 	message = admin.messages[code];
@@ -377,11 +287,9 @@ function log (code, params) {
 	line += ' (' + message.type + ') ' + text + '\n';
 
 	// Append to log file
-//	file = __dirname + '/' + admin.log;
-	file = admin.log;
-	fs.appendFile(file, line, function (err) {
+	fs.appendFile(admin.log, line, function (err) {
 		if (err) {
-			console.error('admin.log: Could not write admin console log message to ' + file);
+			console.error('admin.log: Could not write admin console log message to ' + admin.log);
 		}
 	});
 
@@ -396,215 +304,11 @@ function log (code, params) {
 
 
 // ---------------------------------------------------------------------------------------------
-// Log an error message that has been raised before the Tracker module has been loaded
-//
-// Argument 1 : Function called from
-// Argument 2 : Message text
-// ---------------------------------------------------------------------------------------------
-function log_error (fn, msg) {
-	console.error('[' + fn + '] ' + msg);
-}
-
-
-
-// ---------------------------------------------------------------------------------------------
-// Send a notification message to the API interface that data has changed
-//
-// Argument 1 : Notification message
-//      {item:xxx, action:xxx}
-// ---------------------------------------------------------------------------------------------
-function notify_interface (message) {
-	// If channel is open, send notification message
-/*	if (admin.mq.notifyChannel) {
-		admin.mq.notifyChannel.sendToQueue(admin.mq.notify, new Buffer(JSON.stringify(message), 'utf-8'), { persistent: true });
-	}
-	else {
-		log('ADM036', [admin.mq.notify]);
-	}*/
-}
-
-
-
-// ---------------------------------------------------------------------------------------------
-// Connect to the Mongo database
-// ---------------------------------------------------------------------------------------------
-function open_mongo () {
-	var options = {};
-
-	// Connect to Mongo Atlas
-	mongo.connect(admin.mongo.url, function(err, db) {
-		if (err) {
-			log('ADM017', [admin.mongo.url, err.message]);
-		}
-		else {
-			// Save the database pointer for later use
-			mongoDB = db;
-
-			// Open a server that emits usage data
-//			open_usage_publish();
-
-			// Connect to RabbitMQ
-//			rabbit_connect();
-
-			// Start the admin server and accept connections
-			admin_server();
-		}
-	});
-}
-
-
-
-// ---------------------------------------------------------------------------------------------
-// Open a server that emits usage data
-// ---------------------------------------------------------------------------------------------
-/*function open_usage_publish () {
-	var server, socket;
-
-	// Create an HTTPS server from which to emit usage data
-	server = https.createServer(admin.ssl);
-
-	// Open a port on which the web_monitor can publish updated usage data
-	server.listen(admin.liveFeed, function () {
-		log('ADM032', [admin.liveFeed]);
-	});
-
-	// Attach a socket to the HTTPS server
-	socket = io.listen(server);
-
-	// When attached, emit a socket ready message
-	socket.on('connection', function(sock) {
-		sock.emit('connect', {'message':'Tracker server ready'});
-		// Save the web socket object for later use
-		webSocket = sock;
-	});
-
-	// Errors
-	socket.on('error', function() {
-		log_error("open_usage_publish", "Socket.IO reported a generic error");
-	});
-}*/
-
-
-
-// ---------------------------------------------------------------------------------------------
-// Connect to the RabbitMQ server
-// ---------------------------------------------------------------------------------------------
-/*function rabbit_connect () {
-	amqp.connect(admin.mq.host, function(err, conn) {
-		if (err) {
-			log_error("rabbit_connect", "Can't connect to RabbitMQ: " + err.message);
-		}
-		// Open a queues
-		else {
-			// Listen for incoming log messages from a RabbitMQ queue
-			rabbit_log_listener(conn);
-
-			// Send change notifications to a RabbitMQ queue
-			rabbit_notifications(conn);
-		}
-	});
-}*/
-
-
-
-// ---------------------------------------------------------------------------------------------
-// Listen for incoming log messages from a RabbitMQ queue
-//
-// Argument 1 : RabbitMQ connection object
-//
-// Message object format
-//		action.timestamp	= Timestamp of action including milliseconds
-//		action.pid			= Process ID
-//		action.sid			= Session ID
-//		action.connector	= Connector name
-//		action.server		= Server name
-//		action.username		= User name
-//		action.command		= Command being run
-//		action.type			= Type of message (error/info)
-//		action.module		= Module name
-//		action.fn			= Function name
-//		action.code			= Message code
-//		action.text			= Message text
-//		tx.num				= Number of interactions in this transaction
-//		tx.recs				= Number of records returned to caller: SQL,DML
-//		tx.vol				= Amount of data (bytes) returned to caller: SQL,DML
-// ---------------------------------------------------------------------------------------------
-/*function rabbit_log_listener (conn) {
-	conn.createChannel(function(err, ch) {
-		if (err) {
-			log_error("rabbit_log_listener", "Can't open RabbitMQ channel: " + err.message);
-		}
-		else {
-			// Ensure the queue won't be lost even if RabbitMQ restarts
-			ch.assertQueue(admin.mq.event, {durable: true});
-
-			// Tell RabbitMQ not to send next message until we acknowledge previous one
-			ch.prefetch(1);
-
-			// On receipt of message, write to event and usage collections
-			// Message acknowledgment enabled for load balancing
-			// Argument 1 : Message object in buffer format
-			ch.consume(admin.mq.event, function(message) {
-				// Convert message back to object
-				var usage = {},
-					msg = JSON.parse(message.content.toString()),
-					ts = moment().format('YYYY-MM-DDTHH:mm:ss.SSS');
-
-				// If transaction stats present, increment usage stats and add to action document
-				if (webSocket && msg.tx !== undefined) {
-					usage.server = msg.action.server;
-					usage.connector = msg.action.connector;
-					usage.username = msg.action.username;
-					usage.command = msg.action.command;
-					usage.time = ts.replace('T',' ');
-					usage.tx = {};
-					usage.tx.num = (msg.tx.num) ? parseInt(msg.tx.num) : 0;
-					usage.tx.dur = (msg.tx.dur) ? parseInt(msg.tx.dur) : 0;
-					usage.tx.vol = (msg.tx.vol) ? parseInt(msg.tx.vol) : 0;
-					usage.tx.recs = (msg.tx.recs) ? parseInt(msg.tx.recs) : 0;
-					webSocket.emit('usage', usage);
-				}
-
-				// Send acknowledgement to message server
-				ch.ack(message);
-			}, { noAck: false} );
-
-			// Start the admin server and accept connections
-			admin_server();
-		}
-	});
-}*/
-
-
-
-// ---------------------------------------------------------------------------------------------
-// Create channel that sends change notifications to a RabbitMQ queue
-//
-// Argument 1 : RabbitMQ connection object
-// ---------------------------------------------------------------------------------------------
-/*function rabbit_notifications (conn) {
-	conn.createChannel(function(err, ch) {
-		if (err) {
-			log_error("rabbit_notifications", "Can't open RabbitMQ channel: " + err.message);
-		}
-		else {
-			// Save the channel object
-			admin.mq.notifyChannel = ch;
-
-			// Ensure the queue won't be lost even if RabbitMQ restarts
-			ch.assertQueue(admin.mq.notify, {durable: true});
-		}
-	});
-}*/
-
-
-
-// ---------------------------------------------------------------------------------------------
 // Package data in the correct response format
 //
 // Argument 1 : Data object
 // ---------------------------------------------------------------------------------------------
-function response_data (data) {
+function responseData (data) {
 	var msg = {};
 	msg.result = {};
 	msg.result.status = 1;
@@ -620,7 +324,7 @@ function response_data (data) {
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-function run_request (session) {
+function runRequest (session) {
 	var msg;
 
 	switch (session.command) {
@@ -722,7 +426,7 @@ function run_request (session) {
 			break;
 		default:
 			msg = log('ADM006', [session.command]);
-			send_response(session, msg);
+			sendResponse(session, msg);
 			break;
 	}
 }
@@ -737,7 +441,7 @@ function run_request (session) {
 //              Error in JSON format: {result:{status:0,code:xxx,text:xxx}}
 //              Data in JSON format:  {result:{status:1}, data:[{xxx},{yyy}]}
 // ---------------------------------------------------------------------------------------------
-function send_response (session, data) {
+function sendResponse (session, data) {
 	var tx = {}, msg,
 		response = session.response;
 
@@ -800,19 +504,18 @@ function command_delete (session) {
 	var	id;
 
 	id = session.params['_id'];
-	mongoDB.collection('command').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_command').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM007', ['command', err]);
-			send_response(session, msg);
+			msg = log('ADM007', ['command', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM008', ['command']);
-			send_response(session, msg);
-            notify_interface({"item":"command", "action":"delete"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -833,37 +536,35 @@ function command_delete_version (session) {
 
     // Remove command version
     if (type === 'command') {
-        mongoDB.collection('command').update({'_id':new mongo.ObjectID(id)}, {"$pull":{"command":{"ver":ver}}}, function(err, result) {
+        mongoDB.db(admin.mongo.db).collection('va_command').update({'_id':new mongo.ObjectID(id)}, {"$pull":{"command":{"ver":ver}}}, function(err, result) {
     		var msg = {};
 
     		// Error trying to insert data
     		if (err) {
-    			msg = log('ADM037', [type, err]);
-    			send_response(session, msg);
+    			msg = log('ADM037', [type, err.message]);
+    			sendResponse(session, msg);
     		}
     		// Return result
     		else {
     			msg = log('ADM038', [type]);
-    			send_response(session, msg);
-                notify_interface({"item":"command", "action":"update"});
+    			sendResponse(session, msg);
     		}
     	});
     }
     // Remove parameter version
     else {
-        mongoDB.collection('command').update({'_id':new mongo.ObjectID(id)}, {"$pull":{"parameters":{"ver":ver}}}, function(err, result) {
+        mongoDB.db(admin.mongo.db).collection('va_command').update({'_id':new mongo.ObjectID(id)}, {"$pull":{"parameters":{"ver":ver}}}, function(err, result) {
     		var msg = {};
 
     		// Error trying to insert data
     		if (err) {
-    			msg = log('ADM037', [type, err]);
-    			send_response(session, msg);
+    			msg = log('ADM037', [type, err.message]);
+    			sendResponse(session, msg);
     		}
     		// Return result
     		else {
     			msg = log('ADM038', [type]);
-    			send_response(session, msg);
-                notify_interface({"item":"command", "action":"update"});
+    			sendResponse(session, msg);
     		}
     	});
     }
@@ -887,19 +588,18 @@ function command_new (session) {
 	data.parameters = session.params.parameters;
 
 	// Insert document
-	mongoDB.collection('command').insertOne(data, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_command').insertOne(data, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM009', ['command', err]);
-			send_response(session, msg);
+			msg = log('ADM009', ['command', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM010', ['command']);
-			send_response(session, msg);
-            notify_interface({"item":"command", "action":"new"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -918,18 +618,18 @@ function command_read (session) {
 	filter = { "company" : session.params.filter };
 
 	// Run query
-	mongoDB.collection('command').find(filter).sort({'name':1,'service':1}).toArray( function(err, data) {
+	mongoDB.db(admin.mongo.db).collection('va_command').find(filter).sort({'name':1,'service':1}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM011', ['command', err]);
-			send_response(session, msg);
+			msg = log('ADM011', ['command', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return all command data
 		else {
-            msg = response_data(data);
-			send_response(session, msg);
+            msg = responseData(data);
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -949,19 +649,18 @@ function command_update (session) {
 	delete session.params._id;
 
 	// Update document
-	mongoDB.collection('command').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:session.params}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_command').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:session.params}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM012', ['command', err]);
-			send_response(session, msg);
+			msg = log('ADM012', ['command', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM013', ['command']);
-			send_response(session, msg);
-            notify_interface({"item":"command", "action":"update"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -981,19 +680,18 @@ function company_delete (session) {
 	var	id;
 
 	id = session.params['_id'];
-	mongoDB.collection('company').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_company').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM007', ['company', err]);
-			send_response(session, msg);
+			msg = log('ADM007', ['company', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM008', ['company']);
-			send_response(session, msg);
-            notify_interface({"item":"company", "action":"delete"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1014,19 +712,18 @@ function company_group_delete (session) {
 	docid = session.params.id;
 
 	// Update document
-	mongoDB.collection('company').updateOne({'_id':new mongo.ObjectID(docid)}, {$unset:data}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_company').updateOne({'_id':new mongo.ObjectID(docid)}, {$unset:data}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM012', ['company', err]);
-			send_response(session, msg);
+			msg = log('ADM012', ['company', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM013', ['company']);
-			send_response(session, msg);
-            notify_interface({"item":"company", "action":"update"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1049,19 +746,18 @@ function company_group_upsert (session) {
 	docid = session.params.id;
 
 	// Update document
-	mongoDB.collection('company').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:data}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_company').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:data}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM012', ['company', err]);
-			send_response(session, msg);
+			msg = log('ADM012', ['company', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM013', ['company']);
-			send_response(session, msg);
-            notify_interface({"item":"company", "action":"update"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1081,19 +777,18 @@ function company_new (session) {
 	data.groups= session.params.groups;
 
 	// Insert document
-	mongoDB.collection('company').insertOne(data, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_company').insertOne(data, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM009', ['company', err]);
-			send_response(session, msg);
+			msg = log('ADM009', ['company', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM010', ['company']);
-			send_response(session, msg);
-            notify_interface({"item":"company", "action":"new"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1118,18 +813,18 @@ function company_read (session, attr) {
 	}
 
 	// Run query
-	mongoDB.collection('company').find(filter).sort({'name':1}).toArray( function(err, data) {
+	mongoDB.db(admin.mongo.db).collection('va_company').find(filter).sort({'name':1}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM011', ['company', err]);
-			send_response(session, msg);
+			msg = log('ADM011', ['company', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return all company data
 		else {
-            msg = response_data(data);
-			send_response(session, msg);
+            msg = responseData(data);
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1150,19 +845,18 @@ function company_update (session) {
 	docid = session.params.id;
 
 	// Update document
-	mongoDB.collection('company').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:data}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_company').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:data}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM012', ['company', err]);
-			send_response(session, msg);
+			msg = log('ADM012', ['company', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM013', ['company']);
-			send_response(session, msg);
-            notify_interface({"item":"company", "action":"update"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1182,19 +876,18 @@ function connector_delete (session) {
 	var	id;
 
 	id = session.params['_id'];
-	mongoDB.collection('connector').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_connector').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM007', ['connector', err]);
-			send_response(session, msg);
+			msg = log('ADM007', ['connector', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM008', ['connector']);
-			send_response(session, msg);
-            notify_interface({"item":"connector", "action":"delete"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1215,19 +908,18 @@ function connector_new (session) {
 	data.service = session.params.service;
 
 	// Insert document
-	mongoDB.collection('connector').insertOne(data, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_connector').insertOne(data, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM009', ['connector', err]);
-			send_response(session, msg);
+			msg = log('ADM009', ['connector', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM010', ['connector']);
-			send_response(session, msg);
-            notify_interface({"item":"connector", "action":"new"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1246,18 +938,18 @@ function connector_read (session) {
 	filter = { "company" : session.params.filter };
 
 	// Run query
-	mongoDB.collection('connector').find(filter).sort({'name':1,'service':1}).toArray( function(err, data) {
+	mongoDB.db(admin.mongo.db).collection('va_connector').find(filter).sort({'name':1,'service':1}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM011', ['connector', err]);
-			send_response(session, msg);
+			msg = log('ADM011', ['connector', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return all connector data
 		else {
-            msg = response_data(data);
-			send_response(session, msg);
+            msg = responseData(data);
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1276,19 +968,18 @@ function connector_update (session) {
 	docid = session.params.id;
 
 	// Update document
-	mongoDB.collection('connector').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:{"name":session.params.name, "config":session.params.config}}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_connector').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:{"name":session.params.name, "config":session.params.config}}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM012', ['connector', err]);
-			send_response(session, msg);
+			msg = log('ADM012', ['connector', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM013', ['connector']);
-			send_response(session, msg);
-            notify_interface({"item":"connector", "action":"update"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1302,19 +993,18 @@ function connector_update (session) {
 // ---------------------------------------------------------------------------------------------
 function connector_update_name (session) {
 	// Update document
-	mongoDB.collection('connector').update({"company":session.params.company,"name":session.params.name},{$set:{"name":session.params.newname}}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_connector').update({"company":session.params.company,"name":session.params.name},{$set:{"name":session.params.newname}}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM012', ['connector', err]);
-			send_response(session, msg);
+			msg = log('ADM012', ['connector', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM013', ['connector']);
-			send_response(session, msg);
-            notify_interface({"item":"connector", "action":"update"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1343,23 +1033,23 @@ function event_summary (session) {
     patt_time = new RegExp('[0-2][0-9]:[0-5][0-9]');
     if (!patt_date.test(date)) {
         msg = log('ADM033', [date]);
-        send_response(session, msg);
+        sendResponse(session, msg);
     }
     else {
     	if (!patt_time.test(time)) {
             msg = log('ADM034', [time]);
-            send_response(session, msg);
+            sendResponse(session, msg);
     	}
     	else {
     		// Start timestamp: '2016-11-20T14:00:00'
     		start = new Date('20' + date + 'T' + time + ':00');
 
             // Read the recent events
-        	mongoDB.collection('event').find({timestamp:{$gte:start}}).sort({timestamp:-1}).toArray( function(err, result) {
+        	mongoDB.db(admin.mongo.db).collection('va_event').find({timestamp:{$gte:start}}).sort({timestamp:-1}).toArray( function(err, result) {
         		var msg, i, sessions = {}, codes = [], data = {};
         		if (err) {
                     msg = log('ADM035', ['event', err.message]);
-        			send_response(session, msg);
+        			sendResponse(session, msg);
         		}
         		else {
                     // Summarise the data and generate a unique list of message codes
@@ -1382,8 +1072,8 @@ function event_summary (session) {
                     data.body = sessions;
 
                     // Format the response message
-                    msg = response_data(data);
-                    send_response(session, msg);
+                    msg = responseData(data);
+                    sendResponse(session, msg);
         		}
             });
         }
@@ -1404,19 +1094,18 @@ function event_summary (session) {
 function package_delete (session) {
 	var	id = session.params['_id'];
 
-	mongoDB.collection('package').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_package').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM007', ['package', err]);
-			send_response(session, msg);
+			msg = log('ADM007', ['package', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM008', ['package']);
-			send_response(session, msg);
-            notify_interface({"item":"package", "action":"delete"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1430,19 +1119,18 @@ function package_delete (session) {
 // ---------------------------------------------------------------------------------------------
 function package_new (session) {
 	// Insert document
-	mongoDB.collection('package').insertOne(session.params, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_package').insertOne(session.params, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM009', ['package', err]);
-			send_response(session, msg);
+			msg = log('ADM009', ['package', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM010', ['package']);
-			send_response(session, msg);
-            notify_interface({"item":"package", "action":"new"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1461,18 +1149,18 @@ function package_read (session) {
 	filter = { "company" : session.params.filter };
 
 	// Run query
-	mongoDB.collection('package').find(filter).sort({'name':1,'command':1}).toArray( function(err, data) {
+	mongoDB.db(admin.mongo.db).collection('va_package').find(filter).sort({'name':1,'command':1}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM011', ['package', err]);
-			send_response(session, msg);
+			msg = log('ADM011', ['package', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return all package data
 		else {
-            msg = response_data(data);
-			send_response(session, msg);
+            msg = responseData(data);
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1486,18 +1174,18 @@ function package_read (session) {
 // ---------------------------------------------------------------------------------------------
 function package_read1 (session) {
 	// Run query
-	mongoDB.collection('package').find({'_id':new mongo.ObjectID(session.params.id)}).toArray( function(err, data) {
+	mongoDB.db(admin.mongo.db).collection('va_package').find({'_id':new mongo.ObjectID(session.params.id)}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM011', ['package', err]);
-			send_response(session, msg);
+			msg = log('ADM011', ['package', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return all package data
 		else {
-            msg = response_data(data);
-			send_response(session, msg);
+            msg = responseData(data);
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1517,19 +1205,18 @@ function package_update (session) {
 	delete session.params.id;
 
 	// Update document
-	mongoDB.collection('package').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:session.params}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_package').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:session.params}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM012', ['package', err]);
-			send_response(session, msg);
+			msg = log('ADM012', ['package', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM013', ['package']);
-			send_response(session, msg);
-            notify_interface({"item":"package", "action":"update"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1549,19 +1236,18 @@ function user_delete (session) {
 	var	id;
 
 	id = session.params['_id'];
-	mongoDB.collection('user').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_user').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM007', ['user', err]);
-			send_response(session, msg);
+			msg = log('ADM007', ['user', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM008', ['user']);
-			send_response(session, msg);
-            notify_interface({"item":"user", "action":"delete"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1586,24 +1272,23 @@ function user_new (session) {
 	data.username = session.params.username;
 
     // Generate JSON web token
-	jwt_create(session, data, user_new_jwt);
+	jwtCreate(session, data, user_new_jwt);
 }
 
 function user_new_jwt (session, data) {
 	// Insert document
-	mongoDB.collection('user').insertOne(data, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_user').insertOne(data, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM009', ['user', err]);
-			send_response(session, msg);
+			msg = log('ADM009', ['user', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM010', ['user']);
-			send_response(session, msg);
-            notify_interface({"item":"user", "action":"new"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1622,18 +1307,18 @@ function user_read (session) {
 	filter = { "company" : session.params.filter };
 
 	// Run query
-	mongoDB.collection('user').find(filter).sort({'username':1}).toArray( function(err, data) {
+	mongoDB.db(admin.mongo.db).collection('va_user').find(filter).sort({'username':1}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM011', ['user', err]);
-			send_response(session, msg);
+			msg = log('ADM011', ['user', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return all user data
 		else {
-            msg = response_data(data);
-			send_response(session, msg);
+            msg = responseData(data);
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1659,7 +1344,7 @@ function user_update (session) {
 	data.username = session.params.username;
 
 	// Generate JSON web token
-	jwt_create(session, data, user_update_jwt);
+	jwtCreate(session, data, user_update_jwt);
 }
 
 function user_update_jwt (session, data) {
@@ -1670,19 +1355,18 @@ function user_update_jwt (session, data) {
 	delete data.id;
 
 	// Update document
-	mongoDB.collection('user').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:data}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_user').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:data}, function(err, result) {
 		var msg = {};
 
 		// Error trying to update data
 		if (err) {
-			msg = log('ADM012', ['user', err]);
-			send_response(session, msg);
+			msg = log('ADM012', ['user', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return result
 		else {
 			msg = log('ADM013', ['user']);
-			send_response(session, msg);
-            notify_interface({"item":"user", "action":"update"});
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1698,22 +1382,22 @@ function user_update_jwt (session, data) {
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-function list_plans (session) {
-	mongoDB.collection('plan').find().sort({'name':1}).toArray( function(err, data) {
+/*function list_plans (session) {
+	mongoDB.db(admin.mongo.db).collection('plan').find().sort({'name':1}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
 			msg = log('ADM020', [err.message]);
-			send_response(session, msg);
+			sendResponse(session, msg);
 		}
 		// Return data
 		else {
-            msg = response_data(data);
-			send_response(session, msg);
+            msg = responseData(data);
+			sendResponse(session, msg);
 		}
 	});
-}
+}*/
 
 
 
@@ -1723,16 +1407,16 @@ function list_plans (session) {
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-function list_roles (session) {
+/*function list_roles (session) {
 	var data = [], msg = {};
 
     data.push({"code":"superuser", "name":"Super User", "level":1});
     data.push({"code":"manager", "name":"Manager", "level":2});
     data.push({"code":"user", "name":"User", "level":3});
 
-    msg = response_data(data);
-	send_response(session, msg);
-}
+    msg = responseData(data);
+	sendResponse(session, msg);
+}*/
 
 
 
@@ -1743,13 +1427,13 @@ function list_roles (session) {
 // ---------------------------------------------------------------------------------------------
 function login_check (session) {
 	// Check whether user exists
-	mongoDB.collection('user').find({"username":session.params.username, "password":session.params.password},{"password":0}).toArray( function(err, data) {
+	mongoDB.db(admin.mongo.db).collection('va_user').find({"username":session.params.username, "password":session.params.password},{"password":0}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM018', ['user', err]);
-			send_response(session, msg);
+			msg = log('ADM018', ['user', err.message]);
+			sendResponse(session, msg);
 		}
 		// Check that only 1 user was returned
 		else {
@@ -1758,7 +1442,7 @@ function login_check (session) {
 			}
 			else {
 				msg = log('ADM022', []);
-				send_response(session, msg);
+				sendResponse(session, msg);
 			}
 		}
 	});
@@ -1774,13 +1458,13 @@ function login_check (session) {
 // ---------------------------------------------------------------------------------------------
 function login_group_users (session, user) {
 	// Read all users in the same company group as this user
-	mongoDB.collection('user').find({"company":user.company,"group":user.group},{"username":1,"_id":-1}).toArray( function(err, data) {
+	mongoDB.db(admin.mongo.db).collection('va_user').find({"company":user.company,"group":user.group},{"username":1,"_id":-1}).toArray( function(err, data) {
 		var msg = {}, i, grps = [];
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM021', ['user', err]);
-			send_response(session, msg);
+			msg = log('ADM021', ['user', err.message]);
+			sendResponse(session, msg);
 		}
 		// Return all user data
 		else {
@@ -1794,7 +1478,7 @@ function login_group_users (session, user) {
 				grps.push(data[i].username);
 			}
 			msg.data.groupusers = grps;
-			send_response(session, msg);
+			sendResponse(session, msg);
 		}
 	});
 }
@@ -1822,25 +1506,25 @@ function report (session) {
 		report_filter_parse(filter_obj);
 	}
 	catch (err) {
-		msg = log('ADM014', [err]);
-		send_response(session, msg);
+		msg = log('ADM014', [err.message]);
+		sendResponse(session, msg);
 		return;
 	}
 
 	// Run the query
-	mongoDB.collection(colln).find(filter_obj,flds).sort(seq).limit(max).toArray(function (err, data) {
+	mongoDB.db(admin.mongo.db).collection(colln).find(filter_obj,flds).sort(seq).limit(max).toArray(function (err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM015', [colln, err]);
-            send_response(session, msg);
+			msg = log('ADM015', [colln, err.message]);
+            sendResponse(session, msg);
 		}
 		// Return data
 		else {
 			log('ADM016', [session.command]);
-            msg = response_data(data);
-            send_response(session, msg);
+            msg = responseData(data);
+            sendResponse(session, msg);
 		}
 	});
 }
@@ -1894,19 +1578,19 @@ function report_filter_parse (obj) {
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-function ui_read (session) {
-    mongoDB.collection('ui').find({'access':{$in:[session.params.role]}}).toArray( function(err, data) {
+/*function ui_read (session) {
+    mongoDB.db(admin.mongo.db).collection('ui').find({'access':{$in:[session.params.role]}}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM019', [session.params.role, err]);
-			send_response(session, msg);
+			msg = log('ADM019', [session.params.role, err.message]);
+			sendResponse(session, msg);
 		}
 		// Return all UI documents
 		else {
-            msg = response_data(data);
-			send_response(session, msg);
+            msg = responseData(data);
+			sendResponse(session, msg);
 		}
 	});
-}
+}*/
