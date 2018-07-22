@@ -32,7 +32,7 @@ var common = {
 			type: 'GET',
 			dataType: 'json',
 			data: JSON.stringify(json),
-	//		headers: { "Authorization": "Bearer " + me.jwt },	// THIS DOUBLES UP THE PROCESSING IN admin.js !!!!!!!!!
+//			headers: { "Authorization": "Bearer " + me.jwt },	// THIS DOUBLES UP THE PROCESSING IN admin.js !!!!!!!!!
 			error: function (err) {
 				ui.messageBox('CON010', [common.api.host, common.api.port, command]);
 			},

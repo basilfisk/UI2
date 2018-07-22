@@ -4,6 +4,64 @@
  * @copyright Breato Ltd 2018
  */
 
+ // Global variables for holding data, etc.
+ // 'me' holds details of the current user
+var lastKey = '', me = {}, admin, filters, progress;
+
+// Temporary object used to pass data between functions
+admin = {
+	commands: [],		// List of commands the current user has access to
+	company: {},		// Details of the company the current user has selected
+	companies: [],		// List of companies the current user has access to
+	connectors: [],		// List of connectors the current user has access to
+	packages: [],		// Array of packages for the current company
+	plans: [],			// Array of plans for all companies
+	roles: [],	      	// List of roles that can be granted to users
+	services: [],		// List of services available to all companies
+	users: [],			// Users the current user has access to
+	usage: {},			// Rolling total of usage data
+};
+
+// Load the services
+//admin.services.push({ "code":"bash", "name":"Bash Commands" });
+//admin.services.push({ "code":"file", "name":"File Transfer" });
+//admin.services.push({ "code":"mail", "name":"E-Mail" });
+admin.services.push({ "code":"mongo", "name":"MongoDB" });
+//admin.services.push({ "code":"pgsql", "name":"PostgreSQL" });
+//admin.services.push({ "code":"structure", "name":"Structured SQL" });
+//admin.services.push({ "code":"vsaas", "name":"VisualSaaS" });
+
+// Holds filters applied in forms for persistance
+filters = {
+	codes: {
+		limit: 500
+	},
+	commands: {
+		limit: 500
+	},
+	functions: {
+		limit: 500
+	},
+	reportRecentErrors: {
+		limit: 500
+	},
+	reportRecentTrans: {
+		limit: 500
+	}
+};
+
+// Status of loading data after login
+progress = {
+	command: false,
+	company: false,
+	connector: false,
+	package: false,
+	role: false,
+	user: false
+};
+
+
+
 /**
  * @namespace Login
  * @author Basil Fisk
@@ -22,6 +80,153 @@ var login = {
 
 		// Display the login form for the Admin Console
 		ui.formEdit('login', {"username":'', "password":''});
+	},
+
+
+	/**
+	 * @method readCompany
+	 * @author Basil Fisk
+	 * @param {string} action Action to be performed - 'result' shows data.
+	 * @param {object} result Result returned from database.
+	 * @description Load company data returned from database into global variables.
+	 */
+	readCompany: function (action, result) {
+		var data, i;
+
+		// If no company has been selected yet, start with user's company
+//		if (admin.company.name === undefined) {
+//			admin.company.name = me.company;
+//		}
+		if (admin.company.code === undefined) {
+			admin.company.code = me.company;
+		}
+
+		// Clear out the existing company data
+		admin.companies.splice(0, admin.companies.length);
+
+		// Load list of companies and data for user's company
+		if (result.data !== undefined && result.result.status) {
+			for (i=0; i<result.data.length; i++) {
+				// For the super user, load an array with ID and name of all companies
+				// TODO This version of VeryAPI only has 1 company / database
+console.log(me);
+console.log(admin);
+console.log(result);
+				if (me.role === 'superuser') {
+					admin.companies.push(result.data[i]);
+				}
+
+				// Load user's company data
+//				if (admin.company.name === result.data[i].name) {
+				if (admin.company.code === result.data[i].code) {
+					admin.company = result.data[i];
+
+					// Read all commands used by the company
+					common.apiCall('commandRead', { "filter":admin.company.code }, login.readCommands);
+
+					// Read all commands used by the company
+					common.apiCall('connectorRead', { "filter":admin.company.code }, login.readConnectors);
+
+					// Read all packages used by the company
+					common.apiCall('packageRead', {"filter":admin.company.code}, login.readPackages);
+				}
+			}
+			login.setProgress('company');
+		}
+		else {
+			ui.messageBox('CON010', []);
+		}
+	},
+
+
+	/**
+	 * @method readCommands
+	 * @author Basil Fisk
+	 * @param {string} action Action to be performed - 'result' shows data.
+	 * @param {object} result Result returned from database.
+	 * @description Read commands for the company.
+	 */
+	readCommands: function (action, result) {
+		if (result.data !== undefined && result.result.status) {
+			// Clear out the existing commands
+			admin.commands.splice(0, admin.commands.length);
+
+			// Load commands
+			admin.commands = result.data.sort();
+			login.setProgress('command');
+		}
+		else {
+			ui.messageBox('CON001', [admin.company.name]);
+		}
+	},
+
+
+	/**
+	 * @method readConnectors
+	 * @author Basil Fisk
+	 * @param {string} action Action to be performed - 'result' shows data.
+	 * @param {object} result Result returned from database.
+	 * @description Read connectors for the company.
+	 */
+	readConnectors: function (action, result) {
+		if (result.data !== undefined && result.result.status) {
+			// Clear out the existing connectors
+			admin.connectors.splice(0, admin.packages.length);
+
+			// Load connectors
+			admin.connectors = result.data.sort();
+			login.setProgress('connector');
+		}
+		else {
+			ui.messageBox('CON002', [admin.company.name]);
+		}
+	},
+
+
+	/**
+	 * @method readPackages
+	 * @author Basil Fisk
+	 * @param {string} action Action to be performed - 'result' shows data.
+	 * @param {object} result Result returned from database.
+	 * @description Read packages for the company.
+	 */
+	readPackages: function (action, result) {
+		if (result.data !== undefined && result.result.status) {
+			// Clear out the existing packages
+			admin.packages.splice(0, admin.packages.length);
+
+			// Load packages
+			admin.packages = result.data.sort();
+			login.setProgress('package');
+		}
+		else {
+			ui.messageBox('CON003', [admin.company.name]);
+		}
+	},
+
+
+	/**
+	 * @method readRoles
+	 * @author Basil Fisk
+	 * @param {string} action Action to be performed - 'result' shows data.
+	 * @param {object} result Result returned from database.
+	 * @description Process the result of the login check.
+	 */
+	readRoles: function (action, result) {
+		if (result.data !== undefined) {
+			admin.roles = result.data;
+	
+			// Add role level to user's object
+			for (i=0; i<admin.roles.length; i++) {
+				if (admin.roles[i].code === me.role) {
+					me.level = admin.roles[i].level;
+				}
+			}
+			login.setProgress('role');
+		}
+		else {
+			ui.messageBox('CON006', []);
+		}
 	},
 
 
@@ -46,255 +251,48 @@ var login = {
 			me.groupusers = result.data.groupusers;
 
 			// Read the UI documents
-			this.apiCall('uiRead', { "role":me.role }, load_ui);
+//			common.apiCall('uiRead', { "role":me.role }, load_ui);
 
 			// The super user can view all companies, others can only see their company's data
 			filter = (me.role === 'superuser') ? 'all' : me.company;
-			this.apiCall('companyRead', { "filter":filter }, load_company_data);
+			common.apiCall('companyRead', { "filter":filter }, login.readCompany);
 
 			// Load the plan lists from the plan collection (same for all companies)
-			this.apiCall('listPlans', {}, load_plan_list);
+//			common.apiCall('listPlans', {}, load_plan_list);
 
 			// Load the roles lists from the user collection (same for all users)
-			this.apiCall('listRoles', {}, load_role_list);
+			common.apiCall('listRoles', {}, login.readRoles);
+			login.setProgress('user');
 		}
 		// Show error, then display login form again
 		else {
 			ui.messageBox('CON007', [], () => {
-//				ui.formEdit('login', {"username":'', "password":''});
+				ui.formEdit('login', {"username":'', "password":''});
 			});
+		}
+	},
+
+
+	/**
+	 * @method setProgress
+	 * @author Basil Fisk
+	 * @param {string} item Name of data item that has been loaded.
+	 * @description Track the progress of data loading. Show the data when done.
+	 */
+	setProgress: function (item) {
+		progress[item] = true;
+		if (me.role === 'superuser') {
+			if (progress.command && progress.company && progress.connector && progress.package && progress.role && progress.user) {
+				console.log(admin);
+			}
+		}
+		else {
+			if (progress.company && progress.role && progress.user) {
+				console.log(admin);
+			}
 		}
 	}
 };
-
-
-
-// *********************************************************************************************
-// *********************************************************************************************
-// *********************************************************************************************
-// *********************************************************************************************
-
-// Global variables for holding data, etc.
-var lastKey = '',
-	me = {},				// Details of the current user
-	admin = {};				// Temporary object used to pass data betwwen functions
-
-// Initialise the global data varable
-admin.commands = [];		// List of commands the current user has accesss to
-admin.company = {};			// Details of the company the current user has selected
-admin.companies = [];		// List of companies the current user has accesss to
-admin.connectors = [];		// List of connectors the current user has accesss to
-admin.packages = [];		// Array of packages for the current company
-admin.plans = [];			// Array of plans for all companies
-admin.roles = [];	      	// List of roles that can be granted to users
-admin.services = [];		// List of services available to all companies
-admin.users = [];			// Users the current user has accesss to
-admin.usage = {};			// Rolling total of usage data
-
-// Load the services
-admin.services.push({ "code":"bash", "name":"Bash Commands" });
-admin.services.push({ "code":"file", "name":"File Transfer" });
-admin.services.push({ "code":"mail", "name":"E-Mail" });
-admin.services.push({ "code":"mongo", "name":"MongoDB" });
-admin.services.push({ "code":"pgsql", "name":"PostgreSQL" });
-admin.services.push({ "code":"structure", "name":"Structured SQL" });
-admin.services.push({ "code":"vsaas", "name":"VisualSaaS" });
-
-// Instance of the JSON editor
-var editor = {};
-
-// Global variable holding filters
-var filters = {};
-filters.codes = {};
-filters.codes.limit = 500;
-filters.commands = {};
-filters.commands.limit = 500;
-filters.functions = {};
-filters.functions.limit = 500;
-filters.reportRecentErrors = {};
-filters.reportRecentErrors.limit = 500;
-filters.reportRecentTrans = {};
-filters.reportRecentTrans.limit = 500;
-
-// Initialise the socket that listens for messages from the Tracker daemon
-socket_init();
-
-
-
-// ***************************************************************************************
-//
-//		START-UP AND SOCKET RELATED FUNCTIONS
-//
-// ***************************************************************************************
-
-// ---------------------------------------------------------------------------------------
-// Read commands for the company
-//
-// Argument 1 : Action (not relevant)
-// Argument 2 : Data object returned by the API call
-// ---------------------------------------------------------------------------------------
-function company_commands_save (action, result) {
-	if (result.data !== undefined && result.result.status) {
-		// Clear out the existing commands
-		admin.commands.splice(0, admin.commands.length);
-
-		// Load commands
-        admin.commands = result.data.sort();
-	}
-	else {
-		message('CON001', [admin.company.name]);
-	}
-}
-
-
-
-// ---------------------------------------------------------------------------------------
-// Read connectors for the company
-//
-// Argument 1 : Action (not relevant)
-// Argument 2 : Data object returned by the API call
-// ---------------------------------------------------------------------------------------
-function company_connectors_save (action, result) {
-	if (result.data !== undefined && result.result.status) {
-		// Clear out the existing connectors
-		admin.connectors.splice(0, admin.packages.length);
-
-		// Load connectors
-		admin.connectors = result.data.sort();
-	}
-	else {
-		message('CON002', [admin.company.name]);
-	}
-}
-
-
-
-// ---------------------------------------------------------------------------------------
-// Read packages for the company
-//
-// Argument 1 : Action (not relevant)
-// Argument 2 : Data object returned by the API call
-// ---------------------------------------------------------------------------------------
-function company_packages_save (action, result) {
-	if (result.data !== undefined && result.result.status) {
-		// Clear out the existing packages
-		admin.packages.splice(0, admin.packages.length);
-
-		// Load packages
-		admin.packages = result.data.sort();
-	}
-	else {
-		message('CON003', [admin.company.name]);
-	}
-}
-
-
-
-// ---------------------------------------------------------------------------------------
-// Define the validation tests to be carried out by the UI script
-// ---------------------------------------------------------------------------------------
-/*
-function define_checks () {
-    return {
-    	"alphaLower": {
-    		"pattern": "[a-z]+$",
-    		"description": "Lower case alphabetic string"
-    	},
-    	"alphaMixed": {
-    		"pattern": "[a-zA-Z]+$",
-    		"description": "Mixed case alphabetic string"
-    	},
-    	"alphaUpper": {
-    		"pattern": "[A-Z]+$",
-    		"description": "Upper case alphabetic string"
-    	},
-    	"alphaNumeric": {
-    		"pattern": "^\\w+$",
-    		"description": "Alphanumeric string"
-    	},
-    	"alphaNumericSpecial": {
-    		"pattern": "^[\\w \\-_]+$",
-    		"description": "Alphanumeric string, including space, hyphen and underscore"
-    	},
-    	"email": {
-    		"pattern": "[a-z0-9!#$%&\"*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\"*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-    		"description": "must be an email address"
-    	},
-    	"filename": {
-    		"pattern": "^[\\w\/\\-_]+$",
-        	"description": "Alphanumeric string, including forward slash, hyphen and underscore"
-    	},
-    	"float": {
-    		"pattern": "^-*\\d*\\.\\d+$",
-    		"description": "Floatng point"
-    	},
-    	"integer": {
-    		"pattern": "^-*\\d+$",
-    		"description": "Integer"
-    	},
-    	"ipv4": {
-    		"pattern": "^\\*$|^(?!0)(?!.*\\.$)((1?\\d?\\d|25[0-5]|2[0-4]\\d)(\\.|$)){4}$",
-    		"description": "IP v4 address or * for any client"
-    	},
-    	"password": {
-    		"pattern": "^[\\w \\-_]+$",
-    		"description": "Password, with alphanumeric, space, hyphen and underscore characters"
-    	},
-    	"url": {
-    		"pattern": "^[\\w\/\\.\\-_]+$",
-    		"description": "URL"
-    	}
-    };
-} */
-
-
-
-// ---------------------------------------------------------------------------------------
-// Load company data returned from database into global variables
-//
-// Argument 1 : Action to be performed - always 'result'
-// Argument 2 : Result returned from database
-// ---------------------------------------------------------------------------------------
-function load_company_data (action, result) {
-	var data, i;
-
-	// If no company has been selected yet, start with user's company
-	if (admin.company.name === undefined) {
-		admin.company.name = me.company;
-	}
-
-	// Clear out the existing company data
-	admin.companies.splice(0, admin.companies.length);
-
-	// Load list of companies and data for user's company
-	if (result.data !== undefined && result.result.status) {
-		for (i=0; i<result.data.length; i++) {
-			// For the super user, load an array with ID and name of all companies
-			if (me.role === 'superuser') {
-				admin.companies.push(result.data[i]);
-			}
-
-			// Load user's company data
-			if (admin.company.name === result.data[i].name) {
-				admin.company = result.data[i];
-
-				// Read all commands used by the company
-				this.apiCall('commandRead', { "filter":admin.company.name }, company_commands_save);
-
-				// Read all commands used by the company
-				this.apiCall('connectorRead', { "filter":admin.company.name }, company_connectors_save);
-
-				// Read all packages used by the company
-				this.apiCall('packageRead', {"filter":admin.company.name}, company_packages_save);
-			}
-		}
-	}
-	else {
-		message('CON010', []);
-	}
-}
-
-
 
 // ---------------------------------------------------------------------------------------
 // Load plans returned from database. Plans apply to all companies.
@@ -310,114 +308,6 @@ function load_plan_list (action, result) {
 		}
 	}
 	else {
-		message('CON005', []);
+		ui.messageBox('CON005', []);
 	}
-}
-
-
-
-// ---------------------------------------------------------------------------------------
-// Load roles returned from database
-//
-// Argument 1 : Action to be performed - always 'result'
-// Argument 2 : Result returned from database
-// ---------------------------------------------------------------------------------------
-function load_role_list (action, result) {
-	if (result.data !== undefined) {
-        admin.roles = result.data;
-
-        // Add role level to user's object
-    	for (i=0; i<admin.roles.length; i++) {
-    		if (admin.roles[i].code === me.role) {
-    			me.level = admin.roles[i].level;
-    		}
-    	}
-	}
-	else {
-		message('CON006', []);
-	}
-}
-
-
-
-// ---------------------------------------------------------------------------------------
-// Load the UI data read from the 'ui' collection
-//
-// Argument 1 : Action to be performed - 'result' shows data
-// Argument 2 : Result returned from database
-// ---------------------------------------------------------------------------------------
-function load_ui (action, result) {
-    if (result.result.status === 1) {
-        ui.loadForms(result.data);
-    }
-    else {
-        show_message('UI001', [result.result.code, result.result.text]);
-    }
-}
-
-
-
-// ---------------------------------------------------------------------------------------
-// Process the result of the login check
-//
-// Argument 1 : Action to be performed - 'result' shows data
-// Argument 2 : Result returned from database
-// ---------------------------------------------------------------------------------------
-/*function login_read_user (action, result) {
-	// Only 1 user record should be returned
-	if (result.result.status === 1) {
-		// Save the user data
-		me = {};
-		me.clients = result.data.clients;
-		me.company = result.data.company;
-		me.group = result.data.group;
-		me.jwt = result.data.jwt;
-		me.role = result.data.role;
-		me.packages = result.data.packages;
-		me.username = result.data.username;
-		me.groupusers = result.data.groupusers;
-
-		// Read the UI documents
-        this.apiCall('uiRead', { "role":me.role }, load_ui);
-
-		// The super user can view all companies, others can only see their company's data
-		filter = (me.role === 'superuser') ? 'all' : me.company;
-		this.apiCall('companyRead', { "filter":filter }, load_company_data);
-
-		// Load the plan lists from the plan collection (same for all companies)
-		this.apiCall('listPlans', {}, load_plan_list);
-
-		// Load the roles lists from the user collection (same for all users)
-		this.apiCall('listRoles', {}, load_role_list);
-	}
-	else {
-		message('CON007', [], login);
-	}
-}*/
-
-
-
-// ---------------------------------------------------------------------------------------------
-// Initialise the socket to listen for in-bound updates from the Tracker for the dashboard
-// ---------------------------------------------------------------------------------------------
-function socket_init () {
-	var socket,
-		host = adminConfig.tracker.host,
-		port = adminConfig.tracker.port;
-
-	// Open a socket to listen for messages from the tracker server
-	socket = io.connect(host + ':' + port);
-	socket.on('connect', function() {
-//		message('CON008', [port]);
-	});
-
-	// Errors
-	socket.on('error', function(err) {
-		message('CON009', [port]);
-	});
-
-	// Usage summary record received
-	socket.on('usage', function (data) {
-		usage_update(data);
-	});
 }

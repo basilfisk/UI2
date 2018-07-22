@@ -93,18 +93,18 @@ function adminServer () {
 		str = str.replace(/%7D/g,"}");
 
 		// Load parameters into an object and run the request
-		try {
+//		try {
 			session.params = JSON.parse(str);
 			log('ADM030', [str]);
 			runRequest(session);
-		}
+/*		}
 		// JSON format error
 		catch (err) {
 			msg = log('ADM031', [err.message, str]);
 			sendResponse(session, msg);
 			return;
 		}
-
+*/
 		// Fire when request completes
 		request.on('end', function (request, response) { // TIMING IN LOGS ???????????????????????????????????????
 			log('ADM003', [session.id]);
@@ -1407,7 +1407,7 @@ function user_update_jwt (session, data) {
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-/*function list_roles (session) {
+function list_roles (session) {
 	var data = [], msg = {};
 
     data.push({"code":"superuser", "name":"Super User", "level":1});
@@ -1416,7 +1416,7 @@ function user_update_jwt (session, data) {
 
     msg = responseData(data);
 	sendResponse(session, msg);
-}*/
+}
 
 
 

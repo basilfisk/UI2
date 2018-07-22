@@ -516,7 +516,7 @@ var ui = {
 		// Hide the form and trigger the post-processing function
 		$('#' + id).modal('hide');
 //		try {
-			console.log(id, _defs[id].buttons.save, data);
+//			console.log(id, _defs[id].buttons.save, data);
 			_post[_defs[id].buttons.save](data);
 //		}
 //		catch (err) {
@@ -756,16 +756,22 @@ var ui = {
 		var text, title;
 		
 		// Find message and substitute parameters
-		text = _msgs[code].text;
-		if (prms.length > 0) {
-			for (i=0; i<prms.length; i++) {
-				text = text.replace(new RegExp('_p'+(1+i),'g'), prms[i]);
+		if (_msgs[code]) {
+			text = _msgs[code].text;
+			if (prms.length > 0) {
+				for (i=0; i<prms.length; i++) {
+					text = text.replace(new RegExp('_p'+(1+i),'g'), prms[i]);
+				}
 			}
+			
+			// Title
+			title = (_msgs[code].type === 'error') ? 'Error Message' : 'Information Message';
+			title += ' [' + code + ']';
 		}
-		
-		// Title
-		title = (_msgs[code].type === 'error') ? 'Error Message' : 'Information Message';
-		title += ' [' + code + ']';
+		else {
+			text = 'No explanation found for message code [' + code + ']';
+			text = 'Message Code [' + code + ']';
+		}
 		
 		// Display the message
 		this._messageShow(title, text, callback);
