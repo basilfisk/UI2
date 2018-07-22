@@ -1,0 +1,254 @@
+{
+	"log": "/tmp/veryapi.log",
+	"jwtSecret": "07476d10950675ffd921cc8a21044120",
+	"mongo": {
+		"host": "cluster0-shard-00-00-upnth.gcp.mongodb.net:27017,cluster0-shard-00-01-upnth.gcp.mongodb.net:27017,cluster0-shard-00-02-upnth.gcp.mongodb.net:27017",
+		"replicaset": "Cluster0-shard-0",
+		"authdb": "admin",
+		"database": "qott-quipteldev",
+		"username": "fmh_user",
+		"password": "FMH_Us3r"
+	},
+	"port": 19400,
+	"ssl" : {
+		"ca": "/etc/quiptel/local.very-api.net.ca",
+		"cert": "/etc/quiptel/local.very-api.net.crt",
+		"key": "/etc/quiptel/local.very-api.net.key"
+	},
+	"messages": {
+		"ADM001": {
+			"type" : "info",
+			"module" : "admin",
+			"function" : "admin_server",
+			"internal" : "Starting the Administration daemon using _p1"
+		},
+		"ADM002": {
+			"type" : "info",
+			"module" : "admin",
+			"function" : "admin_server",
+			"internal" : "Listening for requests on port _p1"
+		},
+		"ADM003": {
+			"type": "info",
+			"module" : "admin",
+			"function" : "on.request",
+			"internal": "Client session '_p1' complete"
+		},
+		"ADM004": {
+			"type" : "error",
+			"module" : "admin",
+			"function" : "on.error",
+			"internal" : "Cannot create HTTPS server as port _p1 is in use"
+		},
+		"ADM005": {
+			"type" : "error",
+			"module" : "admin",
+			"function" : "on.error",
+			"internal" : "Socket communication error: _p1 _p2"
+		},
+		"ADM006": {
+			"type" : "error",
+			"module" : "admin",
+			"function" : "check_request",
+			"internal" : "Unrecognized command '_p1'"
+		},
+		"ADM007": {
+			"type": "error",
+			"module" : "admin",
+			"function": "*_delete",
+			"internal": "Can't delete document from collection '_p1': _p2"
+		},
+		"ADM008": {
+			"type": "info",
+			"module" : "admin",
+			"function": "*_delete",
+			"internal": "Deleted document from collection '_p1'"
+		},
+		"ADM009": {
+			"type": "error",
+			"module" : "admin",
+			"function": "*_new",
+			"internal": "Can't insert document into collection '_p1': _p2"
+		},
+		"ADM010": {
+			"type": "info",
+			"module" : "admin",
+			"function": "*_new",
+			"internal": "Inserted document into collection '_p1'"
+		},
+		"ADM011": {
+			"type": "error",
+			"module" : "admin",
+			"function": "*_read",
+			"internal": "Can't retrieve data from collection '_p1': _p2"
+		},
+		"ADM012": {
+			"type": "error",
+			"module" : "admin",
+			"function": "*_update",
+			"internal": "Can't update document in collection '_p1': _p2"
+		},
+		"ADM013": {
+			"type": "info",
+			"module" : "admin",
+			"function": "*_update",
+			"internal": "Updated document in collection '_p1'"
+		},
+		"ADM014": {
+			"type": "error",
+			"module" : "admin",
+			"function": "report",
+			"internal": "Filter statement is not valid JSON: _p1"
+		},
+		"ADM015": {
+			"type": "error",
+			"module" : "admin",
+			"function": "report",
+			"internal": "Can't retrieve data from collection '_p1': _p2"
+		},
+		"ADM016": {
+			"type": "info",
+			"module": "admin",
+			"function": "report",
+			"internal": "Administration report '_p1' ran successfully"
+		},
+		"ADM017": {
+			"type" : "error",
+			"module": "admin",
+			"function" : "open_mongo",
+			"internal" : "Can't connect to Mongo database '_p1': _p2"
+		},
+		"ADM018": {
+			"type": "error",
+			"module" : "admin",
+			"function": "login_check",
+			"internal": "Can't retrieve data from collection '_p1': _p2"
+		},
+		"ADM019": {
+			"type": "error",
+			"module" : "admin",
+			"function": "ui_read",
+			"internal": "Can't retrieve list of '_p1' from collection 'ui': _p2"
+		},
+		"ADM020": {
+			"type": "error",
+			"module" : "admin",
+			"function": "list_plans",
+			"internal": "Can't retrieve data from collection 'plan': _p1"
+		},
+		"ADM021": {
+			"type": "error",
+			"module" : "admin",
+			"function": "login_group_users",
+			"internal": "Can't retrieve data from collection '_p1': _p2"
+		},
+		"ADM022": {
+			"type": "error",
+			"module" : "admin",
+			"function": "login_check",
+			"internal": "Invalid combination of user name and password entered"
+		},
+		"ADM023": {
+			"type": "error",
+			"module" : "admin",
+			"function": "admin_server",
+			"internal": "Invalid authorization header in request for session"
+		},
+		"ADM024": {
+			"type": "error",
+			"module" : "admin",
+			"function": "jwt_create",
+			"internal": "Can't retrieve data from collection '_p1': _p2"
+		},
+		"ADM025": {
+			"type": "error",
+			"module" : "admin",
+			"function": "open_mongo",
+			"internal": "User '_p1' failed authentication: _p2"
+		},
+		"ADM026": {
+			"type": "error",
+			"module" : "admin",
+			"function": "company_package",
+			"internal": "Can't retrieve company packages from collection 'va_package': _p1"
+		},
+		"ADM027": {
+			"type" : "info",
+			"module" : "admin",
+			"function" : "send_response",
+			"internal" : "Successfully ran command '_p1'"
+		},
+		"ADM028": {
+			"type" : "error",
+			"module" : "admin",
+			"function" : "send_response",
+			"internal" : "Error running command '_p1': '_p2' _p3"
+		},
+		"ADM029": {
+			"type": "error",
+			"module": "admin",
+			"function": "admin_server",
+			"internal": "Request paths must take the form: /{version}/{command}"
+		},
+		"ADM030": {
+			"type" : "debug",
+			"module" : "admin",
+			"function" : "admin_server",
+			"internal" : "Version 1 API GET call received: _p1"
+		},
+		"ADM031": {
+			"type": "error",
+			"module": "admin",
+			"function": "admin_server",
+			"internal": "Error parsing user parameters in JSON format: '_p1' : _p2"
+		},
+		"ADM032": {
+			"type": "info",
+			"module": "admin",
+			"function": "open_usage_publish",
+			"internal": "Administration push server started on port _p1"
+		},
+		"ADM033": {
+			"type": "error",
+			"module" : "admin",
+			"function": "event_summary",
+			"internal": "Invalid date '_p1', use YY-MM-DD format"
+		},
+		"ADM034": {
+			"type": "error",
+			"module" : "admin",
+			"function": "event_summary",
+			"internal": "Invalid time '_p1', use HH24-MI format"
+		},
+		"ADM035": {
+			"type": "error",
+			"module" : "admin",
+			"function": "event_summary",
+			"internal": "Can't retrieve data from collection '_p1': _p2"
+		},
+		"ADM036": {
+			"type": "error",
+			"module" : "admin",
+			"function": "notify_interface",
+			"internal": "Notification channel '_p1' on RabbitMQ is not open"
+		},
+		"ADM037": {
+			"type": "error",
+			"module" : "admin",
+			"function": "command_delete_version",
+			"internal": "Can't delete '_p1' version element from document in 'va_command' collection: _p2"
+		},
+		"ADM038": {
+			"type": "info",
+			"module" : "admin",
+			"function": "command_delete_version",
+			"internal": "Delete '_p1' version element from document in 'va_command' collection"
+		},
+		"ADM039": {
+			"type": "error",
+			"module": "admin",
+			"function": "admin_server",
+			"internal": "URL must take the form: http(s)://{domain}:{port}/{version}/{command}?{parameters}"
+		}
+	}
+}

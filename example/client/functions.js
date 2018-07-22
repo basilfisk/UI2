@@ -1,93 +1,127 @@
 /**
- * @file forms.js
+ * @file functions.js
  * @author Basil Fisk
  * @copyright Breato Ltd 2018
  */
 
 /**
- * @namespace Forms
+ * @namespace Functions
  * @author Basil Fisk
- * @description Forms for the administration console. VERYAPI SPECIFIC !!!!!!!!!!!!
+ * @description Functions for interchanging data entered via the UI with the MongoDB database.
  */
-var forms = {
+var formFunctions = {
+	/**
+	 * @method aboutShow
+	 * @author Basil Fisk
+	 * @description Display the About form.
+	 */
+	aboutShow: function () {
+		var data = {}, i;
+
+		data.username = me.username;
+		data.company = me.company;
+		data.group = me.group;
+		data.clients = me.clients;
+		data.jwt = me.jwt;
+		for (i=0; i<admin.roles.length; i++) {
+			if (admin.roles[i].code === me.role) {
+				data.role = admin.roles[i].name;
+			}
+		}
+		data.packages = me.packages.join(',');
+
+		// Display form
+		ui.formEdit('aboutForm', data);
+	},
+
 
 	/**
-	 * @method postProcess
+	 * @method loginCheck
 	 * @author Basil Fisk
-	 * @param {string} name Name of the form being processed.
 	 * @param {string} data Data returned from the form.
-	 * @description Invoke the API call triggered by ui.uiFormSave. ????????????????????
+	 * @description Validate the user credentials.
 	 */
-	postProcess: function (name, data) {
-console.log('forms.postProcess');
-		switch (name) {
-			case 'commandAddForm':
-				command_add_save(data);
-				break;
-			case 'commandEditForm':
-				command_edit_save('common', data);
-				break;
-			case 'commandEditCommandForm':
-				command_edit_save('command', data);
-				break;
-			case 'commandEditCommandForm-delete':
-				command_delete_version('command', data);
-				break;
-			case 'commandEditParametersForm':
-				command_edit_save('parameters', data);
-				break;
-			case 'commandEditParametersForm-delete':
-				command_delete_version('parameters', data);
-				break;
-			case 'companyAddForm':
-				data.groups = {"Internal":{"description":"Internal","plan":"standard"}};
-				api_call('companyNew', data, company_table_load);
-				break;
-			case 'companyEditForm':
-				company_edit_save(data);
-				break;
-			case 'companyGroupAddForm':
-			case 'companyGroupEditForm':
-				company_group_upsert(data);
-				break;
-			case 'connectorAddForm':
-				data.company = admin.company.name;
-				api_call('connectorNew', data, connector_table_load);
-				break;
-			case 'connectorEditForm-bash':
-			case 'connectorEditForm-file':
-			case 'connectorEditForm-mail':
-			case 'connectorEditForm-mongo':
-			case 'connectorEditForm-pgsql':
-			case 'connectorEditForm-structure':
-			case 'connectorEditForm-vsaas':
-				data.company = admin.company.name;
-				api_call('connectorUpdate', data, connector_table_load);
-				break;
-			case 'login':
-				api_call('loginCheck', {"username":data.username, "password":data.password}, login_read_user);
-				break;
-			case 'packageAddForm':
-				data.company = admin.company.name;
-				api_call('packageNew', data, package_table_load);
-				break;
-			case 'packageEditForm':
-				data.company = admin.company.name;
-				api_call('packageUpdate', data, package_table_load);
-				break;
-			case 'userAddForm':
-				data.company = admin.company.name;
-				api_call('userNew', data, user_table_load);
-				break;
-			case 'userEditForm':
-				data.company = admin.company.name;
-				api_call('userUpdate', data, user_table_load);
-				break;
-			default:
-				console.error('form_post_process: Unmatched form name [' + name + ']');
-		}
+	loginCheck: function (data) {
+		common.apiCall('loginCheck', {"username":data.username, "password":data.password}, login.readUser);
 	}
 };
+
+/**
+ * @method postProcess
+ * @author Basil Fisk
+ * @param {string} name Name of the form being processed.
+ * @param {string} data Data returned from the form.
+ * @description Invoke the API call triggered by ui.uiFormSave. ????????????????????
+ */
+/*	postProcess: function (name, data) {
+console.log(name, data);
+	switch (name) {
+		case 'commandAddForm':
+			command_add_save(data);
+			break;
+		case 'commandEditForm':
+			command_edit_save('common', data);
+			break;
+		case 'commandEditCommandForm':
+			command_edit_save('command', data);
+			break;
+		case 'commandEditCommandForm-delete':
+			command_delete_version('command', data);
+			break;
+		case 'commandEditParametersForm':
+			command_edit_save('parameters', data);
+			break;
+		case 'commandEditParametersForm-delete':
+			command_delete_version('parameters', data);
+			break;
+		case 'companyAddForm':
+			data.groups = {"Internal":{"description":"Internal","plan":"standard"}};
+			common.apiCall('companyNew', data, company_table_load);
+			break;
+		case 'companyEditForm':
+			company_edit_save(data);
+			break;
+		case 'companyGroupAddForm':
+		case 'companyGroupEditForm':
+			company_group_upsert(data);
+			break;
+		case 'connectorAddForm':
+			data.company = admin.company.name;
+			common.apiCall('connectorNew', data, connector_table_load);
+			break;
+		case 'connectorEditForm-bash':
+		case 'connectorEditForm-file':
+		case 'connectorEditForm-mail':
+		case 'connectorEditForm-mongo':
+		case 'connectorEditForm-pgsql':
+		case 'connectorEditForm-structure':
+		case 'connectorEditForm-vsaas':
+			data.company = admin.company.name;
+			common.apiCall('connectorUpdate', data, connector_table_load);
+			break;
+		case 'login':
+			common.apiCall('loginCheck', {"username":data.username, "password":data.password}, login_read_user);
+			break;
+		case 'packageAddForm':
+			data.company = admin.company.name;
+			common.apiCall('packageNew', data, package_table_load);
+			break;
+		case 'packageEditForm':
+			data.company = admin.company.name;
+			common.apiCall('packageUpdate', data, package_table_load);
+			break;
+		case 'userAddForm':
+			data.company = admin.company.name;
+			common.apiCall('userNew', data, user_table_load);
+			break;
+		case 'userEditForm':
+			data.company = admin.company.name;
+			common.apiCall('userUpdate', data, user_table_load);
+			break;
+		default:
+			console.error('form_post_process: Unmatched form name [' + name + ']');
+	}
+}*/
 
 
 
@@ -102,27 +136,6 @@ console.log('forms.postProcess');
 // *********************************************************************************************
 // *********************************************************************************************
 
-// ---------------------------------------------------------------------------------------
-// Display the About form
-// ---------------------------------------------------------------------------------------
-function about_show () {
-	var data = {}, i;
-
-	data.username = me.username;
-	data.company = me.company;
-	data.group = me.group;
-	data.clients = me.clients;
-	data.jwt = me.jwt;
-	for (i=0; i<admin.roles.length; i++) {
-		if (admin.roles[i].code === me.role) {
-			data.role = admin.roles[i].name;
-		}
-	}
-	data.packages = me.packages.join(',');
-
-	// Display form
-	ui.formEdit('aboutForm', data);
-}
 
 
 
@@ -147,7 +160,7 @@ function company_add () {
 // Argument 1 : ID of company document
 // ---------------------------------------------------------------------------------------
 function company_delete (id) {
-	api_call('companyDelete', {'_id': id}, company_table_load);
+	common.apiCall('companyDelete', {'_id': id}, company_table_load);
 }
 
 
@@ -199,7 +212,7 @@ function company_edit_save (data) {
 
 	// Add the data group for the company
 	data.groups = admin.companies[index].groups;
-	api_call('companyUpdate', data, company_table_load);
+	common.apiCall('companyUpdate', data, company_table_load);
 }
 
 
@@ -224,7 +237,7 @@ function company_select (id) {
 
 	// Replace the current company data
 	filter = (me.role === 'superuser') ? 'all' : id;
-	api_call('companyReadId', { "filter":filter }, load_company_data);
+	common.apiCall('companyReadId', { "filter":filter }, load_company_data);
 
 	// Change the company name on the title bar
 	ui.pageTitle(admin.company.name);
@@ -237,7 +250,7 @@ function company_select (id) {
 // ---------------------------------------------------------------------------------------
 function company_table_load () {
 	var filter = (me.role === 'superuser') ? 'all' : me.company;
-	api_call('companyRead', { "filter":filter }, company_table_show);
+	common.apiCall('companyRead', { "filter":filter }, company_table_show);
 }
 
 
@@ -321,7 +334,7 @@ function company_group_delete (id) {
 	data.name = arr[1];
 
 	// Delete the group
-	api_call('companyGroupDelete', data, company_group_table_load);
+	common.apiCall('companyGroupDelete', data, company_group_table_load);
 }
 
 
@@ -361,7 +374,7 @@ function company_group_edit (id, name, desc, plan) {
 // Show all groups for the current company
 // ---------------------------------------------------------------------------------------
 function company_group_table_load () {
-	api_call('companyReadId', { "filter":admin.company._id }, company_group_table_show);
+	common.apiCall('companyReadId', { "filter":admin.company._id }, company_group_table_show);
 }
 
 
@@ -422,7 +435,7 @@ function company_group_upsert (data) {
 	obj.desc = data.groups.description;
 	obj.plan = data.groups.plan;
 
-	api_call('companyGroupUpsert', obj, company_group_table_load);
+	common.apiCall('companyGroupUpsert', obj, company_group_table_load);
 }
 
 
@@ -459,7 +472,7 @@ function command_add_save (data) {
 	data.company = admin.company.name;
 	data.command = [{"ver":1, "cmd":"Enter command here..."}];
 	data.parameters = [{"ver":1, "prm":{"parameter":["value"]}}];
-	api_call('commandNew', data, command_table_load);
+	common.apiCall('commandNew', data, command_table_load);
 }
 
 
@@ -470,7 +483,7 @@ function command_add_save (data) {
 // Argument 1 : ID of command document
 // ---------------------------------------------------------------------------------------
 function command_delete (id) {
-	api_call('commandDelete', {'_id': id}, command_table_load);
+	common.apiCall('commandDelete', {'_id': id}, command_table_load);
 }
 
 
@@ -498,7 +511,7 @@ function command_delete_version (type, data) {
 	params['id'] = id;
 	params['ver'] = parseInt(ver);
 	params['type'] = type;
-	api_call('commandDeleteVersion', params, command_table_load);
+	common.apiCall('commandDeleteVersion', params, command_table_load);
 }
 
 
@@ -688,7 +701,7 @@ function command_edit_save (type, data) {
 	}
 
 	// Save data
-	api_call('commandUpdate', temp, command_table_load);
+	common.apiCall('commandUpdate', temp, command_table_load);
 }
 
 
@@ -697,7 +710,7 @@ function command_edit_save (type, data) {
 // Show all commands for the current company
 // ---------------------------------------------------------------------------------------
 function command_table_load () {
-	api_call('commandRead', { "filter":admin.company.name }, command_table_show);
+	common.apiCall('commandRead', { "filter":admin.company.name }, command_table_show);
 }
 
 
@@ -794,7 +807,7 @@ function connector_add () {
 // Argument 1 : ID of connector document
 // ---------------------------------------------------------------------------------------
 function connector_delete (id) {
-	api_call('connectorDelete', {'_id': id}, connector_table_load);
+	common.apiCall('connectorDelete', {'_id': id}, connector_table_load);
 }
 
 
@@ -827,7 +840,7 @@ function connector_edit (id) {
 // Show all connectors for the current company
 // ---------------------------------------------------------------------------------------
 function connector_table_load () {
-	api_call('connectorRead', { "filter":admin.company.name }, connector_table_show);
+	common.apiCall('connectorRead', { "filter":admin.company.name }, connector_table_show);
 }
 
 
@@ -913,7 +926,7 @@ function package_add () {
 // Argument 1 : Type of package
 // ---------------------------------------------------------------------------------------
 function package_delete (id) {
-	api_call('packageDelete', {'_id': id}, package_table_load);
+	common.apiCall('packageDelete', {'_id': id}, package_table_load);
 }
 
 
@@ -963,7 +976,7 @@ function package_edit (id) {
 // Show all packages for the current company
 // ---------------------------------------------------------------------------------------
 function package_table_load () {
-	api_call('packageRead', { "filter":admin.company.name }, package_table_show);
+	common.apiCall('packageRead', { "filter":admin.company.name }, package_table_show);
 }
 
 
@@ -1067,7 +1080,7 @@ function user_add () {
 // Argument 1 : ID of user
 // ---------------------------------------------------------------------------------------
 function user_delete (id) {
-	api_call('userDelete', {'_id': id}, user_table_load);
+	common.apiCall('userDelete', {'_id': id}, user_table_load);
 }
 
 
@@ -1130,7 +1143,7 @@ function user_edit (id) {
 // Show all users for the current company
 // ---------------------------------------------------------------------------------------
 function user_table_load () {
-	api_call('userRead', { "filter":admin.company.name }, user_table_show);
+	common.apiCall('userRead', { "filter":admin.company.name }, user_table_show);
 }
 
 

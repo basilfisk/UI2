@@ -10,7 +10,7 @@
  * @description Define the validation tests to be carried out by the UI script.
  */
 
-var validationChecks = {
+var _validation = {
 	"alphaLower": {
 		"pattern": "[a-z]+$",
 		"description": "Lower case alphabetic string"

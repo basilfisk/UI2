@@ -10,7 +10,7 @@ npm-debug.log*
 build/Release
 
 # Dependency directories
-node_modules/
+example/server/node_modules/
 
 # Optional npm cache directory
 .npm

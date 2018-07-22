@@ -5,27 +5,65 @@
  */
 
 /**
- * @namespace VeryAPI
+ * @namespace Login
  * @author Basil Fisk
- * @property {integer} xxx ???????????
- * @description <p>User interface functions.<br>
- * Requirements in index.html for successful operation:<br><ul>
- * <li>A div with an ID for each form</li>
- * <li>Message box element at the end of index.html so that it is displayed above everything else</li>
- * </ul></p>
+ * @description VeryAPI login functions.
  */
-var veryapi = {
+var login = {
 	/**
 	 * @method init
 	 * @author Basil Fisk
 	 * @description Start up function called by 'body onload'.
 	 */
 	init: function () {
-		// Initialize the UI manager and build the menus
-		ui.init(formDefinitions, forms.postProcess);
+		// Initialize UI manager with menu and form definitions, post-processing functions
+		// and the messages TODO which ones ???????
+		ui.init(menuDefinitions, formDefinitions, formFunctions, messages);
 
 		// Display the login form for the Admin Console
 		ui.formEdit('login', {"username":'', "password":''});
+	},
+
+
+	/**
+	 * @method readUser
+	 * @author Basil Fisk
+	 * @param {string} action Action to be performed - 'result' shows data.
+	 * @param {object} result Result returned from database.
+	 * @description Process the result of the login check.
+	 */
+	readUser: function (action, result) {
+		// Only 1 user record should be returned
+		if (result.result.status === 1) {
+			me = {};
+			me.clients = result.data.clients;
+			me.company = result.data.company;
+			me.group = result.data.group;
+			me.jwt = result.data.jwt;
+			me.role = result.data.role;
+			me.packages = result.data.packages;
+			me.username = result.data.username;
+			me.groupusers = result.data.groupusers;
+
+			// Read the UI documents
+			this.apiCall('uiRead', { "role":me.role }, load_ui);
+
+			// The super user can view all companies, others can only see their company's data
+			filter = (me.role === 'superuser') ? 'all' : me.company;
+			this.apiCall('companyRead', { "filter":filter }, load_company_data);
+
+			// Load the plan lists from the plan collection (same for all companies)
+			this.apiCall('listPlans', {}, load_plan_list);
+
+			// Load the roles lists from the user collection (same for all users)
+			this.apiCall('listRoles', {}, load_role_list);
+		}
+		// Show error, then display login form again
+		else {
+			ui.messageBox('CON007', [], () => {
+//				ui.formEdit('login', {"username":'', "password":''});
+			});
+		}
 	}
 };
 
@@ -33,12 +71,6 @@ var veryapi = {
 
 // *********************************************************************************************
 // *********************************************************************************************
-//
-// VeryAPI
-// Copyright 2016 Breato Ltd.
-//
-// Functions for the client side administration console
-//
 // *********************************************************************************************
 // *********************************************************************************************
 
@@ -247,18 +279,18 @@ function load_company_data (action, result) {
 				admin.company = result.data[i];
 
 				// Read all commands used by the company
-				api_call('commandRead', { "filter":admin.company.name }, company_commands_save);
+				this.apiCall('commandRead', { "filter":admin.company.name }, company_commands_save);
 
 				// Read all commands used by the company
-				api_call('connectorRead', { "filter":admin.company.name }, company_connectors_save);
+				this.apiCall('connectorRead', { "filter":admin.company.name }, company_connectors_save);
 
 				// Read all packages used by the company
-				api_call('packageRead', {"filter":admin.company.name}, company_packages_save);
+				this.apiCall('packageRead', {"filter":admin.company.name}, company_packages_save);
 			}
 		}
 	}
 	else {
-		message('CON004', []);
+		message('CON010', []);
 	}
 }
 
@@ -331,7 +363,7 @@ function load_ui (action, result) {
 // Argument 1 : Action to be performed - 'result' shows data
 // Argument 2 : Result returned from database
 // ---------------------------------------------------------------------------------------
-function login_read_user (action, result) {
+/*function login_read_user (action, result) {
 	// Only 1 user record should be returned
 	if (result.result.status === 1) {
 		// Save the user data
@@ -346,22 +378,22 @@ function login_read_user (action, result) {
 		me.groupusers = result.data.groupusers;
 
 		// Read the UI documents
-        api_call('uiRead', { "role":me.role }, load_ui);
+        this.apiCall('uiRead', { "role":me.role }, load_ui);
 
 		// The super user can view all companies, others can only see their company's data
 		filter = (me.role === 'superuser') ? 'all' : me.company;
-		api_call('companyRead', { "filter":filter }, load_company_data);
+		this.apiCall('companyRead', { "filter":filter }, load_company_data);
 
 		// Load the plan lists from the plan collection (same for all companies)
-		api_call('listPlans', {}, load_plan_list);
+		this.apiCall('listPlans', {}, load_plan_list);
 
 		// Load the roles lists from the user collection (same for all users)
-		api_call('listRoles', {}, load_role_list);
+		this.apiCall('listRoles', {}, load_role_list);
 	}
 	else {
 		message('CON007', [], login);
 	}
-}
+}*/
 
 
 

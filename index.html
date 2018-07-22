@@ -8,40 +8,38 @@
 	<!-- Glyph icons -->
 	@font-face{
 		font-family: "glyphicons-halflings-regular";
-		src: url('fonts/glyphicons-halflings-regular.ttf') format('truetype');
+		src: url('json-ui/fonts/glyphicons-halflings-regular.ttf') format('truetype');
 	}
 	@font-face{
 		font-family: "glyphicons-halflings-regular";
-		src: url('fonts/glyphicons-halflings-regular.woff'), url('fonts/glyphicons-halflings-regular.woff2') format('woff');
+		src: url('json-ui/fonts/glyphicons-halflings-regular.woff'), url('json-ui/fonts/glyphicons-halflings-regular.woff2') format('woff');
 	}
 
 	<!-- 3rd party stylesheets and libraries -->
-	<link rel="stylesheet" href="packages/bootstrap.min.css">
-	<link rel="stylesheet" href="packages/bootstrap-multiselect.css">
-	<link rel="stylesheet" href="packages/bootstrap-datetimepicker.css">
-	<script src="packages/moment.min.js"></script>
-	<script src="packages/jquery.min.js"></script>
-	<script src="packages/bootstrap.min.js"></script>
-	<script src="packages/bootstrap-multiselect.js"></script>
-	<script src="packages/bootstrap-datetimepicker.js"></script>
+	<link rel="stylesheet" href="json-ui/packages/bootstrap.min.css">
+	<link rel="stylesheet" href="json-ui/packages/bootstrap-multiselect.css">
+	<link rel="stylesheet" href="json-ui/packages/bootstrap-datetimepicker.css">
+	<script src="json-ui/packages/moment.min.js"></script>
+	<script src="json-ui/packages/jquery.min.js"></script>
+	<script src="json-ui/packages/bootstrap.min.js"></script>
+	<script src="json-ui/packages/bootstrap-multiselect.js"></script>
+	<script src="json-ui/packages/bootstrap-datetimepicker.js"></script>
 
 	<!-- Application definitions -->
-	<script src="data/definition.js"></script>
-	<script src="data/functions.js"></script>
-	<script src="data/veryapi.js"></script>
-	<!--
-	<script src="data/functions.js"></script>
-	<script src="data/forms.js"></script>
-	-->
+	<script src="example/client/common.js"></script>
+	<script src="example/client/forms.js"></script>
+	<script src="example/client/functions.js"></script>
+	<script src="example/client/login.js"></script>
+	<script src="example/client/menu.js"></script>
+	<script src="example/client/messages.js"></script>
 
-	<!-- User interface functions -->
-	<script src="js/api.js"></script>
-	<script src="js/ui.js"></script>
-	<script src="js/validation.js"></script>
-
-	<!-- Configuration functions -->
-	<script src="etc/config.js"></script>
-	<script src="etc/messages.js"></script>
+	<!-- UI scripts that hold core functions. Shouldn't be edited -->
+	<script src="json-ui/js/ui.js"></script>
+	<script src="json-ui/js/messages.js"></script>
+	
+	<!-- UI functions that hold definitions that can be edited -->
+	<script src="json-ui/etc/config.js"></script>
+	<script src="json-ui/etc/validation.js"></script>
 
 	<!-- Form definitions OLD -->
 	<!--
@@ -51,7 +49,7 @@
 	-->
 </head>
 
-<body onload="veryapi.init();">
+<body onload="login.init();">
 	<!-- ****************************************************************************************************
 			REPORTS
 	***************************************************************************************************** -->

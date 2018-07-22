@@ -7,15 +7,8 @@
 /**
  * @namespace UserInterface
  * @author Basil Fisk
- * @property {integer} xxx ???????????
- * @description <p>User interface functions.<br>
- * Requirements in index.html for successful operation:<br><ul>
- * <li>A div with an ID for each form</li>
- * <li>Message box element at the end of index.html so that it is displayed above everything else</li>
- * </ul></p>
+ * @description User interface functions.
  */
-
-//var UserInterface = {
 var ui = {
 	_post: undefined,
 	_msgOK: undefined,
@@ -27,7 +20,7 @@ var ui = {
 	 * @param {string} title Name of field being checked.
 	 * @param {string} value String to be checked.
 	 * @return True or false.
-	 * @description Validate the format of the supplied string.
+	 * @description Check the format of the supplied string against a pattern using a regular expression.
 	 */
 	_checkFormat: function (format, title, value) {
 		var pattern, error, regex;
@@ -38,13 +31,13 @@ var ui = {
 		}
 		else {
 			// Pick pattern to be used for validation
-			pattern = validationChecks[format].pattern;
-			error = validationChecks[format].description;
+			pattern = _validation[format].pattern;
+			error = _validation[format].description;
 
-			// Error if format not recognised
+			// Error if format not recognized
 			if (pattern == undefined) {
-				console.error('Unrecognised validation format [' + format + ']');
-				this._messageBuild('UI002', [format]);
+				console.error('Unrecognized validation format [' + format + ']');
+				this._messageBox('UI002', [format]);
 				return false;
 			}
 			else {
@@ -55,12 +48,13 @@ var ui = {
 				}
 				// Show an error message
 				else {
-					this._messageBuild('UI003', [title, error]);
+					this._messageBox('UI003', [title, error]);
 					return false;
 				}
 			}
 		}
 	},
+
 
 	/**
 	 * @method _checkMandatory
@@ -73,13 +67,14 @@ var ui = {
 	 */
 	_checkMandatory: function (mandatory, title, value) {
 		if (mandatory && value === '') {
-			this._messageBuild('UI001', [title]);
+			this._messageBox('UI001', [title]);
 			return false;
 		}
 		else {
 			return true;
 		}
 	},
+
 
 	/**
 	 * @method _checkRange
@@ -115,10 +110,11 @@ var ui = {
 		}
 		// Show an error message
 		else {
-			this._messageBuild('UI004', [title, error]);
+			this._messageBox('UI004', [title, error]);
 			return false;
 		}
 	},
+
 
 	/**
 	 * @method _convertData
@@ -139,33 +135,19 @@ var ui = {
 		}
 	},
 
-	/**
-	 * @method _findElement
-	 * @author Basil Fisk
-	 * @param {string} id ID of element.
-	 * @return Index in array or -1.
-	 * @description Find index of element in UI object.
-	 */
-/*	_findElement: function (id) {
-		var i;
-		for (i=0; i<_defs.length; i++) {
-			if (_defs[i].id === id) { return i; }
-		}
-		return -1;
-	},*/
 
 	/**
-	 * @method _messageBuild
+	 * @method _messageBox
 	 * @author Basil Fisk
 	 * @param {string} code Message code.
 	 * @param {array} prms Message parameters.
 	 * @description Build a message to be displayed in a dialogue box.
 	 */
-	_messageBuild: function (code, prms) {
+	_messageBox: function (code, prms) {
 		var msg, text, i, title;
 
 		// Find message and substitute parameters
-		msg = messages[code];
+		msg = _messages[code];
 		text = msg.text;
 		for (i=0; i<prms.length; i++) {
 			text = text.replace(new RegExp('_p'+(1+i),'g'), prms[i]);
@@ -178,6 +160,7 @@ var ui = {
 		// Display the message
 		this._messageShow(title, text);
 	},
+
 
 	/**
 	 * @method _messageShow
@@ -192,7 +175,7 @@ var ui = {
 
 		// Save the function
 		if (callback !== undefined) {
-			_msgOK = callback;
+			this._msgOK = callback;
 		}
 
 		// Build the message container
@@ -219,18 +202,21 @@ var ui = {
 		$('#messageBox').modal('show');
 	},
 
+
 	/**
 	 * @method _pageTitle
 	 * @author Basil Fisk
+	 * @param {string} style Class to be applied to the title.
+	 * @param {string} text Title text.
 	 * @return An HTML DIV element holding the formatted title.
 	 * @description Display the page title.
 	 */
-	_pageTitle: function () {
+	_pageTitle: function (style, text) {
 		var div = '';
 		div += '<div';
-		div += (_defs.title.class) ? ' class="' + _defs.title.class + '"' : '';
+		div += (style) ? ' class="' + style + '"' : '';
 		div += '>';
-		div += _defs.title.text;
+		div += text;
 		div += '</div>';
 		return div;
 	},
@@ -241,7 +227,7 @@ var ui = {
 	 * @param {object} checks Object holding checks to be performed.
 	 * @param {string} title Name of field.
 	 * @param {string} value Value to be checked.
-	 * @return True if all tests passed or false.
+	 * @return True if all tests passed or false if any errors are raised.
 	 * @description Run the set of checks defined for a field.
 	 */
 	_runChecks: function (checks, title, value) {
@@ -278,6 +264,7 @@ var ui = {
 		}
 	},
 
+
 	/**
 	 * @method _showContainer
 	 * @author Basil Fisk
@@ -287,16 +274,15 @@ var ui = {
 	 * The container can be a form, table or report.
 	 */
 	_showContainer: function (id, html) {
-		var div;
-
 		// Add a div to hold the container
-		div = '<div class="modal fade" id="' + id + '" tabindex="-1" role="dialog">' + html + '</div>';
+		var div = '<div class="modal fade" id="' + id + '" tabindex="-1" role="dialog">' + html + '</div>';
 
 		// Remove the node, then add the new container to 'body' and display the new form
 		$('#' + id).remove();
 		$('body').append(div);
 		$('#' + id).modal('show');
 	},
+
 
 	/**
 	 * @method _showField
@@ -384,6 +370,7 @@ var ui = {
 		return divot;
 	},
 
+
 	/**
 	 * @method _sortArrayObjects
 	 * @author Basil Fisk
@@ -398,6 +385,8 @@ var ui = {
 		return sorted;
 	},
 
+
+
 	// ***************************************************************************************
 	//
 	//		EXTERNAL FUNCTIONS
@@ -409,7 +398,7 @@ var ui = {
 	//
 	// Argument 1 : Name of UI form
 	// ---------------------------------------------------------------------------------------
-	delete: function (form) {
+	buttonDelete: function (form) {
 		var fields, i, field, data = {};
 
 		// Read and validate each field
@@ -423,6 +412,118 @@ var ui = {
 		$('#' + form).modal('hide');
 		_post(form + '-delete', data);
 	},
+
+
+	/**
+	 * @method buttonSave
+	 * @author Basil Fisk
+	 * @param {string} id ID of UI form.
+	 * @description Validate and save the data entered on a form.
+	 */
+	buttonSave: function (id) {
+		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
+
+		// Read fields and their names
+		fields = _defs[id].fields;
+		names = Object.keys(fields);
+
+		// Read and validate each field
+		for (i=0; i<names.length; i++) {
+			name = names[i];
+
+			// Read the value(s) based on the stated data type of the field
+			switch (fields[name].type) {
+				// True or false, assign direct to data object
+				case 'checkbox':
+					temp[name] = (document.getElementById(name).checked) ? true : false;
+					break;
+				// ID field
+				case 'id':
+					temp[name] = document.getElementById(name).value;
+					break;
+				// Single value or an array of values, assign direct to data object
+				case 'list':
+					if (fields[name].options.display.select === 'multiple') {
+						temp[name] = [];
+						elem = document.getElementById(name);
+						for (e=0; e<elem.length; e++) {
+							if (elem[e].selected) {
+								temp[name].push(elem[e].value);
+							}
+						}
+
+					}
+					else {
+						temp[name] = document.getElementById(name).value;
+					}
+					break;
+				// All other field types (text, float, integer)
+				default:
+					// Read data as a text string
+					text = document.getElementById(name).value;
+
+					// Validate using 'options.checks' section
+					if (fields[name].options && fields[name].options.checks) {
+						// Field holds an array of values
+						if (fields[name].options.content && fields[name].options.content.type === 'array') {
+							// Validate each element of the field
+							temp[name] = [];
+							elem = text.split(fields[name].options.content.separator);
+							for (e=0; e<elem.length; e++) {
+								// Run the check
+								if (!this._runChecks(fields[name].options.checks, fields[name].title, elem[e])) {
+									return;
+								}
+								// Convert value to the correct type
+								temp[name].push(this._convertData(fields[name].type, elem[e]));
+							}
+						}
+						// Field holds a single value (default)
+						else {
+							// Run the check
+							if (!this._runChecks(fields[name].options.checks, fields[name].title, text)) {
+								return;
+							}
+							// Convert value to the correct type
+							temp[name] = this._convertData(fields[name].type, text);
+						}
+					}
+					// Nothing in the 'options.checks' section, so treat value as text
+					else {
+						temp[name] = text;
+					}
+			}
+
+			// Split dot separated element name into array of element names
+			elem = fields[name].element.split('.');
+
+			// Assign data to element in object
+			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
+			if (elem.length === 1) {
+				data[elem[0]] = temp[name];
+			}
+			else if (elem.length === 2) {
+				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
+				data[elem[0]][elem[1]] = temp[name];
+			}
+			else if (elem.length === 3) {
+				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
+				if (data[elem[0]][elem[1]] === undefined) { data[elem[0]][elem[1]] = {}; }
+				data[elem[0]][elem[1]][elem[2]] = temp[name];
+			}
+		}
+
+		// Hide the form and trigger the post-processing function
+		$('#' + id).modal('hide');
+//		try {
+			console.log(id, _defs[id].buttons.save, data);
+			_post[_defs[id].buttons.save](data);
+//		}
+//		catch (err) {
+//			this._messageBox('UI005', [_defs[id].buttons.save, 'save']);
+//		}
+	},
+
 
 	/**
 	 * @method formAdd
@@ -472,9 +573,9 @@ var ui = {
 		if (_defs[id].buttons && _defs[id].buttons.add) {
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-//			div += '<button type="button" class="btn btn-success" data-dismiss="modal" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
-//			div += '<button type="button" class="btn btn-success" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
-			div += '<button type="button" class="btn btn-success" onClick="ui.saveData(' + id + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+//			div += '<button type="button" class="btn btn-success" data-dismiss="modal" onClick="ui.buttonSave(' + index + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+//			div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + index + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+			div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + "'" + id + "'" + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
 			div += '</div></div>';
 		}
 
@@ -485,6 +586,7 @@ var ui = {
 		this._showContainer(id, div);
 	},
 
+
 	// ---------------------------------------------------------------------------------------
 	// Close a form
 	//
@@ -493,6 +595,7 @@ var ui = {
 	formClose: function (form) {
 		$('#' + form).modal('hide');
 	},
+
 
 	/**
 	 * @method formEdit
@@ -568,20 +671,16 @@ var ui = {
 		div += '</form></div>';
 
 		// Save and/or delete buttons in form footer
-//		if (_defs[index].buttons) {
-console.log(_defs[id].buttons);
 		if (_defs[id].buttons) {
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-//			if (_defs[index].buttons && _defs[index].buttons.delete) {
 			if (_defs[id].buttons.delete) {
-				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" onClick="ui.deleteData(' + index + '); return false;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" onClick="ui.buttonDelete(' + index + '); return false;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
 			}
-//			if (_defs[index].buttons && _defs[index].buttons.save) {
 			if (_defs[id].buttons.save) {
-//				div += '<button type="button" class="btn btn-success" data-dismiss="modal" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
-//				div += '<button type="button" class="btn btn-success" onClick="ui.saveData(' + index + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
-				div += '<button type="button" class="btn btn-success" onClick="ui.saveData(' + id + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
+//				div += '<button type="button" class="btn btn-success" data-dismiss="modal" onClick="ui.buttonSave(' + index + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
+//				div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + index + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
+				div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + "'" + id + "'" + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
 			}
 			div += '</div></div>';
 		}
@@ -590,463 +689,102 @@ console.log(_defs[id].buttons);
 		div += '</div></div>';
 
 		// Remove existing form, then add new form and display
-//		this._showContainer(form, div);
 		this._showContainer(id, div);
 	},
 
-	// ---------------------------------------------------------------------------------------
-	// Display a form
-	//
-	// Argument 1 : ID of form
-	// Argument 2 : Data to be shown in fields for editing
-	// Argument 3 : Object holding list for dropdown field
-	//					{field: [values], ...}
-	// ---------------------------------------------------------------------------------------
-	form: function (id, data, list) {
-		var title, fields, names, add, div = '', i, elem, value, buttons;
-
-		// Read fields and their names
-		title = structure.forms[id].title;
-		fields = structure.forms[id].fields;
-		names = Object.keys(fields);
-
-		// If data object is empty, form has been opened for new data
-		add = (Object.keys(data).length === 0) ? true : false;
-
-		// Build form container
-		div += '<div class="modal-dialog" role="document" style="width:50%;">';
-		div += '<div class="modal-content">';
-
-		// Add form header and title
-		div += '<div class="modal-header">';
-		div += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-		div += '<h4 class="modal-title">';
-		div += ((add) ? 'Add ' : 'Edit ') + title;
-		div += '</h4>';
-		div += '</div>';
-
-		// Add form body
-		div += '<div class="modal-body">';
-		div += '<form role="form">';
-
-		// Add fields
-		for (i=0; i<names.length; i++) {
-			// Split dot separated element name into array of element names
-			elem = fields[names[i]].element.split('.');
-
-			// Read data from object
-			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
-			if (elem.length === 1) {
-				value = data[elem[0]];
-			}
-			else if (elem.length === 2) {
-				if (data[elem[0]] === undefined) {
-					value = '';
-				}
-				else {
-					value = data[elem[0]][elem[1]];
-				}
-			}
-			else if (elem.length === 3) {
-				if (data[elem[0]] === undefined || data[elem[0]][elem[1]] === undefined) {
-					value = '';
-				}
-				else {
-					value = data[elem[0]][elem[1]][elem[2]];
-				}
-			}
-			value = (value) ? value : '';
-
-			// Add field
-			switch (fields[names[i]].type) {
-				case 'list':
-					div += this._showField(names[i], fields[names[i]], value, _sortArrayObjects(list[names[i]], 'text'));
-					break;
-				default:
-					div += this._showField(names[i], fields[names[i]], value);
-			}
-		}
-
-		// Close form body
-		div += '</form></div>';
-
-		// Place buttons in footer
-		div += '<div class="modal-footer">';
-		div += '<div class="col-md-12">';
-		// Show Add button
-		if (add) {
-			div += '<button type="button" class="btn btn-success" onClick="ui.save(\'' + id + '\'); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
-		}
-		// Show save, copy and delete buttons
-		else {
-			if (structure.forms[id].buttons) {
-				buttons = structure.forms[id].buttons;
-				if (buttons && buttons.add) {
-					div += '<button type="button" class="btn btn-success" onClick="ui.save(\'' + id + '\'); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
-				}
-				if (buttons && buttons.delete) {
-					div += '<button type="button" class="btn btn-danger" data-dismiss="modal" onClick="ui.delete(\'' + id + '\'); return false;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
-				}
-				if (buttons && buttons.save) {
-					div += '<button type="button" class="btn btn-success" onClick="ui.save(\'' + id + '\'); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
-				}
-			}
-		}
-		div += '</div></div>';
-
-		// Close form container
-		div += '</div></div>';
-
-		// Remove existing form, then add new form and display
-		this._showContainer(id, div);
-	},
 
 	/**
 	 * @method init
 	 * @author Basil Fisk
-	 * @param {object} forms User's UI definition.
-	 * @param {function} callback User's post-processing function. ?????? TODO triggered when
+	 * @param {object} menu User's menu definition.
+	 * @param {object} forms User's form definitions.
+	 * @param {object} functions User's functions to be triggered for post-processing.
+	 * @param {object} messages User message definitions.
 	 * @description Parse the user's UI data structures for building the menus, forms and reports.
 	 */
-	init: function (forms, callback) {
-		var i, keys, menu = {}, main, n, option, div = '';
+	init: function (menu, forms, functions, messages) {
+		var i, n, option, div = '';
 
 		// Save form definitions and post-processing function
 		_defs = forms;
-		_post = callback;
+		_post = functions;
+		_msgs = messages;
 
 		// Open the container for the menus and titles
 		div += '<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">';
 		div += '<ul class="nav navbar-nav">';
 
-		// Show the menu options for the user
-		keys = Object.keys(_defs);
-		for (i=0; i<keys.length; i++) {
-			// Is this entry part of the menu
-			if (_defs[keys[i]].menu) {
-				// Create an empty menu object for a new menu
-				if(!menu[_defs[keys[i]].menu.menu]) {
-					menu[_defs[keys[i]].menu.menu] = [];
-				}
-				// Add a menu option
-				menu[_defs[keys[i]].menu.menu][_defs[keys[i]].menu.order] = {
-					name: keys[i],
-					title: _defs[keys[i]].menu.title || _defs[keys[i]].title,
-					action: _defs[keys[i]].menu.select
-				};
-			}
-		}
-
 		// Build the menu
-		main = Object.keys(menu);
-		if (main.length > 0) {
+		if (menu.top.length > 0) {
 			div += '<ul class="nav navbar-nav">';
-			for (i=0; i<menu.main.length; i++) {
-				// Skip if the menu option is not available
-				if (menu.main[i] !== undefined) {
-					// Option on main menu
-					if (main.indexOf(menu.main[i].name) === -1) {
-						div += '<li id="' + menu.main[i].name + '-option" class="option"><a href="#' + menu.main[i].name + '" onClick="' + menu.main[i].action + '; return false;">' + menu.main[i].title + '</a></li>';
-					}
-					// Menu of options
-					else {
-						div += '<li id="' + menu.main[i].name + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + menu.main[i].name + '" href="#">' + menu.main[i].title + '<span class="caret"></span></a>';
-						div += '<ul class="dropdown-menu">';
-						option = menu.main[i].name;
-						for (n=0; n<menu[option].length; n++) {
-							// Skip if the menu option is not available
-							if (menu[option][n] !== undefined) {
-								div += '<li id="' + menu[option][n].name + '-option" class="option"><a href="#' + menu[option][n].name + '" onClick="' + menu[option][n].action + '; return false;">' + menu[option][n].title + '</a></li>';
-							}
+			for (i=0; i<menu.top.length; i++) {
+				div += '<li id="' + menu.top[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + menu.top[i].name + '" href="#">' + menu.top[i].title + '<span class="caret"></span></a>';
+				div += '<ul class="dropdown-menu">';
+				// Skip if no top level options have been defined
+				if (menu.top[i].options !== undefined) {
+					for (n=0; n<menu.top[i].options.length; n++) {
+						// Skip if the menu option has not been defined
+						if (menu.top[i].options[n] !== undefined) {
+							option = menu.top[i].options[n];
+							div += '<li id="' + option.id + '-option" class="option"><a href="#' + option.id + '" onClick="' + option.action + '; return false;">' + option.title + '</a></li>';
 						}
-						div += '</ul>';
-						div += '</li>';
 					}
 				}
+				div += '</ul>';
+				div += '</li>';
 			}
 			div += '</ul>';
 		}
 		
 		// Create page title and add to body
 		div += '</ul>';
-		div += this._pageTitle();
+		div += this._pageTitle(menu.title.class, menu.title.text);
 		div += '</div>';
 		$('body').append(div);
 	},
 
-	// ---------------------------------------------------------------------------------------
-	// Display the message in a message box
-	//
-	// Argument 1 : Title of message box
-	// Argument 2 : Message to be displayed
-	// Argument 3 : Function to be run after OK button is pressed (optional)
-	// ---------------------------------------------------------------------------------------
-//        messageBox: function (title, text, callback) {
-//            this._messageShow(title, text, callback);
-//        },
-	// ---------------------------------------------------------------------------------------
-	// Display a message in a dialogue box
-	//
-	// Argument 1 : Message code
-	// Argument 2 : Message parameter array
-	// Argument 3 : Function to be run after OK button is pressed (optional)
-	// ---------------------------------------------------------------------------------------
-	messageBox: function (code, prms, callback) {
-		var msg, text, title;
 
+	/**
+	 * @method messageBox
+	 * @author Basil Fisk
+	 * @param {string} code Message code.
+	 * @param {array} prms Parameters to be substituted into the message.
+	 * @param {function} callback Function to be run after OK button is pressed (optional).
+	 * @description Display a message in a dialogue box.
+	 */
+	messageBox: function (code, prms, callback) {
+		var text, title;
+		
 		// Find message and substitute parameters
-		msg = messages[code];
-		text = msg.text;
+		text = _msgs[code].text;
 		if (prms.length > 0) {
 			for (i=0; i<prms.length; i++) {
 				text = text.replace(new RegExp('_p'+(1+i),'g'), prms[i]);
 			}
 		}
-
+		
 		// Title
-		title = (msg.type === 'error') ? 'Error Message' : 'Information Message';
+		title = (_msgs[code].type === 'error') ? 'Error Message' : 'Information Message';
 		title += ' [' + code + ']';
-
+		
 		// Display the message
-//			console.log(text);
 		this._messageShow(title, text, callback);
 	},
 
-	// ---------------------------------------------------------------------------------------
-	// Run the post-processing script when the message OK button is pressed
-	// ---------------------------------------------------------------------------------------
-	messageConfirmed: function () {
-		if (_msgOK !== undefined) {
-			_msgOK();
-			_msgOK = undefined;
-		}
-	},
 
 	/**
-	 * @method saveData
+	 * @method messageConfirmed
 	 * @author Basil Fisk
-	 * @param {object} data User's UI definition.
-	 * @description User's UI data for building the menus, forms and reports.
+	 * @description Run the post-processing script when the message OK button is pressed.
 	 */
-	// ---------------------------------------------------------------------------------------
-	// Validate and save the data on a form
-	//
-	// Argument 1 : Index of UI form
-	// ---------------------------------------------------------------------------------------
-//	saveData: function (index) {
-	saveData: function (id) {
-		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
-
-		// Read fields and their names
-//		fields = _defs[index].fields;
-		fields = _defs[id].fields;
-		names = Object.keys(fields);
-
-		// Read and validate each field
-		for (i=0; i<names.length; i++) {
-			name = names[i];
-
-			// Read the value(s) based on the stated data type of the field
-			switch (fields[name].type) {
-				// True or false, assign direct to data object
-				case 'checkbox':
-					temp[name] = (document.getElementById(name).checked) ? true : false;
-					break;
-				// ID field
-				case 'id':
-					temp[name] = document.getElementById(name).value;
-					break;
-				// Single value or an array of values, assign direct to data object
-				case 'list':
-					if (fields[name].options.display.select === 'multiple') {
-						temp[name] = [];
-						elem = document.getElementById(name);
-						for (e=0; e<elem.length; e++) {
-							if (elem[e].selected) {
-								temp[name].push(elem[e].value);
-							}
-						}
-
-					}
-					else {
-						temp[name] = document.getElementById(name).value;
-					}
-					break;
-				// All other field types (text, float, integer)
-				default:
-					// Read data as a text string
-					text = document.getElementById(name).value;
-
-					// Validate using 'options.checks' section
-					if (fields[name].options && fields[name].options.checks) {
-						// Field holds an array of values
-						if (fields[name].options.content && fields[name].options.content.type === 'array') {
-							// Validate each element of the field
-							temp[name] = [];
-							elem = text.split(fields[name].options.content.separator);
-							for (e=0; e<elem.length; e++) {
-								// Run the check
-								if (!_runChecks(fields[name].options.checks, fields[name].title, elem[e])) {
-									return;
-								}
-								// Convert value to the correct type
-								temp[name].push(this._convertData(fields[name].type, elem[e]));
-							}
-						}
-						// Field holds a single value (default)
-						else {
-							// Run the check
-							if (!_runChecks(fields[name].options.checks, fields[name].title, text)) {
-								return;
-							}
-							// Convert value to the correct type
-							temp[name] = this._convertData(fields[name].type, text);
-						}
-					}
-					// Nothing in the 'options.checks' section, so treat value as text
-					else {
-						temp[name] = text;
-					}
-			}
-
-			// Split dot separated element name into array of element names
-			elem = fields[name].element.split('.');
-
-			// Assign data to element in object
-			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
-			if (elem.length === 1) {
-				data[elem[0]] = temp[name];
-			}
-			else if (elem.length === 2) {
-				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
-				data[elem[0]][elem[1]] = temp[name];
-			}
-			else if (elem.length === 3) {
-				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
-				if (data[elem[0]][elem[1]] === undefined) { data[elem[0]][elem[1]] = {}; }
-				data[elem[0]][elem[1]][elem[2]] = temp[name];
-			}
+	messageConfirmed: function () {
+		if (this._msgOK !== undefined) {
+			this._msgOK();
+			this._msgOK = undefined;
 		}
-
-		// Hide the form and save the data
-//		$('#' + _defs[index].id).modal('hide');
-//		_post(_defs[index].id, data);
-		$('#' + id).modal('hide');
-		_post(id, data);
 	},
 
-	// ---------------------------------------------------------------------------------------
-	// Validate and save the data on a form
-	//
-	// Argument 1 : ID of UI form
-	// ---------------------------------------------------------------------------------------
-	save: function (id) {
-		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
-		
-		// Read fields and their names
-		fields = structure.forms[id].fields;
-		names = Object.keys(fields);
-		
-		// Read and validate each field
-		for (i=0; i<names.length; i++) {
-			name = names[i];
-			
-			// Read the value(s) based on the stated data type of the field
-			switch (fields[name].type) {
-				// True or false, assign direct to data object
-				case 'checkbox':
-				temp[name] = (document.getElementById(name).checked) ? true : false;
-				break;
-				// ID field
-				case 'id':
-				temp[name] = document.getElementById(name).value;
-				break;
-				// Single value or an array of values, assign direct to data object
-				case 'list':
-				if (fields[name].options.display.select === 'multiple') {
-					temp[name] = [];
-					elem = document.getElementById(name);
-					for (e=0; e<elem.length; e++) {
-						if (elem[e].selected) {
-							temp[name].push(elem[e].value);
-						}
-					}
-					
-				}
-				else {
-					temp[name] = document.getElementById(name).value;
-				}
-				break;
-				// All other field types (text, float, integer)
-				default:
-				// Read data as a text string
-				text = document.getElementById(name).value;
-				
-				// Validate using 'options.checks' section
-				if (fields[name].options && fields[name].options.checks) {
-					// Field holds an array of values
-					if (fields[name].options.content && fields[name].options.content.type === 'array') {
-						// Validate each element of the field
-						temp[name] = [];
-						elem = text.split(fields[name].options.content.separator);
-						for (e=0; e<elem.length; e++) {
-							// Run the check
-							if (!_runChecks(fields[name].options.checks, fields[name].title, elem[e])) {
-								return;
-							}
-							// Convert value to the correct type
-							temp[name].push(this._convertData(fields[name].type, elem[e]));
-						}
-					}
-					// Field holds a single value (default)
-					else {
-						// Run the check
-						if (!_runChecks(fields[name].options.checks, fields[name].title, text)) {
-							return;
-						}
-						// Convert value to the correct type
-						temp[name] = this._convertData(fields[name].type, text);
-					}
-				}
-				// Nothing in the 'options.checks' section, so treat value as text
-				else {
-					temp[name] = text;
-				}
-			}
-			
-			// Split dot separated element name into array of element names
-			elem = fields[name].element.split('.');
-			
-			// Assign data to element in object
-			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
-			if (elem.length === 1) {
-				data[elem[0]] = temp[name];
-			}
-			else if (elem.length === 2) {
-				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
-				data[elem[0]][elem[1]] = temp[name];
-			}
-			else if (elem.length === 3) {
-				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
-				if (data[elem[0]][elem[1]] === undefined) { data[elem[0]][elem[1]] = {}; }
-				data[elem[0]][elem[1]][elem[2]] = temp[name];
-			}
-		}
-		
-		// Hide the form and save the data
-		$('#' + id).modal('hide');
-console.log(data);
-//			_post(id, data);
-//			structure.forms[id].functions.post(data); WORKS -- groupUpsert()
-		var obj = {};
-		obj.id = admin.company._id;
-		obj.name = data.groups.name;
-		obj.desc = data.groups.description;
-		obj.plan = data.groups.plan;
-console.log(obj);
-//			api_call('companyGroupUpsert', obj, company_group_table_load);
-	},
-	
+
 	// ---------------------------------------------------------------------------------------
 	// Display a table of data
 	//
@@ -1148,6 +886,7 @@ console.log(obj);
 		this._showContainer(id, body);
 	},
 
+
 	// ---------------------------------------------------------------------------------------
 	// Display a table of data
 	//
@@ -1163,9 +902,6 @@ console.log(obj);
 	// ---------------------------------------------------------------------------------------
 	tableShow: function (id, rows) {
 		var index, body = '', i, n, row, rowid, cell = {};
-
-		// Locate UI element
-//		index = this._findElement(id);
 
 		// Build the container
 		body += '<div class="modal-dialog" role="document" style="width:50%">'; // TODO Make a parameter
@@ -1250,6 +986,7 @@ console.log(obj);
 		this._showContainer(id, body);
 	},
 
+
 	// ---------------------------------------------------------------------------------------
 	// Check whether user has access to the named UI element
 	//
@@ -1258,7 +995,6 @@ console.log(obj);
 	// Return true or false
 	// ---------------------------------------------------------------------------------------
 	userAccess: function (name) {
-//		return (this._findElement(name) > -1) ? true : false;
 		return true;
 	}
 };
