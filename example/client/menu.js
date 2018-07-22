@@ -51,11 +51,11 @@ var menuDefinitions = {
 					"columns": ["Name", "Service", "Command", "Parameters", "Delete"]
 				},
 				{
-					"id" : "packageTable",
-					"title": "Packages",
-					"action": "package_table_load()",
+					"id" : "bundleTable",
+					"title": "Bundles",
+					"action": "bundle_table_load()",
 					"access": ["superuser","manager","user"],
-					"add": "package_add()",
+					"add": "bundle_add()",
 					"columns": ["Name", "Command", "Connector", "Versions", "Delete"]
 				}
 			]

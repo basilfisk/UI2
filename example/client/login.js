@@ -14,7 +14,7 @@ admin = {
 	company: {},		// Details of the company the current user has selected
 	companies: [],		// List of companies the current user has access to
 	connectors: [],		// List of connectors the current user has access to
-	packages: [],		// Array of packages for the current company
+	bundles: [],		// Array of bundles for the current company
 	plans: [],			// Array of plans for all companies
 	roles: [],	      	// List of roles that can be granted to users
 	services: [],		// List of services available to all companies
@@ -55,7 +55,7 @@ progress = {
 	command: false,
 	company: false,
 	connector: false,
-	package: false,
+	bundle: false,
 	role: false,
 	user: false
 };
@@ -127,8 +127,8 @@ console.log(result);
 					// Read all commands used by the company
 					common.apiCall('connectorRead', { "filter":admin.company.code }, login.readConnectors);
 
-					// Read all packages used by the company
-					common.apiCall('packageRead', {"filter":admin.company.code}, login.readPackages);
+					// Read all bundles used by the company
+					common.apiCall('bundleRead', {"filter":admin.company.code}, login.readBundles);
 				}
 			}
 			login.setProgress('company');
@@ -171,7 +171,7 @@ console.log(result);
 	readConnectors: function (action, result) {
 		if (result.data !== undefined && result.result.status) {
 			// Clear out the existing connectors
-			admin.connectors.splice(0, admin.packages.length);
+			admin.connectors.splice(0, admin.bundles.length);
 
 			// Load connectors
 			admin.connectors = result.data.sort();
@@ -184,20 +184,20 @@ console.log(result);
 
 
 	/**
-	 * @method readPackages
+	 * @method readBundles
 	 * @author Basil Fisk
 	 * @param {string} action Action to be performed - 'result' shows data.
 	 * @param {object} result Result returned from database.
-	 * @description Read packages for the company.
+	 * @description Read bundles for the company.
 	 */
-	readPackages: function (action, result) {
+	readBundles: function (action, result) {
 		if (result.data !== undefined && result.result.status) {
-			// Clear out the existing packages
-			admin.packages.splice(0, admin.packages.length);
+			// Clear out the existing bundles
+			admin.bundles.splice(0, admin.bundles.length);
 
-			// Load packages
-			admin.packages = result.data.sort();
-			login.setProgress('package');
+			// Load bundles
+			admin.bundles = result.data.sort();
+			login.setProgress('bundle');
 		}
 		else {
 			ui.messageBox('CON003', [admin.company.name]);
@@ -246,7 +246,7 @@ console.log(result);
 			me.group = result.data.group;
 			me.jwt = result.data.jwt;
 			me.role = result.data.role;
-			me.packages = result.data.packages;
+			me.bundles = result.data.bundles;
 			me.username = result.data.username;
 			me.groupusers = result.data.groupusers;
 
@@ -282,7 +282,7 @@ console.log(result);
 	setProgress: function (item) {
 		progress[item] = true;
 		if (me.role === 'superuser') {
-			if (progress.command && progress.company && progress.connector && progress.package && progress.role && progress.user) {
+			if (progress.command && progress.company && progress.connector && progress.bundle && progress.role && progress.user) {
 				console.log(admin);
 			}
 		}

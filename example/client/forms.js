@@ -44,9 +44,9 @@ var formDefinitions = {
 				"visible": true,
 				"edit": false
 			},
-			"aboutPackages": {
-				"element": "packages",
-				"title": "Packages",
+			"aboutBundles": {
+				"element": "bundles",
+				"title": "Bundles",
 				"type": "text",
 				"visible": true,
 				"edit": false

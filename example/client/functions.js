@@ -28,7 +28,7 @@ var formFunctions = {
 				data.role = admin.roles[i].name;
 			}
 		}
-		data.packages = me.packages.join(',');
+		data.bundles = me.bundles.join(',');
 
 		// Display form
 		ui.formEdit('aboutForm', data);
@@ -102,13 +102,13 @@ console.log(name, data);
 		case 'login':
 			common.apiCall('loginCheck', {"username":data.username, "password":data.password}, login_read_user);
 			break;
-		case 'packageAddForm':
+		case 'bundleAddForm':
 			data.company = admin.company.name;
-			common.apiCall('packageNew', data, package_table_load);
+			common.apiCall('bundleNew', data, bundle_table_load);
 			break;
-		case 'packageEditForm':
+		case 'bundleEditForm':
 			data.company = admin.company.name;
-			common.apiCall('packageUpdate', data, package_table_load);
+			common.apiCall('bundleUpdate', data, bundle_table_load);
 			break;
 		case 'userAddForm':
 			data.company = admin.company.name;
@@ -892,140 +892,140 @@ function connector_table_show (action, result) {
 
 // ***************************************************************************************
 //
-//		PACKAGES
+//		BUNDLES
 //
 // ***************************************************************************************
 
 // ---------------------------------------------------------------------------------------
-// Add a new package
+// Add a new bundle
 // ---------------------------------------------------------------------------------------
-function package_add () {
+function bundle_add () {
 	var i, options = [], lists = {};
 
 	// Load commands list
 	for (i=0; i<admin.commands.length; i++) {
 		options.push({"value":admin.commands[i].name, "text":admin.commands[i].name});
 	}
-	lists['packageAddCommand'] = sort_array_objects(options, 'text');
+	lists['bundleAddCommand'] = sort_array_objects(options, 'text');
 
 	// Load connectors list
 	options = [];
 	for (i=0; i<admin.connectors.length; i++) {
 		options.push({"value":admin.connectors[i].name, "text":admin.connectors[i].name});
 	}
-	lists['packageAddConnector'] = sort_array_objects(options, 'text');
+	lists['bundleAddConnector'] = sort_array_objects(options, 'text');
 
-	ui.formAdd('packageAddForm', lists);
+	ui.formAdd('bundleAddForm', lists);
 }
 
 
 
 // ---------------------------------------------------------------------------------------
-// Delete the selected package
+// Delete the selected bundle
 //
-// Argument 1 : Type of package
+// Argument 1 : Type of bundle
 // ---------------------------------------------------------------------------------------
-function package_delete (id) {
-	common.apiCall('packageDelete', {'_id': id}, package_table_load);
+function bundle_delete (id) {
+	common.apiCall('bundleDelete', {'_id': id}, bundle_table_load);
 }
 
 
 
 // ---------------------------------------------------------------------------------------
-// Open the selected package document for editing
+// Open the selected bundle document for editing
 //
-// Argument 1 : ID of package document
+// Argument 1 : ID of bundle document
 // ---------------------------------------------------------------------------------------
-function package_edit (id) {
+function bundle_edit (id) {
 	var i, index = -1, data = {}, options = [], lists = [];
 
 	// Find the selected document
-	for (i=0; i<admin.packages.length; i++) {
-		index = (admin.packages[i]._id === id) ? i : index;
+	for (i=0; i<admin.bundles.length; i++) {
+		index = (admin.bundles[i]._id === id) ? i : index;
 	}
 
-	// Load package data into temporary object
-	data.id = admin.packages[index]._id;
-	data.name = admin.packages[index].name;
-	data.command = admin.packages[index].command;
-	data.connector = admin.packages[index].connector;
+	// Load bundle data into temporary object
+	data.id = admin.bundles[index]._id;
+	data.name = admin.bundles[index].name;
+	data.command = admin.bundles[index].command;
+	data.connector = admin.bundles[index].connector;
 	data.version = {};
-	data.version.cmd = admin.packages[index].version.cmd;
-	data.version.prms = admin.packages[index].version.prms;
+	data.version.cmd = admin.bundles[index].version.cmd;
+	data.version.prms = admin.bundles[index].version.prms;
 
 	// Load connectors list
 	for (i=0; i<admin.connectors.length; i++) {
 		options.push({"value":admin.connectors[i].name, "text":admin.connectors[i].name});
 	}
-	lists['packageEditConnector'] = sort_array_objects(options, 'text');
+	lists['bundleEditConnector'] = sort_array_objects(options, 'text');
 
 	// Load commands list
 	options = [];
 	for (i=0; i<admin.commands.length; i++) {
 		options.push({"value":admin.commands[i].name, "text":admin.commands[i].name});
 	}
-	lists['packageEditCommand'] = sort_array_objects(options, 'text');
+	lists['bundleEditCommand'] = sort_array_objects(options, 'text');
 
 	// Display form for editing data
-	ui.formEdit('packageEditForm', data, lists);
+	ui.formEdit('bundleEditForm', data, lists);
 }
 
 
 
 // ---------------------------------------------------------------------------------------
-// Show all packages for the current company
+// Show all bundles for the current company
 // ---------------------------------------------------------------------------------------
-function package_table_load () {
-	common.apiCall('packageRead', { "filter":admin.company.name }, package_table_show);
+function bundle_table_load () {
+	common.apiCall('bundleRead', { "filter":admin.company.name }, bundle_table_show);
 }
 
 
 
 // ---------------------------------------------------------------------------------------
-// Display the package data in a table
+// Display the bundle data in a table
 //
 // Argument 1 : Action (not relevant)
 // Argument 2 : Data object returned by the API call
 // ---------------------------------------------------------------------------------------
-function package_table_show (action, result) {
+function bundle_table_show (action, result) {
 	var i, rows = [], cols = [], obj = {}, ver;
 
-	// Extract data from result set and load into global 'admin.packages' variable
-	admin.packages = [];
+	// Extract data from result set and load into global 'admin.bundles' variable
+	admin.bundles = [];
 	for (i=0; i<result.data.length; i++) {
-		admin.packages.push(result.data[i]);
+		admin.bundles.push(result.data[i]);
 	}
 
 	// Add each element of the array as a table row
-	for (i=0; i<admin.packages.length; i++) {
+	for (i=0; i<admin.bundles.length; i++) {
 		cols = [];
 
 		// Add column with link to edit form - only if user has permission to edit data
 		obj = {};
-		obj.text = admin.packages[i].name;
-		if (ui.userAccess('packageEditForm')) {
-			obj.link = 'package_edit';
+		obj.text = admin.bundles[i].name;
+		if (ui.userAccess('bundleEditForm')) {
+			obj.link = 'bundle_edit';
 		}
 		cols.push(obj);
 
 		// Add information columns
-		cols.push({"text":admin.packages[i].command});
-		cols.push({"text":admin.packages[i].connector});
-		ver = 'Cmd v' + admin.packages[i].version.cmd + ' / ';
-		ver += 'Prm v' + admin.packages[i].version.prms;
+		cols.push({"text":admin.bundles[i].command});
+		cols.push({"text":admin.bundles[i].connector});
+		ver = 'Cmd v' + admin.bundles[i].version.cmd + ' / ';
+		ver += 'Prm v' + admin.bundles[i].version.prms;
 		cols.push({"text":ver});
 
 		// Only add delete link if user has permission to edit data
-		if (ui.userAccess('packageEditForm')) {
-			cols.push({"button":"package_delete", "style":"danger", "icon":"trash"});
+		if (ui.userAccess('bundleEditForm')) {
+			cols.push({"button":"bundle_delete", "style":"danger", "icon":"trash"});
 		}
 
 		// Save row
-		rows.push({"id":admin.packages[i]._id, "cols":cols});
+		rows.push({"id":admin.bundles[i]._id, "cols":cols});
 	}
 
 	// Display the table
-	ui.tableShow('packageTable', rows);
+	ui.tableShow('bundleTable', rows);
 }
 
 
@@ -1058,16 +1058,16 @@ function user_add () {
 	}
 	lists['userAddRole'] = sort_array_objects(options, 'text');
 
-	// Load unique list of packages
+	// Load unique list of bundles
 	arr = [];
 	options = [];
-	for (i=0; i<admin.packages.length; i++) {
-		if (arr.indexOf(admin.packages[i].name) === -1) {
-			arr.push(admin.packages[i].name);
-			options.push({"value":admin.packages[i].name, "text":admin.packages[i].name});
+	for (i=0; i<admin.bundles.length; i++) {
+		if (arr.indexOf(admin.bundles[i].name) === -1) {
+			arr.push(admin.bundles[i].name);
+			options.push({"value":admin.bundles[i].name, "text":admin.bundles[i].name});
 		}
 	}
-	lists['userAddPackages'] = sort_array_objects(options, 'text');
+	lists['userAddbundles'] = sort_array_objects(options, 'text');
 
 	ui.formAdd('userAddForm', lists);
 }
@@ -1106,7 +1106,7 @@ function user_edit (id) {
 	data.group = admin.users[index].group;
 	data.jwt = admin.users[index].jwt;
 	data.clients = admin.users[index].clients;
-	data.packages = admin.users[index].packages;
+	data.bundles = admin.users[index].bundles;
 
 	// Load list of groups
 	keys = Object.keys(admin.company.groups);
@@ -1122,16 +1122,16 @@ function user_edit (id) {
 	}
 	lists['userEditRole'] = sort_array_objects(options, 'text');
 
-	// Load unique list of packages
+	// Load unique list of bundles
 	arr = [];
 	options = [];
-	for (i=0; i<admin.packages.length; i++) {
-		if (arr.indexOf(admin.packages[i].name) === -1) {
-			arr.push(admin.packages[i].name);
-			options.push({"value":admin.packages[i].name, "text":admin.packages[i].name});
+	for (i=0; i<admin.bundles.length; i++) {
+		if (arr.indexOf(admin.bundles[i].name) === -1) {
+			arr.push(admin.bundles[i].name);
+			options.push({"value":admin.bundles[i].name, "text":admin.bundles[i].name});
 		}
 	}
-	lists['userEditPackages'] = sort_array_objects(options, 'text');
+	lists['userEditBundles'] = sort_array_objects(options, 'text');
 
 	// Display form for editing data
 	ui.formEdit('userEditForm', data, lists);

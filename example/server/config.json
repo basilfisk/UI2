@@ -169,8 +169,8 @@
 		"ADM026": {
 			"type": "error",
 			"module" : "admin",
-			"function": "company_package",
-			"internal": "Can't retrieve company packages from collection 'va_package': _p1"
+			"function": "company_bundle",
+			"internal": "Can't retrieve company bundles from collection 'va_bundle': _p1"
 		},
 		"ADM027": {
 			"type" : "info",

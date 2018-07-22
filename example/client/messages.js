@@ -11,8 +11,8 @@ var messages = {
 	},
 	"CON003" : {
 		"type": "error",
-		"func": "company_packages_save",
-		"text": "No packages returned from Admin Server for '_p1'"
+		"func": "company_bundles_save",
+		"text": "No bundles returned from Admin Server for '_p1'"
 	},
 	"zzzCON004" : {
 		"type": "error",

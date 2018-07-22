@@ -153,18 +153,18 @@ function jwtCreate (session, user, callback) {
 			sendResponse(session, msg);
 		}
 		else {
-			// Create object linking connector to service, then read user's packages
+			// Create object linking connector to service, then read user's bundles
 			for (i=0; i<result.length; i++) {
 				connectors[result[i].name] = result[i].service;
 			}
 
-			// Read the packages available to the user
-			mongoDB.db(admin.mongo.db).collection('va_package').find({"company":user.company,"name":{$in:user.packages}}).sort({"name":1, "command":1}).toArray( function(err, result) {
+			// Read the bundles available to the user
+			mongoDB.db(admin.mongo.db).collection('va_bundle').find({"company":user.company,"name":{$in:user.bundles}}).sort({"name":1, "command":1}).toArray( function(err, result) {
 				var msg, access = {}, i, unique, pkg = [], cmd;
 
 				// Error trying to retrieve data
 				if (err) {
-					msg = log('ADM024', ['package', err.message]);
+					msg = log('ADM024', ['bundle', err.message]);
 					sendResponse(session, msg);
 				}
 				else {
@@ -304,7 +304,7 @@ function log (code, params) {
 
 
 // ---------------------------------------------------------------------------------------------
-// Package data in the correct response format
+// Bundle data in the correct response format
 //
 // Argument 1 : Data object
 // ---------------------------------------------------------------------------------------------
@@ -388,20 +388,20 @@ function runRequest (session) {
 		case 'loginCheck':
 			login_check(session);
 			break;
-		case 'packageDelete':
-			package_delete(session);
+		case 'bundleDelete':
+			bundle_delete(session);
 			break;
-		case 'packageNew':
-			package_new(session);
+		case 'bundleNew':
+			bundle_new(session);
 			break;
-		case 'packageRead':
-			package_read(session);
+		case 'bundleRead':
+			bundle_read(session);
 			break;
-		case 'packageRead1':
-			package_read1(session);
+		case 'bundleRead1':
+			bundle_read1(session);
 			break;
-		case 'packageUpdate':
-			package_update(session);
+		case 'bundleUpdate':
+			bundle_update(session);
 			break;
 		case 'report':
 			report(session);
@@ -1083,28 +1083,28 @@ function event_summary (session) {
 
 
 // *********************************************************************************************
-//		PACKAGES
+//		BUNDLES
 // *********************************************************************************************
 
 // ---------------------------------------------------------------------------------------------
-// Delete a package document
+// Delete a bundle document
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-function package_delete (session) {
+function bundle_delete (session) {
 	var	id = session.params['_id'];
 
-	mongoDB.db(admin.mongo.db).collection('va_package').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_bundle').deleteOne({'_id':new mongo.ObjectID(id)}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM007', ['package', err.message]);
+			msg = log('ADM007', ['bundle', err.message]);
 			sendResponse(session, msg);
 		}
 		// Return result
 		else {
-			msg = log('ADM008', ['package']);
+			msg = log('ADM008', ['bundle']);
 			sendResponse(session, msg);
 		}
 	});
@@ -1113,23 +1113,23 @@ function package_delete (session) {
 
 
 // ---------------------------------------------------------------------------------------------
-// Add a package document
+// Add a bundle document
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-function package_new (session) {
+function bundle_new (session) {
 	// Insert document
-	mongoDB.db(admin.mongo.db).collection('va_package').insertOne(session.params, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_bundle').insertOne(session.params, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM009', ['package', err.message]);
+			msg = log('ADM009', ['bundle', err.message]);
 			sendResponse(session, msg);
 		}
 		// Return result
 		else {
-			msg = log('ADM010', ['package']);
+			msg = log('ADM010', ['bundle']);
 			sendResponse(session, msg);
 		}
 	});
@@ -1138,26 +1138,26 @@ function package_new (session) {
 
 
 // ---------------------------------------------------------------------------------------------
-// Read all package documents for a company
+// Read all bundle documents for a company
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-function package_read (session) {
+function bundle_read (session) {
 	var	filter;
 
 	// Read filter to be applied
 	filter = { "company" : session.params.filter };
 
 	// Run query
-	mongoDB.db(admin.mongo.db).collection('va_package').find(filter).sort({'name':1,'command':1}).toArray( function(err, data) {
+	mongoDB.db(admin.mongo.db).collection('va_bundle').find(filter).sort({'name':1,'command':1}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM011', ['package', err.message]);
+			msg = log('ADM011', ['bundle', err.message]);
 			sendResponse(session, msg);
 		}
-		// Return all package data
+		// Return all bundle data
 		else {
             msg = responseData(data);
 			sendResponse(session, msg);
@@ -1168,21 +1168,21 @@ function package_read (session) {
 
 
 // ---------------------------------------------------------------------------------------------
-// Read 1 package document for a company
+// Read 1 bundle document for a company
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-function package_read1 (session) {
+function bundle_read1 (session) {
 	// Run query
-	mongoDB.db(admin.mongo.db).collection('va_package').find({'_id':new mongo.ObjectID(session.params.id)}).toArray( function(err, data) {
+	mongoDB.db(admin.mongo.db).collection('va_bundle').find({'_id':new mongo.ObjectID(session.params.id)}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
 		if (err) {
-			msg = log('ADM011', ['package', err.message]);
+			msg = log('ADM011', ['bundle', err.message]);
 			sendResponse(session, msg);
 		}
-		// Return all package data
+		// Return all bundle data
 		else {
             msg = responseData(data);
 			sendResponse(session, msg);
@@ -1193,11 +1193,11 @@ function package_read1 (session) {
 
 
 // ---------------------------------------------------------------------------------------------
-// Update a package document
+// Update a bundle document
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-function package_update (session) {
+function bundle_update (session) {
 	var	docid;
 
 	// Extract then remove Mongo document ID from object
@@ -1205,17 +1205,17 @@ function package_update (session) {
 	delete session.params.id;
 
 	// Update document
-	mongoDB.db(admin.mongo.db).collection('va_package').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:session.params}, function(err, result) {
+	mongoDB.db(admin.mongo.db).collection('va_bundle').updateOne({'_id':new mongo.ObjectID(docid)}, {$set:session.params}, function(err, result) {
 		var msg = {};
 
 		// Error trying to insert data
 		if (err) {
-			msg = log('ADM012', ['package', err.message]);
+			msg = log('ADM012', ['bundle', err.message]);
 			sendResponse(session, msg);
 		}
 		// Return result
 		else {
-			msg = log('ADM013', ['package']);
+			msg = log('ADM013', ['bundle']);
 			sendResponse(session, msg);
 		}
 	});
@@ -1264,7 +1264,7 @@ function user_new (session) {
 
 	// Extract data to be added
 	data.clients = session.params.clients;
-	data.packages = session.params.packages;
+	data.bundles = session.params.bundles;
 	data.company = session.params.company;
 	data.group = session.params.group;
 	data.password = session.params.password;
@@ -1335,7 +1335,7 @@ function user_update (session) {
 
 	// Extract data to be updated
 	data.clients = session.params.clients;
-	data.packages = session.params.packages;
+	data.bundles = session.params.bundles;
 	data.company = session.params.company;
 	data.group = session.params.group;
     data.id = session.params.id;

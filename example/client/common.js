@@ -37,7 +37,7 @@ var common = {
 				ui.messageBox('CON010', [common.api.host, common.api.port, command]);
 			},
 			success: function (result) {
-console.log(result);
+//console.log(result);
 				callback('result', result);
 			}
 		};
