@@ -52,10 +52,11 @@ filters = {
 
 // Status of loading data after login
 progress = {
+	bundle: false,
 	command: false,
 	company: false,
 	connector: false,
-	bundle: false,
+	plan: false,
 	role: false,
 	user: false
 };
@@ -84,6 +85,28 @@ var login = {
 
 
 	/**
+	 * @method readBundles
+	 * @author Basil Fisk
+	 * @param {string} action Action to be performed - 'result' shows data.
+	 * @param {object} result Result returned from database.
+	 * @description Read bundles for the company.
+	 */
+	readBundles: function (action, result) {
+		if (result.data !== undefined && result.result.status) {
+			// Clear out the existing bundles
+			admin.bundles.splice(0, admin.bundles.length);
+
+			// Load bundles
+			admin.bundles = result.data.sort();
+			login.setProgress('bundle');
+		}
+		else {
+			ui.messageBox('CON003', [admin.company.name]);
+		}
+	},
+
+
+	/**
 	 * @method readCompany
 	 * @author Basil Fisk
 	 * @param {string} action Action to be performed - 'result' shows data.
@@ -94,9 +117,6 @@ var login = {
 		var data, i;
 
 		// If no company has been selected yet, start with user's company
-//		if (admin.company.name === undefined) {
-//			admin.company.name = me.company;
-//		}
 		if (admin.company.code === undefined) {
 			admin.company.code = me.company;
 		}
@@ -109,15 +129,11 @@ var login = {
 			for (i=0; i<result.data.length; i++) {
 				// For the super user, load an array with ID and name of all companies
 				// TODO This version of VeryAPI only has 1 company / database
-console.log(me);
-console.log(admin);
-console.log(result);
 				if (me.role === 'superuser') {
 					admin.companies.push(result.data[i]);
 				}
 
 				// Load user's company data
-//				if (admin.company.name === result.data[i].name) {
 				if (admin.company.code === result.data[i].code) {
 					admin.company = result.data[i];
 
@@ -184,23 +200,22 @@ console.log(result);
 
 
 	/**
-	 * @method readBundles
+	 * @method readPlans
 	 * @author Basil Fisk
 	 * @param {string} action Action to be performed - 'result' shows data.
 	 * @param {object} result Result returned from database.
-	 * @description Read bundles for the company.
+	 * @description Load plans returned from database. Plans apply to all companies.
 	 */
-	readBundles: function (action, result) {
-		if (result.data !== undefined && result.result.status) {
-			// Clear out the existing bundles
-			admin.bundles.splice(0, admin.bundles.length);
-
-			// Load bundles
-			admin.bundles = result.data.sort();
-			login.setProgress('bundle');
+	readPlans: function (action, result) {
+		if (result.data !== undefined) {
+			admin.plans = [];
+			for (i=0; i<result.data.length; i++) {
+				admin.plans.push({"id":result.data[i].code, "name":result.data[i].name});
+			}
+			login.setProgress('plan');
 		}
 		else {
-			ui.messageBox('CON003', [admin.company.name]);
+			ui.messageBox('CON005', []);
 		}
 	},
 
@@ -250,15 +265,12 @@ console.log(result);
 			me.username = result.data.username;
 			me.groupusers = result.data.groupusers;
 
-			// Read the UI documents
-//			common.apiCall('uiRead', { "role":me.role }, load_ui);
-
 			// The super user can view all companies, others can only see their company's data
 			filter = (me.role === 'superuser') ? 'all' : me.company;
 			common.apiCall('companyRead', { "filter":filter }, login.readCompany);
 
 			// Load the plan lists from the plan collection (same for all companies)
-//			common.apiCall('listPlans', {}, load_plan_list);
+			common.apiCall('listPlans', {}, login.readPlans);
 
 			// Load the roles lists from the user collection (same for all users)
 			common.apiCall('listRoles', {}, login.readRoles);
@@ -282,32 +294,16 @@ console.log(result);
 	setProgress: function (item) {
 		progress[item] = true;
 		if (me.role === 'superuser') {
-			if (progress.command && progress.company && progress.connector && progress.bundle && progress.role && progress.user) {
+			if (progress.bundle && progress.command && progress.company && progress.connector && progress.plan && progress.role && progress.user) {
 				console.log(admin);
+				console.log(me);
 			}
 		}
 		else {
 			if (progress.company && progress.role && progress.user) {
 				console.log(admin);
+				console.log(me);
 			}
 		}
 	}
 };
-
-// ---------------------------------------------------------------------------------------
-// Load plans returned from database. Plans apply to all companies.
-//
-// Argument 1 : Action to be performed - always 'result'
-// Argument 2 : Result returned from database
-// ---------------------------------------------------------------------------------------
-function load_plan_list (action, result) {
-	if (result.data !== undefined) {
-		admin.plans = [];
-		for (i=0; i<result.data.length; i++) {
-			admin.plans.push({"id":result.data[i].code, "name":result.data[i].name});
-		}
-	}
-	else {
-		ui.messageBox('CON005', []);
-	}
-}

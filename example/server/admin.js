@@ -1382,8 +1382,8 @@ function user_update_jwt (session, data) {
 //
 // Argument 1 : Session object
 // ---------------------------------------------------------------------------------------------
-/*function list_plans (session) {
-	mongoDB.db(admin.mongo.db).collection('plan').find().sort({'name':1}).toArray( function(err, data) {
+function list_plans (session) {
+	mongoDB.db('qott').collection('plan').find().sort({'name':1}).toArray( function(err, data) {
 		var msg = {};
 
 		// Error trying to retrieve data
@@ -1397,7 +1397,7 @@ function user_update_jwt (session, data) {
 			sendResponse(session, msg);
 		}
 	});
-}*/
+}
 
 
 

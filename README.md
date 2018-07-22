@@ -76,3 +76,16 @@ http://ulion.github.io/jsonform/playground/?example=factory-sleek
 |_post|Post-processing functions for user forms, passed as an argument to the `init` function.|
 |_validation|Internal validation patterns (in regular expression format) used for validating data entered into fields. Loaded from `etc/validation.js`.|
 
+# Issues
+
+## Short Term
+
+- How does the "access" element work?
+- try/catch picks up later errors. How do I fix this?
+    - ui.buttonSave 
+    - admin.adminServer
+- Match the names in message.func with the current function names
+
+## Enhancements
+
+- Provide a tool for validating the menu and form schemas before running
