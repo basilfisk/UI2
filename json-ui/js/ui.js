@@ -546,7 +546,9 @@ var ui = {
 
 		// Add form header and title
 		div += '<div class="modal-header">';
-		div += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+		if (_defs[id].buttons && _defs[id].buttons.close) {
+			div += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+		}
 		div += '<h4 class="modal-title">' + title + '</h4>';
 		div += '</div>';
 
@@ -558,7 +560,6 @@ var ui = {
 		for (i=0; i<names.length; i++) {
 			switch (fields[names[i]].type) {
 				case 'list':
-//					div += this._showField(names[i], fields[names[i]], '', list[names[i]]);
 					div += this._showField(names[i], fields[names[i]], '', _sortArrayObjects(list[names[i]], 'text'));
 					break;
 				default:
@@ -573,8 +574,6 @@ var ui = {
 		if (_defs[id].buttons && _defs[id].buttons.add) {
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-//			div += '<button type="button" class="btn btn-success" data-dismiss="modal" onClick="ui.buttonSave(' + index + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
-//			div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + index + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
 			div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + "'" + id + "'" + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
 			div += '</div></div>';
 		}
@@ -620,7 +619,9 @@ var ui = {
 
 		// Add form header and title
 		div += '<div class="modal-header">';
-		div += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+		if (_defs[id].buttons && _defs[id].buttons.close) {
+			div += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+		}
 		div += '<h4 class="modal-title">' + title + '</h4>';
 		div += '</div>';
 
@@ -659,7 +660,6 @@ var ui = {
 			// Add field
 			switch (fields[names[i]].type) {
 				case 'list':
-//					div += this._showField(names[i], fields[names[i]], value, list[names[i]]);
 					div += this._showField(names[i], fields[names[i]], value, _sortArrayObjects(list[names[i]], 'text'));
 					break;
 				default:
@@ -678,8 +678,6 @@ var ui = {
 				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" onClick="ui.buttonDelete(' + index + '); return false;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
 			}
 			if (_defs[id].buttons.save) {
-//				div += '<button type="button" class="btn btn-success" data-dismiss="modal" onClick="ui.buttonSave(' + index + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
-//				div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + index + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
 				div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + "'" + id + "'" + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
 			}
 			div += '</div></div>';
@@ -908,6 +906,7 @@ var ui = {
 	// ---------------------------------------------------------------------------------------
 	tableShow: function (id, rows) {
 		var index, body = '', i, n, row, rowid, cell = {};
+console.log(id, rows);
 
 		// Build the container
 		body += '<div class="modal-dialog" role="document" style="width:50%">'; // TODO Make a parameter
