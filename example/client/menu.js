@@ -31,8 +31,8 @@ var menuDefinitions = {
 					"title": "Users",
 					"action": "user_table_load()",
 					"access": ["superuser","manager"],
-					"add": "user_add()",
-					"columns": ["Email Address", "Group", "Role", "Delete"]
+					"ZZZadd": "user_add()",
+					"ZZZcolumns": ["Email Address", "Group", "Role", "Delete"]
 				},
 				{
 					"id" : "connectorTable",
