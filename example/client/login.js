@@ -18,8 +18,7 @@ admin = {
 	plans: [],			// Array of plans for all companies
 	roles: [],	      	// List of roles that can be granted to users
 	services: [],		// List of services available to all companies
-	users: [],			// Users the current user has access to
-	usage: {},			// Rolling total of usage data
+	users: []			// Users the current user has access to
 };
 
 // Load the services
