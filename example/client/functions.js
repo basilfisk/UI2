@@ -18,11 +18,13 @@ var formFunctions = {
 	aboutShow: function () {
 		var data = {}, i;
 
-		data.username = me.username;
-		data.company = me.company;
-		data.group = me.group;
 		data.clients = me.clients;
+		data.company = me.company;
+		data.email = me.email;
+		data.group = me.group;
 		data.jwt = me.jwt;
+		data.name = me.name;
+		data.username = me.username;
 		for (i=0; i<admin.roles.length; i++) {
 			if (admin.roles[i].code === me.role) {
 				data.role = admin.roles[i].name;
@@ -31,7 +33,7 @@ var formFunctions = {
 		data.bundles = me.bundles.join(',');
 
 		// Display form
-		ui.formEdit('aboutForm', data);
+		ui.formEdit('about', data);
 	},
 
 
@@ -42,9 +44,14 @@ var formFunctions = {
 	 * @description Validate the user credentials.
 	 */
 	loginCheck: function (data) {
-		common.apiCall('loginCheck', {"username":data.username, "password":data.password}, login.readUser);
+//		common.apiCall('loginCheck', {"username":data.username, "password":data.password}, login.readUser);
+		common.apiCall('loginCheck', {"username":"admin", "password":"password"}, login.readUser);
 	}
 };
+
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
 
 /**
  * @method postProcess

@@ -255,14 +255,16 @@ var login = {
 		// Only 1 user record should be returned
 		if (result.result.status === 1) {
 			me = {};
+			me.bundles = result.data.bundles;
 			me.clients = result.data.clients;
 			me.company = result.data.company;
+			me.email = result.data.email;
 			me.group = result.data.group;
-			me.jwt = result.data.jwt;
-			me.role = result.data.role;
-			me.bundles = result.data.bundles;
-			me.username = result.data.username;
 			me.groupusers = result.data.groupusers;
+			me.jwt = result.data.jwt;
+			me.name = result.data.name;
+			me.role = result.data.role;
+			me.username = result.data.username;
 
 			// The super user can view all companies, others can only see their company's data
 			filter = (me.role === 'superuser') ? 'all' : me.company;
