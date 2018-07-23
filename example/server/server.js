@@ -237,7 +237,7 @@ class Server {
 	 * @description Bundle data in the correct response format.
 	 */
 	responseData (data) {
-		return msg = {
+		return {
 			result: {
 				status: 1,
 			},
@@ -253,7 +253,7 @@ class Server {
 	 * @description Run the selected command.
 	 */
 	runRequest (session) {
-		var msg, calls;
+		var calls, found = true, msg;
 
 		switch (session.command) {
 			case 'bundleDelete':
@@ -262,15 +262,13 @@ class Server {
 			case 'bundleRead1':
 			case 'bundleUpdate':
 				calls = new this.BundleCalls();
-				calls[session.command](this, session);
 				break;
 			case 'commandDelete':
 			case 'commandDeleteVersion':
 			case 'commandNew':
 			case 'commandRead':
 			case 'commandUpdate':
-					calls = new this.CommandCalls();
-				calls[session.command](this, session);
+				calls = new this.CommandCalls();
 				break;
 			case 'companyDelete':
 			case 'companyGroupDelete':
@@ -280,7 +278,6 @@ class Server {
 			case 'companyReadId':
 			case 'companyUpdate':
 				calls = new this.CompanyCalls();
-				calls[session.command](this, session);
 				break;
 			case 'connectorDelete':
 			case 'connectorNew':
@@ -288,29 +285,30 @@ class Server {
 			case 'connectorUpdate':
 			case 'connectorUpdateName':
 				calls = new this.ConnectorCalls();
-				calls[session.command](this, session);
 				break;
 			case 'listPlans':
 			case 'listRoles':
 			case 'loginCheck':
 				calls = new this.GeneralCalls();
-				calls[session.command](this, session);
 				break;
 			case 'report':
 			case 'reportEventSummary':
 				calls = new this.ReportCalls();
-				calls[session.command](this, session);
 				break;
 			case 'userDelete':
 			case 'userNew':
 			case 'userRead':
 			case 'userUpdate':
 				calls = new this.UserCalls();
-				calls[session.command](this, session);
 				break;
 			default:
 				msg = this.log('ADM006', [session.command]);
 				this.sendResponse(session, msg);
+				found = false;
+		}
+
+		if (found) {
+			calls[session.command](this, session);
 		}
 	}
 
