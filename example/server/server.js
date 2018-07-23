@@ -19,7 +19,13 @@ class Server {
 		this.moment = require('moment');
 		this.mongo = require('mongodb').MongoClient;
 		this.shortid = require('shortid');
-		this.CallTemplate = require(__dirname + '/calls/general.js');
+		this.BundleCalls = require(__dirname + '/calls/bundle.js');
+		this.CommandCalls = require(__dirname + '/calls/command.js');
+		this.CompanyCalls = require(__dirname + '/calls/company.js');
+		this.ConnectorCalls = require(__dirname + '/calls/connector.js');
+		this.GeneralCalls = require(__dirname + '/calls/general.js');
+		this.ReportCalls = require(__dirname + '/calls/report.js');
+		this.UserCalls = require(__dirname + '/calls/user.js');
 		this.admin = {};
 		this.mongoDB;
 	}
@@ -169,80 +175,6 @@ class Server {
 
 
 	/**
-	 * @method jwtCreate
-	 * @memberof Server
-	 * @param {object} session Session object.
-	 * @param {object} user Object holding user's details.
-	 * @param {function} callback Function to be called after JWT has been created.
-	 * @description Create a JSON web token for the user, who will include it
-	 * in the message header when sending messages to the API.
-	 */
-	jwtCreate (session, user, callback) {
-		var	access = {};
-	
-		// Read connector name and type of service for all connectors for user's company
-		this.mongoDB.db(this.admin.mongo.db).collection('va_connector').find({"company":user.company},{"name":1,"service":1}).toArray( (err, result) => {
-			var connectors = {}, i;
-	
-			// Error trying to retrieve data
-			if (err) {
-				msg = this.log('ADM024', ['connector', err.message]);
-				this.sendResponse(session, msg);
-			}
-			else {
-				// Create object linking connector to service, then read user's bundles
-				for (i=0; i<result.length; i++) {
-					connectors[result[i].name] = result[i].service;
-				}
-	
-				// Read the bundles available to the user
-				this.mongoDB.db(this.admin.mongo.db).collection('va_bundle').find({"company":user.company,"name":{$in:user.bundles}}).sort({"name":1, "command":1}).toArray( (err, result) => {
-					var msg, access = {}, i, unique, pkg = [], cmd;
-	
-					// Error trying to retrieve data
-					if (err) {
-						msg = this.log('ADM024', ['bundle', err.message]);
-						this.sendResponse(session, msg);
-					}
-					else {
-						// User info to be included in token
-						access.usr = user.username;
-						access.org = user.company;
-						access.ip4= user.clients;
-						access.svc = [];
-	
-						// Add array of unique connector/service combinations to token
-						for (i=0; i<result.length; i++) {
-							unique = result[i].name + result[i].connector;
-							if(pkg.indexOf(unique) === -1) {
-								pkg.push(unique);
-								access.svc.push({con:result[i].connector, svc:connectors[result[i].connector]});
-							}
-						}
-	
-						// Add commands to token
-						access.cmd = {};
-						for (i=0; i<result.length; i++) {
-							cmd = result[i].command;
-							access.cmd[cmd] = {};
-							access.cmd[cmd].s = pkg.indexOf(result[i].name + result[i].connector);
-							access.cmd[cmd].c = result[i].version.cmd;
-							access.cmd[cmd].p = result[i].version.prms;
-						}
-	
-						// Use access data to create token
-						user.jwt = this.jwt.sign(access, this.admin.jwtSecret, { "noTimestamp":true });
-	
-						// Run the callback function
-						callback(session, user);
-					}
-				});
-			}
-		});
-	}
-
-
-	/**
 	 * @method log
 	 * @memberof Server
 	 * @param {string} code Code of the message.
@@ -324,14 +256,62 @@ class Server {
 		var msg, calls;
 
 		switch (session.command) {
+			case 'bundleDelete':
+			case 'bundleNew':
+			case 'bundleRead':
+			case 'bundleRead1':
+			case 'bundleUpdate':
+				calls = new this.BundleCalls();
+				calls[session.command](this, session);
+				break;
+			case 'commandDelete':
+			case 'commandDeleteVersion':
+			case 'commandNew':
+			case 'commandRead':
+			case 'commandUpdate':
+					calls = new this.CommandCalls();
+				calls[session.command](this, session);
+				break;
+			case 'companyDelete':
+			case 'companyGroupDelete':
+			case 'companyGroupUpsert':
+			case 'companyNew':
+			case 'companyRead':
+			case 'companyReadId':
+			case 'companyUpdate':
+				calls = new this.CompanyCalls();
+				calls[session.command](this, session);
+				break;
+			case 'connectorDelete':
+			case 'connectorNew':
+			case 'connectorRead':
+			case 'connectorUpdate':
+			case 'connectorUpdateName':
+				calls = new this.ConnectorCalls();
+				calls[session.command](this, session);
+				break;
+			case 'listPlans':
+			case 'listRoles':
 			case 'loginCheck':
-				calls = new this.CallTemplate();
+				calls = new this.GeneralCalls();
+				calls[session.command](this, session);
+				break;
+			case 'report':
+			case 'reportEventSummary':
+				calls = new this.ReportCalls();
+				calls[session.command](this, session);
+				break;
+			case 'userDelete':
+			case 'userNew':
+			case 'userRead':
+			case 'userUpdate':
+				calls = new this.UserCalls();
 				calls[session.command](this, session);
 				break;
 			default:
 				msg = this.log('ADM006', [session.command]);
 				this.sendResponse(session, msg);
-			}
+		}
 	}
 
 

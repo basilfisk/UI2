@@ -1,32 +1,76 @@
 /**
- * @file calls.js
+ * @file general.js
  * @author Basil Fisk
  * @copyright Breato Ltd 2018
- * @description API calls handled by the administration server.
+ * @description General API calls handled by the administration server.
  */
 
 /**
- * @namespace Calls
+ * @namespace GeneralCalls
  * @author Basil Fisk
- * @description API calls handled by the administration server.
+ * @description General API calls handled by the administration server.
  */
-class Calls {
+class GeneralCalls {
 	constructor () {
 		// empty
 	}
 
 
 	/**
-	 * @method loginCheck
-	 * @memberof Calls
+	 * @method listPlans
+	 * @memberof GeneralCalls
 	 * @param {object} that Current scope.
 	 * @param {object} session Session object.
-	 * @param {function} callback Function to be run after processing is complete.
+	 * @description Read the list of subscriber plans.
+	 */
+	listPlans (that, session) {
+		that.mongoDB.db('qott').collection('plan').find().sort({'name':1}).toArray( (err, data) => {
+			var msg = {};
+
+			// Error trying to retrieve data
+			if (err) {
+				msg = that.log('ADM020', [err.message]);
+				that.sendResponse(session, msg);
+			}
+			// Return data
+			else {
+				msg = that.responseData(data);
+				that.sendResponse(session, msg);
+			}
+		});
+	}
+
+
+	/**
+	 * @method listRoles
+	 * @memberof GeneralCalls
+	 * @param {object} that Current scope.
+	 * @param {object} session Session object.
+	 * @description Return the list of roles.
+	 * TODO Where this comes from has yet to be decided.
+	 */
+	listRoles (that, session) {
+		var data = [], msg = {};
+
+		data.push({"code":"superuser", "name":"Super User", "level":1});
+		data.push({"code":"manager", "name":"Manager", "level":2});
+		data.push({"code":"user", "name":"User", "level":3});
+
+		msg = that.responseData(data);
+		that.sendResponse(session, msg);
+	}
+
+
+	/**
+	 * @method loginCheck
+	 * @memberof GeneralCalls
+	 * @param {object} that Current scope.
+	 * @param {object} session Session object.
 	 * @description Check the supplied login credentials against the user collection.
 	 */
 	loginCheck (that, session) {
 		// Check whether user exists
-		that.mongoDB.db(that.admin.mongo.db).collection('va_user').find({"username":session.params.username, "password":session.params.password},{"password":0}).toArray( function(err, data) {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_user').find({"username":session.params.username, "password":session.params.password},{"password":0}).toArray( (err, data) => {
 			var msg = {};
 	
 			// Error trying to retrieve data
@@ -38,7 +82,7 @@ class Calls {
 			else {
 				if (data.length === 1) {
 					// Read all users in the same company group as this user
-					that.mongoDB.db(that.admin.mongo.db).collection('va_user').find({"company":data[0].company,"group":data[0].group},{"username":1,"_id":-1}).toArray( function(err, users) {
+					that.mongoDB.db(that.admin.mongo.db).collection('va_user').find({"company":data[0].company,"group":data[0].group},{"username":1,"_id":-1}).toArray( (err, users) => {
 						var msg = {}, i, grps = [];
 
 						// Error trying to retrieve data
@@ -71,4 +115,4 @@ class Calls {
 	}
 }
 
-module.exports = Calls;
+module.exports = GeneralCalls;
