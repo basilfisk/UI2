@@ -1,17 +1,25 @@
 var formDefinitions = {
 	"about" : {
-		"access": ["superuser","manager","user"],
 		"title": "Information About the Current User",
-		"menu": {
-			"menu" : "main",
-			"title": "About",
-			"order": 4,
-			"select": "about_show()"
-		},
+		"access": ["superuser","manager","user"],
 		"fields" : {
-			"aboutUsername": {
-				"element": "username",
+			"aboutUserName": {
+				"element": "name",
 				"title": "User Name",
+				"type": "text",
+				"visible": true,
+				"edit": false
+			},
+			"aboutLoginName": {
+				"element": "username",
+				"title": "Login Name",
+				"type": "text",
+				"visible": true,
+				"edit": false
+			},
+			"aboutEmail": {
+				"element": "email",
+				"title": "Email",
 				"type": "text",
 				"visible": true,
 				"edit": false
