@@ -724,7 +724,7 @@ function command_table_load () {
 function command_table_show (action, result) {
 	var i, rows = [], cols = [], obj = {}, n, ver, cmd, prm, str;
 
-	// Extract data from result set and load into global 'admin.users' variable
+	// Extract data from result set and load into global 'admin.commands' variable
 	admin.commands = [];
 	for (i=0; i<result.data.length; i++) {
 		admin.commands.push(result.data[i]);
