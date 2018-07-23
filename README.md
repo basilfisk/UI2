@@ -123,6 +123,12 @@ http://ulion.github.io/jsonform/playground/?example=factory-sleek
     - ui.buttonSave 
     - admin.adminServer
 - Match the names in message.func with the current function names
+- Are these API calls used anywhere?
+    - bundleRead1
+    - connectorUpdateName
+    - report
+    - reportEventSummary
+- Is the admin.users element needed in login.js? Is it related to me.groupusers?
 
 ## Enhancements
 
