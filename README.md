@@ -1,11 +1,3 @@
-# Installation
-
-To install the application.
-
-~~~
-???
-~~~
-
 # Using the VeryAPI Sample Application
 
 ## Administration Server
@@ -19,9 +11,10 @@ sudo vi /etc/hosts
     local.very-api.net (add to the end of the line for 127.0.0.1)
 ~~~
 
-Then install the SSL certificates into the `/etc/veryapi` directory.
+Now install the SSL certificates into the `/etc/veryapi` directory.
 
 ~~~bash
+mkdir /etc/veryapi/
 sudo cp ~/UI2/example/server/ssl/local.very-api.net.* /etc/veryapi/
 ~~~
 
@@ -39,12 +32,15 @@ ps -ef | grep server.js | grep -v grep
 sudo netstat -plnt | grep node
 ~~~
 
+>>Set up the web server for the Administration console.
+
 ## Administration Console
 
-Use this URL to access the Administration Console.
+Use the first URL to access the Administration Console from the file system on a development server, or the second URL if a web server has been set-up.
 
 ~~~
 file:///home/bf/Google/basil.fisk@gmail.com/Software/UI2/index.html
+https://local.very-api.net
 ~~~
 
 The example application has 2 users:
@@ -54,42 +50,59 @@ The example application has 2 users:
 
 # How the Application Works
 
-When `index.html` is called, it loads several 3rd Party stylesheets and libraries.
+When `index.html` is called, it loads files that are part of the example application and files that are part of `json-ui`.
 
+## Example Application Files
+
+These files are part of the example application and are held in the `example/client` directory.
+
+## `json-ui` Package Files
+
+These files are part of the `json-ui` package.
+
+### Fonts
+
+These files are provided with the `json-ui` package by default, and can be changed as required to modify the styling of the application.
+
+~~~bash
+json-ui/fonts/glyphicons-halflings-regular.ttf
+json-ui/fonts/glyphicons-halflings-regular.woff
 ~~~
-packages/bootstrap.min.css
-packages/bootstrap-datetimepicker.css
-packages/jquery.min.js
-packages/moment.min.js
-packages/bootstrap.min.js
-packages/bootstrap-datetimepicker.js
+
+### 3rd Party stylesheets and libraries
+
+These files are provided with the `json-ui` package by default. The CSS files can be changed as required to modify the styling of the application.
+
+~~~bash
+json-ui/packages/bootstrap.min.css
+json-ui/packages/bootstrap.min.js
+json-ui/packages/bootstrap-multiselect.css
+json-ui/packages/bootstrap-multiselect.js
+json-ui/packages/bootstrap-datetimepicker.css
+json-ui/packages/bootstrap-datetimepicker.js
+json-ui/packages/jquery.min.js
+json-ui/packages/moment.min.js
 ~~~
 
-Then `index.html` loads several built-in user interface functions and configuration files.
+### `json-ui` Package
 
-File | Purpose
----- | -------
-js/api.js | ????
-js/ui.js | ????
-js/config.js | ????
-js/messages.js | ????
+These files hold the core `json-ui` functionality and shouldn't be edited by developers.
 
-The last set of files to be loaded by `index.html` are the application definition scripts created by the user.
+|File|Purpose|
+|----|-------|
+|json-ui/js/messages.js||
+|json-ui/js/ui.js||
 
-File | Purpose
----- | -------
-app/functions.js | ????
-app/definition.js | ???
+These files can be edited by developers to modify the way `json-ui` works.
 
-To display the application, `index.html` calls the `onStart()` function from the *???* file.
+|File|Purpose|
+|----|-------|
+|json-ui/etc/config.js||
+|json-ui/etc/validation.js||
 
-## JSON Forms
+# How the Example Application Works
 
-https://github.com/joshfire/jsonform
-
-https://github.com/joshfire/jsonform/wiki
-
-http://ulion.github.io/jsonform/playground/?example=factory-sleek
+>> To display the application, `index.html` calls the `onStart()` function from the *???* file.
 
 ## Flow Through Functions
 
@@ -105,7 +118,11 @@ http://ulion.github.io/jsonform/playground/?example=factory-sleek
 ||ui._checkRange|Validate the range of a number.|
 |||If all checks for all fields return `true`, the form's post-processing function is run. The name of the function to be run is held in the `buttons.save` element of the form definition, held in the `forms.js` script.|
 
-## UI Internal Data Objects
+# How `json-ui` Works
+
+>> ?????????????
+
+## Internal Data Objects
 
 |Data Object|Description|
 |---|---|
@@ -133,3 +150,13 @@ http://ulion.github.io/jsonform/playground/?example=factory-sleek
 ## Enhancements
 
 - Provide a tool for validating the menu and form schemas before running
+
+# Useful References
+
+## JSON Forms
+
+https://github.com/joshfire/jsonform
+
+https://github.com/joshfire/jsonform/wiki
+
+http://ulion.github.io/jsonform/playground/?example=factory-sleek
