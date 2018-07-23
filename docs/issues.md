@@ -13,7 +13,7 @@
 
 ## General Issues
 
-- How does the "access" element work?
+- How does the `access` element in `menu.js` work?
 - try/catch picks up later errors. How do I fix this?
 	- ui.buttonSave 
 	- admin.adminServer
@@ -30,7 +30,6 @@
 - about form
 	- Company : name instead of code
 - login form
-	- remove close button (top right)
 	- if login fails, show login form again
 - logout option
 	- clear `me` and `admin` variables before showing login form
