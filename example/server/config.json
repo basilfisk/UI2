@@ -11,9 +11,9 @@
 	},
 	"port": 19400,
 	"ssl" : {
-		"ca": "/etc/quiptel/local.very-api.net.ca",
-		"cert": "/etc/quiptel/local.very-api.net.crt",
-		"key": "/etc/quiptel/local.very-api.net.key"
+		"ca": "/etc/veryapi/local.very-api.net.ca",
+		"cert": "/etc/veryapi/local.very-api.net.cert",
+		"key": "/etc/veryapi/local.very-api.net.key"
 	},
 	"messages": {
 		"ADM001": {

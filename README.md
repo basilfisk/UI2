@@ -3,16 +3,54 @@
 To install the application.
 
 ~~~
-
+???
 ~~~
 
-# Using the Application
+# Using the VeryAPI Sample Application
 
-To display the application.
+## Administration Server
+
+The VeryAPI administration server must be installed first.
+
+~~~bash
+cd ~/UI2/example/server/
+npm i
+sudo vi /etc/hosts
+    local.very-api.net (add to the end of the line for 127.0.0.1)
+~~~
+
+Then install the SSL certificates into the `/etc/veryapi` directory.
+
+~~~bash
+sudo cp ~/UI2/example/server/ssl/local.very-api.net.* /etc/veryapi/
+~~~
+
+Finally, start the VeryAPI administration server. By default, the log data is writtem to `/tmp/veryapi.log` but this can be changed in the `config.json` file.
+
+~~~bash
+cd ~/UI2/example/server/
+node server.js &
+~~~
+
+Check the server is running and listening on the correct port.
+
+~~~bash
+ps -ef | grep server.js | grep -v grep
+sudo netstat -plnt | grep node
+~~~
+
+## Administration Console
+
+Use this URL to access the Administration Console.
 
 ~~~
 file:///home/bf/Google/basil.fisk@gmail.com/Software/UI2/index.html
 ~~~
+
+The example application has 2 users:
+
+- admin / password (user with access to all options)
+- client / password (user with restricted access to certain options)
 
 # How the Application Works
 
