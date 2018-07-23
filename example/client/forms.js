@@ -1,7 +1,9 @@
 var formDefinitions = {
 	"about" : {
 		"title": "Information About the Current User",
-		"access": ["superuser","manager","user"],
+		"buttons": {
+			"close": true,
+		},
 		"fields" : {
 			"aboutUserName": {
 				"element": "name",
@@ -75,7 +77,6 @@ var formDefinitions = {
 	},
 	"login" : {
 		"title": "Login to the VeryAPI Console",
-		"access": ["superuser","manager","user"],
 		"buttons": {
 			"save": "loginCheck"
 		},
@@ -106,6 +107,16 @@ var formDefinitions = {
 					}
 				}
 			}
+		}
+	},
+	"userTable" : {
+		"title": "Users",
+		"buttons": {
+			"close": true,
+			"add": "user_add",
+		},
+		"fields" : {
+			"columns": ["Email Address", "Group", "Role", "Delete"]
 		}
 	}
 };
