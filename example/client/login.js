@@ -243,7 +243,7 @@ var login = {
 			}
 		}
 		else {
-			if (system.progress.company && system.progress.role && system.progress.user) {
+			if (system.progress.company && system.progress.plan && system.progress.role && system.progress.user) {
 				console.log(admin);
 				console.log(me);
 			}
