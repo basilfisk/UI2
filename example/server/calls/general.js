@@ -59,60 +59,6 @@ class GeneralCalls {
 		msg = that.responseData(data);
 		that.sendResponse(session, msg);
 	}
-
-
-	/**
-	 * @method loginCheck
-	 * @memberof GeneralCalls
-	 * @param {object} that Current scope.
-	 * @param {object} session Session object.
-	 * @description Check the supplied login credentials against the user collection.
-	 */
-	loginCheck (that, session) {
-		// Check whether user exists
-		that.mongoDB.db(that.admin.mongo.db).collection('va_user').find({"username":session.params.username, "password":session.params.password},{"password":0}).toArray( (err, data) => {
-			var msg = {};
-	
-			// Error trying to retrieve data
-			if (err) {
-				msg = that.log('ADM018', ['user', err.message]);
-				that.sendResponse(session, msg);
-			}
-			// Check that only 1 user was returned
-			else {
-				if (data.length === 1) {
-					// Read all users in the same company group as this user
-					that.mongoDB.db(that.admin.mongo.db).collection('va_user').find({"company":data[0].company,"group":data[0].group},{"username":1,"_id":-1}).toArray( (err, users) => {
-						var msg = {}, i, grps = [];
-
-						// Error trying to retrieve data
-						if (err) {
-							msg = that.log('ADM021', ['user', err.message]);
-							that.sendResponse(session, msg);
-						}
-						// Return all user data
-						else {
-							msg.result = {};
-							msg.result.status = (Object.keys(users).length > 0) ? 1 : 0;
-							msg.data = {};
-							// Add user credentials from login query
-							msg.data = data[0];
-							// Add an array of users in this group
-							for (i=0; i<users.length; i++) {
-								grps.push(users[i].username);
-							}
-							msg.data.groupusers = grps;
-							that.sendResponse(session, msg);
-						}
-					});
-				}
-				else {
-					msg = that.log('ADM022', []);
-					that.sendResponse(session, msg);
-				}
-			}
-		});
-	}
 }
 
 module.exports = GeneralCalls;

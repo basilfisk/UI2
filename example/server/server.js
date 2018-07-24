@@ -288,7 +288,6 @@ class Server {
 				break;
 			case 'listPlans':
 			case 'listRoles':
-			case 'loginCheck':
 				calls = new this.GeneralCalls();
 				break;
 			case 'report':
@@ -296,6 +295,7 @@ class Server {
 				calls = new this.ReportCalls();
 				break;
 			case 'userDelete':
+			case 'userLogin':
 			case 'userNew':
 			case 'userRead':
 			case 'userUpdate':
