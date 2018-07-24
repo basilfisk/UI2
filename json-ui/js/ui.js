@@ -7,7 +7,7 @@
 /**
  * @namespace UserInterface
  * @author Basil Fisk
- * @description User interface functions.
+ * @description Functions that control the display and validation of the web application.
  */
 var ui = {
 	_post: undefined,

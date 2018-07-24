@@ -1,5 +1,11 @@
 # Sample Application
 
+The sample application is the administration client for an API server. It is a traditional client/server application with a web interface that interacts with a server that accesses and processes data read from a database. The web client is written in JavaScript, the server is written in NodeJS and the database is MongoDB.
+
+The sections below describe how to install and test the server, and how to launch the administration console.
+
+>> Remove MongoDB before release and use JSON files instead.
+
 ## Administration Server
 
 The VeryAPI administration server must be installed first.
@@ -32,33 +38,58 @@ ps -ef | grep server.js | grep -v grep
 sudo netstat -plnt | grep node
 ~~~
 
->> Set up the web server for the Administration console.
-
 ## Administration Console
 
-Use the first URL to access the Administration Console from the file system on a development server, or the second URL if a web server has been set-up.
+>> Explain how to set up the web server for the administration console.
+
+Use the first URL to access the administration console from the file system on a development server, or the second URL if a web server has been set-up.
 
 ~~~bash
 file:///home/bf/Google/basil.fisk@gmail.com/Software/UI2/index.html
 https://local.very-api.net
 ~~~
 
-The example application has 2 users:
+The sample application has 2 users:
 
 - admin / password (user with access to all options)
 - client / password (user with restricted access to certain options)
 
 # How the Application Works
 
-When `index.html` is called, it loads files that are part of the example application and files that are part of `json-ui`.
+When `index.html` is opened, it loads files that are part of the sample application and files that are part of `json-ui`.
 
-## Example Application Files
+## Sample Application Files
 
-These files are part of the example application and are held in the `example/client` directory.
+The sample application files are stored in the `example/client` directory. These files contain the logic for displaying the web interface (using `json-ui`) and for interacting with the administration server.
 
-## `json-ui` Package Files
+|File|Purpose|
+|---|---|
+|common.js|Functions that are used across the web application.|
+|config.js|Defines configuration settings used by the application.|
+|forms.js|Defines how `json-ui` will display forms in the web application.|
+|functions.js|Functions for interchanging data entered via the UI with the database.|
+|login.js|Functionss that control the application's login process.|
+|menu.js|Defines how `json-ui` will display menus in the web application.|
+|messages.js|Returns an object holding message definitions for the application.|
 
-These files are part of the `json-ui` package.
+## Files within the `json-ui` Package
+
+These files are provided with the `json-ui` package, and include .., as well as fonts, 3rd Party stylesheets and libraries.
+
+### Package Files
+
+These files define the core `json-ui` functionality and shouldn't be edited by developers. The files are stored in the `json-ui/js` directory.
+
+|File|Purpose|
+|----|-------|
+|messages.js|Returns an object holding message definitions for `json-ui`.|
+|ui.js|Functions that control the display and validation of the web application.|
+
+These files can be edited by developers to modify the way `json-ui` works. The files are stored in the `json-ui/etc` directory.
+
+|File|Purpose|
+|----|-------|
+|validation.js|Defines the format validation tests that can be performed, as regular expressions.|
 
 ### Fonts
 
@@ -69,7 +100,7 @@ json-ui/fonts/glyphicons-halflings-regular.ttf
 json-ui/fonts/glyphicons-halflings-regular.woff
 ~~~
 
-### 3rd Party stylesheets and libraries
+### 3rd Party Stylesheets and Libraries
 
 These files are provided with the `json-ui` package by default. The CSS files can be changed as required to modify the styling of the application.
 
@@ -84,23 +115,7 @@ json-ui/packages/jquery.min.js
 json-ui/packages/moment.min.js
 ~~~
 
-### `json-ui` Package
-
-These files hold the core `json-ui` functionality and shouldn't be edited by developers.
-
-|File|Purpose|
-|----|-------|
-|json-ui/js/messages.js||
-|json-ui/js/ui.js||
-
-These files can be edited by developers to modify the way `json-ui` works.
-
-|File|Purpose|
-|----|-------|
-|json-ui/etc/config.js||
-|json-ui/etc/validation.js||
-
-# How the Example Application Works
+# How the Sample Application Works
 
 >> To display the application, `index.html` calls the `onStart()` function from the *???* file.
 

@@ -7,7 +7,7 @@
 /**
  * @namespace Validation
  * @author Basil Fisk
- * @description Define the validation tests to be carried out by the UI script.
+ * @description Defines the format validation tests that can be performed, as regular expressions.
  */
 
 var _validation = {

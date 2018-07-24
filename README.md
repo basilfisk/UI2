@@ -1,5 +1,7 @@
 # Build Web Interfaces with JSON
 
+`json-ui` is aimed at people who want to build a web interface, but don't want to mess about with design tools or frameworks. Not that they are a bad thing, but sometimes you just need to get a web interface up and running with minimum hassle.
+
 >> Blah...
 
 ## How `json-ui` Works
