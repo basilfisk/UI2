@@ -4,68 +4,10 @@
  * @copyright Breato Ltd 2018
  */
 
- // Global variables for holding data, etc.
- // 'me' holds details of the current user
-var lastKey = '', me = {}, admin, filters, progress;
-
-// Temporary object used to pass data between functions
-admin = {
-	commands: [],		// List of commands the current user has access to
-	company: {},		// Details of the company the current user has selected
-	companies: [],		// List of companies the current user has access to
-	connectors: [],		// List of connectors the current user has access to
-	bundles: [],		// Array of bundles for the current company
-	plans: [],			// Array of plans for all companies
-	roles: [],	      	// List of roles that can be granted to users
-	services: [],		// List of services available to all companies
-	users: []			// Users the current user has access to
-};
-
-// Load the services
-//admin.services.push({ "code":"bash", "name":"Bash Commands" });
-//admin.services.push({ "code":"file", "name":"File Transfer" });
-//admin.services.push({ "code":"mail", "name":"E-Mail" });
-admin.services.push({ "code":"mongo", "name":"MongoDB" });
-//admin.services.push({ "code":"pgsql", "name":"PostgreSQL" });
-//admin.services.push({ "code":"structure", "name":"Structured SQL" });
-//admin.services.push({ "code":"vsaas", "name":"VisualSaaS" });
-
-// Holds filters applied in forms for persistance
-filters = {
-	codes: {
-		limit: 500
-	},
-	commands: {
-		limit: 500
-	},
-	functions: {
-		limit: 500
-	},
-	reportRecentErrors: {
-		limit: 500
-	},
-	reportRecentTrans: {
-		limit: 500
-	}
-};
-
-// Status of loading data after login
-progress = {
-	bundle: false,
-	command: false,
-	company: false,
-	connector: false,
-	plan: false,
-	role: false,
-	user: false
-};
-
-
-
 /**
  * @namespace Login
  * @author Basil Fisk
- * @description VeryAPI login functions.
+ * @description Functions that control the application's login process.
  */
 var login = {
 	/**
@@ -127,7 +69,7 @@ var login = {
 		if (result.data !== undefined && result.result.status) {
 			for (i=0; i<result.data.length; i++) {
 				// For the super user, load an array with ID and name of all companies
-				// TODO This version of VeryAPI only has 1 company / database
+				// TODO This version only has 1 company / database
 				if (me.role === 'superuser') {
 					admin.companies.push(result.data[i]);
 				}
@@ -293,15 +235,15 @@ var login = {
 	 * @description Track the progress of data loading. Show the data when done.
 	 */
 	setProgress: function (item) {
-		progress[item] = true;
+		system.progress[item] = true;
 		if (me.role === 'superuser') {
-			if (progress.bundle && progress.command && progress.company && progress.connector && progress.plan && progress.role && progress.user) {
+			if (system.progress.bundle && system.progress.command && system.progress.company && system.progress.connector && system.progress.plan && system.progress.role && system.progress.user) {
 				console.log(admin);
 				console.log(me);
 			}
 		}
 		else {
-			if (progress.company && progress.role && progress.user) {
+			if (system.progress.company && system.progress.role && system.progress.user) {
 				console.log(admin);
 				console.log(me);
 			}
