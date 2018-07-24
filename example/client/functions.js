@@ -44,8 +44,8 @@ var formFunctions = {
 	 * @description Validate the user credentials.
 	 */
 	loginCheck: function (data) {
-//		common.apiCall('loginCheck', {"username":data.username, "password":data.password}, login.readUser);
-		common.apiCall('loginCheck', {"username":"admin", "password":"password"}, login.readUser);
+//		common.apiCall('userLogin', {"username":data.username, "password":data.password}, login.readUser);
+		common.apiCall('userLogin', {"username":"admin", "password":"password"}, login.readUser);
 	}
 };
 
