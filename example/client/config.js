@@ -1,4 +1,10 @@
-// Global variables for holding data, etc.
+/**
+ * @file config.js
+ * @author Basil Fisk
+ * @copyright Breato Ltd 2018
+ * @description Global variables used across the application.
+ */
+
 var me = {};			// Holds details of the current user
 
 // Temporary object used to pass data between functions
