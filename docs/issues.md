@@ -33,6 +33,7 @@
 	- Company : name instead of code
 - login form
 	- if login fails, show login form again
+	- display loading icon until `setProgress` has finished
 - logout option
 	- clear `me` and `admin` variables before showing login form
 
