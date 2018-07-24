@@ -1,6 +1,6 @@
 var menuDefinitions = {
 	"title": {
-		"text": "VeryAPI Console",
+		"text": "Administration Console",
 		"class": "navbar-brand pull-right"
 	},
 	"top": [

@@ -47,12 +47,12 @@ var messages = {
 	"CON010" : {
 		"type": "error",
 		"func": "apiCall",
-		"text": "Failed to connect to the VeryAPI server at _p1:_p2 for command '_p3'"
+		"text": "Failed to connect to the server at _p1:_p2 for command '_p3'"
 	},
 	"zzzCON011" : {
 		"type": "error",
 		"func": "api_login",
-		"text": "Can't access the VeryAPI server at _p1:_p2.\n\nPlease contact the System Administrator and report this error."
+		"text": "Can't access the server at _p1:_p2.\n\nPlease contact the System Administrator and report this error."
 	},
 	"FRM001" : {
 		"type": "error",

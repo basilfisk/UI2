@@ -34,7 +34,7 @@ class Server {
 	/**
 	 * @method adminServer
 	 * @memberof Server
-	 * @description Start the VeryAPI administration server.
+	 * @description Start the administration server.
 	 */
 	adminServer () {
 		var options, server;

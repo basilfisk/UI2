@@ -7,7 +7,7 @@
 /**
  * @namespace Common
  * @author Basil Fisk
- * @description VeryAPI common functions.
+ * @description Common functions used across the sample application.
  */
 var common = {
 	api: {

@@ -8,7 +8,7 @@ The sections below describe how to install and test the server, and how to launc
 
 ## Administration Server
 
-The VeryAPI administration server must be installed first.
+The administration server must be installed first.
 
 ~~~bash
 cd ~/UI2/example/server/
@@ -24,7 +24,7 @@ mkdir /etc/veryapi/
 sudo cp ~/UI2/example/server/ssl/local.very-api.net.* /etc/veryapi/
 ~~~
 
-Finally, start the VeryAPI administration server. By default, the log data is writtem to `/tmp/veryapi.log` but this can be changed in the `config.json` file.
+Finally, start the administration server. By default, the log data is writtem to `/tmp/server.log` but this can be changed in the `config.json` file.
 
 ~~~bash
 cd ~/UI2/example/server/
@@ -68,7 +68,7 @@ The sample application files are stored in the `example/client` directory. These
 |config.js|Defines configuration settings used by the application.|
 |forms.js|Defines how `json-ui` will display forms in the web application.|
 |functions.js|Functions for interchanging data entered via the UI with the database.|
-|login.js|Functionss that control the application's login process.|
+|login.js|Functions that control the application's login process.|
 |menu.js|Defines how `json-ui` will display menus in the web application.|
 |messages.js|Returns an object holding message definitions for the application.|
 

@@ -1,7 +1,7 @@
 {
-	"name": "@basilfisk/veryapi",
+	"name": "@basilfisk/json-ui",
 	"version": "0.0.1",
-	"description": "VeryAPI Example Administration Server",
+	"description": "JSON-UI Sample Administration Server",
 	"private": true,
 	"main": "server.js",
 	"dependencies": {

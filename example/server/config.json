@@ -1,5 +1,5 @@
 {
-	"log": "/tmp/veryapi.log",
+	"log": "/tmp/server.log",
 	"jwtSecret": "07476d10950675ffd921cc8a21044120",
 	"mongo": {
 		"host": "cluster0-shard-00-00-upnth.gcp.mongodb.net:27017,cluster0-shard-00-01-upnth.gcp.mongodb.net:27017,cluster0-shard-00-02-upnth.gcp.mongodb.net:27017",

@@ -76,7 +76,7 @@ var formDefinitions = {
 		}
 	},
 	"login" : {
-		"title": "Login to the VeryAPI Console",
+		"title": "Login to the Console",
 		"buttons": {
 			"save": "loginCheck"
 		},
