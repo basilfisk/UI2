@@ -9,7 +9,7 @@
  * @author Basil Fisk
  * @description Interchange of 'bundle' data between the UI and the MongoDB database.
  */
-var command = {
+var bundle = {
 	/**
 	 * @method add
 	 * @author Basil Fisk
@@ -42,7 +42,7 @@ var command = {
 	 * @description Read the details for the selected company.
 	 */
 	delete: function (id) {
-		common.apiCall('bundleDelete', {'_id': id}, bundle_table_load);
+		common.apiCall('bundleDelete', {'_id': id}, bundle.load);
 	},
 
 
@@ -93,7 +93,7 @@ var command = {
 	 * @description Show all bundles for the current company.
 	 */
 	load: function () {
-		common.apiCall('bundleRead', { "filter":admin.company.code }, bundle_table_show);
+		common.apiCall('bundleRead', { "filter":admin.company.code }, bundle.showTable);
 	},
 
 
@@ -121,7 +121,7 @@ var command = {
 			obj = {};
 			obj.text = admin.bundles[i].name;
 			if (ui.userAccess('bundleEditForm')) {
-				obj.link = 'bundle_edit';
+				obj.link = 'bundle.edit';
 			}
 			cols.push(obj);
 
@@ -134,7 +134,7 @@ var command = {
 
 			// Only add delete link if user has permission to edit data
 			if (ui.userAccess('bundleEditForm')) {
-				cols.push({"button":"bundle_delete", "style":"danger", "icon":"trash"});
+				cols.push({"button":"bundle.delete", "style":"danger", "icon":"trash"});
 			}
 
 			// Save row

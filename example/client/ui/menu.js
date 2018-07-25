@@ -13,10 +13,8 @@ var menuDefinitions = {
 				{
 					"id" : "companyTable",
 					"title": "Companies",
-					"action": "company_table_load()",
-					"access": ["superuser"],
-					"add": "company_add()",
-					"columns": ["Company", "Select", "Update", "Delete"]
+					"action": "company.load",
+					"access": ["superuser"]
 				}
 			]
 		},
@@ -29,34 +27,26 @@ var menuDefinitions = {
 				{
 					"id" : "userTable",
 					"title": "Users",
-					"action": "user_table_load()",
-					"access": ["superuser","manager"],
-					"ZZZadd": "user_add()",
-					"ZZZcolumns": ["Email Address", "Group", "Role", "Delete"]
+					"action": "user.load",
+					"access": ["superuser","manager"]
 				},
 				{
 					"id" : "connectorTable",
 					"title": "Connectors",
-					"action": "connector_table_load()",
-					"access": ["superuser","manager"],
-					"add": "connector_add()",
-					"columns": ["Name", "Service", "Delete"]
+					"action": "connector.load",
+					"access": ["superuser","manager"]
 				},
 				{
 					"id" : "commandTable",
 					"title": "Commands",
-					"action": "command.load()",
-					"access": ["superuser","manager","user"],
-					"ZZZadd": "command_add()",
-					"ZZZcolumns": ["Name", "Service", "Command", "Parameters", "Delete"]
+					"action": "command.load",
+					"access": ["superuser","manager","user"]
 				},
 				{
 					"id" : "bundleTable",
 					"title": "Bundles",
-					"action": "bundle_table_load()",
-					"access": ["superuser","manager","user"],
-					"ZZZadd": "bundle_add()",
-					"ZZZcolumns": ["Name", "Command", "Connector", "Versions", "Delete"]
+					"action": "bundle.load",
+					"access": ["superuser","manager","user"]
 				}
 			]
 		},
@@ -69,25 +59,25 @@ var menuDefinitions = {
 				{
 					"id": "reportUsageStats",
 					"title": "Usage Statistics",
-					"action": "usage_stats('default')",
+					"action": "report.usageStats('default')",
 					"access": ["superuser","manager","user"]
 				},
 				{
 					"id": "reportEventSummary",
 					"title": "Event Summary",
-					"action": "event_summary('default')",
+					"action": "report.eventSummary('default')",
 					"access": ["superuser"]
 				},
 				{
 					"id": "reportRecentTrans",
 					"title": "Recent Transactions",
-					"action": "recent_trans('default')",
+					"action": "report.recentTransactions('default')",
 					"access": ["superuser","manager","user"]
 				},
 				{
 					"id": "reportRecentErrors",
 					"title": "Recent Errors",
-					"action": "recent_errors('default')",
+					"action": "report.recentErrors('default')",
 					"access": ["superuser","manager","user"]
 				}
 			]
@@ -101,13 +91,13 @@ var menuDefinitions = {
 				{
 					"id": "about",
 					"title": "About",
-					"action": "general.aboutShow()",
+					"action": "general.aboutShow",
 					"access": ["superuser","manager","user"]
 				},
 				{
 					"id": "logout",
 					"title": "Logout",
-					"action": "login.init()",
+					"action": "login.init",
 					"access": ["superuser","manager","user"]
 				}
 			]

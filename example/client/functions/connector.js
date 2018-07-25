@@ -34,7 +34,7 @@ var connector = {
 	 * @description Delete the selected connector.
 	 */
 	delete: function (id) {
-		common.apiCall('connectorDelete', {'_id': id}, connector_table_load);
+		common.apiCall('connectorDelete', {'_id': id}, connector.load);
 	},
 
 
@@ -68,7 +68,7 @@ var connector = {
 	 * @description Show all connectors for the current company.
 	 */
 	load: function () {
-		common.apiCall('connectorRead', { "filter":admin.company.code }, connector_table_show);
+		common.apiCall('connectorRead', { "filter":admin.company.code }, connector.showTable);
 	},
 
 
@@ -96,7 +96,7 @@ var connector = {
 			obj = {};
 			obj.text = admin.connectors[i].name;
 			if (admin.connectors[i].name !== undefined) {
-				obj.link = 'connector_edit';
+				obj.link = 'connector.edit';
 			}
 			cols.push(obj);
 
@@ -105,7 +105,7 @@ var connector = {
 
 			// Only add delete link if user has permission to edit data
 			if (admin.connectors[i].name !== undefined) {
-				cols.push({"button":"connector_delete", "style":"danger", "icon":"trash"});
+				cols.push({"button":"connector.delete", "style":"danger", "icon":"trash"});
 			}
 
 			// Save row

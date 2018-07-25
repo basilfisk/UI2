@@ -27,7 +27,7 @@
 	 * @description Delete the selected company.
 	 */
 	delete: function (id) {
-		common.apiCall('companyDelete', {'_id': id}, company_table_load);
+		common.apiCall('companyDelete', {'_id': id}, company.load);
 	},
 
 
@@ -79,7 +79,7 @@
 
 		// Add the data group for the company
 		data.groups = admin.companies[index].groups;
-		common.apiCall('companyUpdate', data, company_table_load);
+		common.apiCall('companyUpdate', data, company.load);
 	},
 
 
@@ -90,7 +90,7 @@
 	 */
 	load: function () {
 		var filter = (me.role === 'superuser') ? 'all' : me.company;
-		common.apiCall('companyRead', { "filter":filter }, company_table_show);
+		common.apiCall('companyRead', { "filter":filter }, company.showTable);
 	},
 
 
@@ -115,7 +115,7 @@
 
 		// Replace the current company data
 		filter = (me.role === 'superuser') ? 'all' : id;
-		common.apiCall('companyReadId', { "filter":filter }, load_company_data);
+		common.apiCall('companyReadId', { "filter":filter }, company.showTable);
 
 		// Change the company name on the title bar
 		ui.pageTitle(admin.company.code);
@@ -146,13 +146,13 @@
 			cols.push({"text":admin.companies[i].name});
 
 			// Select button
-			cols.push({"button":"company_select", "style":"success", "icon":"ok"});
+			cols.push({"button":"company.select", "style":"success", "icon":"ok"});
 
 			// Update button
-			cols.push({"button":"company_edit", "style":"info", "icon":"pencil"});
+			cols.push({"button":"company.edit", "style":"info", "icon":"pencil"});
 
 			// Delete button
-			cols.push({"button":"company_delete", "style":"danger", "icon":"trash"});
+			cols.push({"button":"company.delete", "style":"danger", "icon":"trash"});
 
 			// Save row
 			rows.push({"id":admin.companies[i]._id, "cols":cols});
@@ -197,7 +197,7 @@
 		data.name = arr[1];
 
 		// Delete the group
-		common.apiCall('companyGroupDelete', data, company_group_table_load);
+		common.apiCall('companyGroupDelete', data, company.groupLoad);
 	},
 
 
@@ -238,7 +238,7 @@
 	 * @description Show all groups for the current company.
 	 */
 	groupLoad: function () {
-		common.apiCall('companyReadId', { "filter":admin.company._id }, company_group_table_show);
+		common.apiCall('companyReadId', { "filter":admin.company._id }, company.groupShowTable);
 	},
 
 
@@ -249,7 +249,7 @@
 	 * @param {object} result Data object returned by the API call.
 	 * @description Display the company group data in a table.
 	 */
-	groupShow: function (action, result) {
+	groupShowTable: function (action, result) {
 		var data, groups, i, rows = [], cols = [], desc, plan, str, rowid;
 
 		// Add each element of the array as a table row
@@ -261,7 +261,7 @@
 			// Add column with link to edit form - only if user has permission to edit data
 			desc = data.groups[groups[i]].description;
 			plan = data.groups[groups[i]].plan;
-			str = '<a onClick="company_group_edit(\'' + data._id + '\',\'' + groups[i] + '\',\'' + desc + '\',\'' + plan + '\');" data-toggle="modal">' + groups[i] + ' </a>';
+			str = '<a onClick="company.groupEdit(\'' + data._id + '\',\'' + groups[i] + '\',\'' + desc + '\',\'' + plan + '\');" data-toggle="modal">' + groups[i] + ' </a>';
 			cols.push({"text":str});
 
 			// Add information columns
@@ -270,7 +270,7 @@
 
 			// Only add delete link if user has permission to edit data
 			if (ui.userAccess('companyGroupEditForm')) {
-				cols.push({"button":"company_group_delete", "style":"danger", "icon":"trash"});
+				cols.push({"button":"company.groupDelete", "style":"danger", "icon":"trash"});
 			}
 
 			// Row ID is a combination of document ID and group name (used by delete function)
@@ -299,6 +299,6 @@
 		obj.desc = data.groups.description;
 		obj.plan = data.groups.plan;
 
-		common.apiCall('companyGroupUpsert', obj, company_group_table_load);
+		common.apiCall('companyGroupUpsert', obj, company.groupLoad);
 	}
 };

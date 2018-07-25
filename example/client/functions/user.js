@@ -56,7 +56,7 @@ var user = {
 	 * @description Delete the selected user.
 	 */
 	delete: function (id) {
-		common.apiCall('userDelete', {'_id': id}, user_table_load);
+		common.apiCall('userDelete', {'_id': id}, user.load);
 	},
 
 
@@ -121,7 +121,7 @@ var user = {
 	 * @description Show all users for the current company.
 	 */
 	load: function () {
-		common.apiCall('userRead', { "filter":admin.company.code }, user_table_show);
+		common.apiCall('userRead', { "filter":admin.company.code }, user.showTable);
 	},
 
 
@@ -162,7 +162,7 @@ var user = {
 				obj = {};
 				obj.text = admin.users[i].username;
 				if (ui.userAccess('userEditForm')) {
-					obj.link = 'user_edit';
+					obj.link = 'user.edit';
 				}
 				cols.push(obj);
 
@@ -172,7 +172,7 @@ var user = {
 
 				// Only add delete link if user has permission to edit data
 				if (ui.userAccess('userEditForm')) {
-					cols.push({"button":"user_delete", "style":"danger", "icon":"trash"});
+					cols.push({"button":"user.delete", "style":"danger", "icon":"trash"});
 				}
 
 				// Save row

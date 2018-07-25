@@ -245,6 +245,14 @@ var formDefinitions = {
 			}
 		}
 	},
+	"bundleTable": {
+		"title": "Bundles",
+		"buttons": {
+			"close": true,
+			"add": "bundle.add",
+		},
+		"columns": ["Name", "Command", "Connector", "Versions", "Delete"]
+	},
 	"commandTable": {
 		"title": "Commands",
 		"buttons": {
@@ -252,6 +260,22 @@ var formDefinitions = {
 			"add": "command.add",
 		},
 		"columns": ["Name", "Service", "Command", "Parameters", "Delete"]
+	},
+	"companyTable": {
+		"title": "Companies",
+		"buttons": {
+			"close": true,
+			"add": "company.add",
+		},
+		"columns": ["Company", "Select", "Update", "Delete"]
+	},
+	"connectorTable": {
+		"title": "Connectors",
+		"buttons": {
+			"close": true,
+			"add": "connector.add",
+		},
+		"columns": ["Name", "Service", "Delete"]
 	},
 	"login": {
 		"title": "Login to the Console",
@@ -286,5 +310,13 @@ var formDefinitions = {
 				}
 			}
 		}
+	},
+	"userTable": {
+		"title": "Users",
+		"buttons": {
+			"close": true,
+			"add": "user.add",
+		},
+		"columns": ["Email Address", "Group", "Role", "Delete"]
 	}
 };
