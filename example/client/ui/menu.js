@@ -3,7 +3,7 @@ var menuDefinitions = {
 		"text": "Administration Console",
 		"class": "navbar-brand pull-right"
 	},
-	"top": [
+	"menubar": [
 		{
 			"id": "admin",
 			"access": ["superuser"],

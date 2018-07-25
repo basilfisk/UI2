@@ -712,17 +712,17 @@ var ui = {
 		div += '<ul class="nav navbar-nav">';
 
 		// Build the menu
-		if (menu.top.length > 0) {
+		if (menu.menubar.length > 0) {
 			div += '<ul class="nav navbar-nav">';
-			for (i=0; i<menu.top.length; i++) {
-				div += '<li id="' + menu.top[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + menu.top[i].name + '" href="#">' + menu.top[i].title + '<span class="caret"></span></a>';
+			for (i=0; i<menu.menubar.length; i++) {
+				div += '<li id="' + menu.menubar[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + menu.menubar[i].name + '" href="#">' + menu.menubar[i].title + '<span class="caret"></span></a>';
 				div += '<ul class="dropdown-menu">';
 				// Skip if no top level options have been defined
-				if (menu.top[i].options !== undefined) {
-					for (n=0; n<menu.top[i].options.length; n++) {
+				if (menu.menubar[i].options !== undefined) {
+					for (n=0; n<menu.menubar[i].options.length; n++) {
 						// Skip if the menu option has not been defined
-						if (menu.top[i].options[n] !== undefined) {
-							option = menu.top[i].options[n];
+						if (menu.menubar[i].options[n] !== undefined) {
+							option = menu.menubar[i].options[n];
 							div += '<li id="' + option.id + '-option" class="option"><a href="#' + option.id + '" onClick="' + option.action + '; return false;">' + option.title + '</a></li>';
 						}
 					}
