@@ -50,7 +50,7 @@ var general = {
 
 
 	/**
-	 * @method _sortArrayObjects
+	 * @method sortArrayObjects
 	 * @author Basil Fisk
 	 * @param {array} arr Array of objects to be sorted.
 	 * @param {string} key Field in each object to sort by.
