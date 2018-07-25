@@ -113,7 +113,7 @@ class ReportCalls {
 	 * @description Generate the event summary report.
 	 */
 	reportEventSummary (that, session) {
-		var	date, time, patt_date, patt_time, start;
+		var	date, time, patt_date, patt_time, msg, start;
 
 		// Read arguments and use last 30 mins if not provided
 		// [1] Date YY-MM-DD [2] Time HH24:MI
