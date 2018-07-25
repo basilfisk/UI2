@@ -62,20 +62,23 @@ When `index.html` is opened, it loads files that are part of the sample applicat
 
 The sample application files are stored in the `example/client` directory. These files contain the logic for displaying the web interface (using `json-ui`) and for interacting with the administration server.
 
-|File|Purpose|
-|---|---|
-|common.js|Functions that are used across the web application.|
-|config.js|Defines configuration settings used by the application.|
-|forms.js|Defines how `json-ui` will display forms in the web application.|
-|functions/bundle.js|Functions for managing bundles.|
-|functions/command.js|Functions for managing commands.|
-|functions/company.js|Functions for managing companies.|
-|functions/connector.js|Functions for managing connectors.|
-|functions/general.js|General purpose functions.|
-|functions/user.js|Functions for managing users.|
-|login.js|Functions that control the application's login process.|
-|menu.js|Defines how `json-ui` will display menus in the web application.|
-|messages.js|Returns an object holding message definitions for the application.|
+|Directory|File|Purpose|
+|---|---|---|
+|functions||Scripts defining functions that are triggered from menus and forms|
+||bundle.js|Functions for managing bundles.|
+||command.js|Functions for managing commands.|
+||company.js|Functions for managing companies.|
+||connector.js|Functions for managing connectors.|
+||general.js|General purpose functions.|
+||user.js|Functions for managing users.|
+|support||Support functions and data files for the sample application|
+||common.js|Functions that are used across the web application.|
+||config.js|Defines configuration settings used by the application.|
+||login.js|Functions that control the application's login process.|
+||messages.js|Returns an object holding message definitions for the application.|
+|ui||Menu and form definitions to build the user interface|
+||forms.js|Defines how `json-ui` will display forms in the web application.|
+||menu.js|Defines how `json-ui` will display menus in the web application.|
 
 ## Files within the `json-ui` Package
 

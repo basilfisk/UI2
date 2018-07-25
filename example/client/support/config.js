@@ -24,8 +24,15 @@ var admin = {
 	users: []			// Users the current user has access to
 };
 
-// Holds filters applied in forms for persistance and status of loading data after login
+// Holds global data:
+// api		Location of the API administration server
+// filters	Filters applied in forms for persistance
+// status	Status of data loading after login
 var system = {
+	api: {
+		host: "https://local.very-api.net",
+		port: 19400
+	},
 	filters: {
 		codes: {
 			limit: 500

@@ -10,12 +10,6 @@
  * @description Common functions used across the sample application.
  */
 var common = {
-	api: {
-		host: "https://local.very-api.net",
-		port: 19400
-	},
-
-
 	/**
 	 * @method apiCall
 	 * @author Basil Fisk
@@ -27,14 +21,14 @@ var common = {
 	apiCall: function (command, json, callback) {
 		var url, options;
 
-		url = common.api.host + ':' + common.api.port + '/1/' + command;
+		url = system.api.host + ':' + system.api.port + '/1/' + command;
 		options = {
 			type: 'GET',
 			dataType: 'json',
 			data: JSON.stringify(json),
 //			headers: { "Authorization": "Bearer " + me.jwt },	// THIS DOUBLES UP THE PROCESSING IN admin.js !!!!!!!!!
 			error: function (err) {
-				ui.messageBox('CON010', [common.api.host, common.api.port, command]);
+				ui.messageBox('CON010', [system.api.host, system.api.port, command]);
 			},
 			success: function (result) {
 //console.log(result);
