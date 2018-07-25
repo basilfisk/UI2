@@ -43,7 +43,7 @@ var user = {
 				options.push({"value":admin.bundles[i].name, "text":admin.bundles[i].name});
 			}
 		}
-		lists['userAddbundles'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['userAddBundles'] = formFunctions.sortArrayObjects(options, 'text');
 
 		ui.formAdd('userAddForm', lists);
 	},

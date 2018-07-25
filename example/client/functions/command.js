@@ -172,7 +172,7 @@ var command = {
 	 * @description Save command or parameter data into the selected command document after editing.
 	 */
 	editSave: function (type, data) {
-		var i, index = -1, temp = {}, cmd, found, add = {}, prms = [], arr, name, pattern, n, valstr, values, obj = {};
+		var i, index = -1, temp = {}, cmd, found, add = {}, prms = [], arr, name, pattern, n, str, values, obj = {};
 
 		// Find command using ID and save data in temporary object
 		for (i=0; i<admin.commands.length; i++) {
@@ -226,11 +226,11 @@ var command = {
 					}
 
 					// Clean up parameters and remove quotes
-					valstr = cleanWhiteSpace(arr[1]);
-					valstr = valstr.replace(/\"/g, '');
+					str = cleanWhiteSpace(arr[1]);
+					str = str.replace(/\"/g, '');
 
 					// Values separated by commas
-					values = valstr.split(',');
+					values = str.split(',');
 
 					// Check that parameters contain:
 					// alphanumerics, minus, underscore, space, asterisk

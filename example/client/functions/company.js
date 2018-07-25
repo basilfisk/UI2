@@ -47,7 +47,7 @@
 			}
 			id = admin.companies
 		}
-		// Find the selected comapny
+		// Find the selected company
 		else {
 			for (i=0; i<admin.companies.length; i++) {
 				index = (admin.companies[i]._id === id) ? i : index;
