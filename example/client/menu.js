@@ -45,18 +45,18 @@ var menuDefinitions = {
 				{
 					"id" : "commandTable",
 					"title": "Commands",
-					"action": "command_table_load()",
+					"action": "command.load()",
 					"access": ["superuser","manager","user"],
-					"add": "command_add()",
-					"columns": ["Name", "Service", "Command", "Parameters", "Delete"]
+					"ZZZadd": "command_add()",
+					"ZZZcolumns": ["Name", "Service", "Command", "Parameters", "Delete"]
 				},
 				{
 					"id" : "bundleTable",
 					"title": "Bundles",
 					"action": "bundle_table_load()",
 					"access": ["superuser","manager","user"],
-					"add": "bundle_add()",
-					"columns": ["Name", "Command", "Connector", "Versions", "Delete"]
+					"ZZZadd": "bundle_add()",
+					"ZZZcolumns": ["Name", "Command", "Connector", "Versions", "Delete"]
 				}
 			]
 		},

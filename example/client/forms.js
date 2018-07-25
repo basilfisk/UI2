@@ -1,10 +1,10 @@
 var formDefinitions = {
-	"about" : {
+	"about": {
 		"title": "Information About the Current User",
 		"buttons": {
 			"close": true,
 		},
-		"fields" : {
+		"fields": {
 			"aboutUserName": {
 				"element": "name",
 				"title": "User Name",
@@ -75,12 +75,190 @@ var formDefinitions = {
 			}
 		}
 	},
-	"login" : {
+	"commandAdd": {
+		"title": "Add Command",
+		"buttons": {
+			"add": "formFunctions.command.addSave()",
+			"close": true
+		},
+		"fields": {
+			"commandAddName": {
+				"element": "name",
+				"title": "Command Name",
+				"description": "Enter name of command",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"commandAddService": {
+				"element": "service",
+				"title": "Service Name",
+				"description": "Enter name of service",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			}
+		}
+	},
+	"commandEdit": {
+		"title": "Edit Command",
+		"buttons": {
+			"close": true,
+			"save": "command.editSave()"
+		},
+		"fields": {
+			"commandEditId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"commandEditName": {
+				"element": "name",
+				"title": "Command Name",
+				"description": "Enter name of command",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"commandEditService": {
+				"element": "service",
+				"title": "Service Name",
+				"description": "Enter name of service",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			}
+		}
+	},
+	"commandEditCommand": {
+		"title": "Edit Command Text",
+		"buttons": {
+			"close": true,
+			"delete": true,
+			"save": "command.editSave()"
+		},
+		"fields": {
+			"commandEditCommandId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"commandEditCommandVersion": {
+				"element": "version",
+				"title": "Version",
+				"description": "Enter version number of command",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			},
+			"commandEditCommandText": {
+				"element": "command",
+				"title": "Command",
+				"description": "Enter command",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"size": 20
+					}
+				}
+			}
+		}
+	},
+	"commandEditParameters": {
+		"title": "Edit Parameters",
+		"buttons": {
+			"close": true,
+			"delete": true,
+			"save": "command.editSave()"
+		},
+		"fields": {
+			"commandEditParametersId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"commandEditParametersVersion": {
+				"element": "version",
+				"title": "Version",
+				"description": "Enter version number of parameters",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			},
+			"commandEditParametersText": {
+				"element": "parameters",
+				"title": "Parameters",
+				"description": "Enter parameters",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"size": 20
+					}
+				}
+			}
+		}
+	},
+	"commandTable": {
+		"title": "Commands",
+		"buttons": {
+			"close": true,
+			"add": "command.add()",
+		},
+		"columns": ["Name", "Service", "Command", "Parameters", "Delete"]
+	},
+	"login": {
 		"title": "Login to the Console",
 		"buttons": {
 			"save": "loginCheck"
 		},
-		"fields" : {
+		"fields": {
 			"username": {
 				"element": "username",
 				"title": "User Name",
@@ -107,16 +285,6 @@ var formDefinitions = {
 					}
 				}
 			}
-		}
-	},
-	"userTable" : {
-		"title": "Users",
-		"buttons": {
-			"close": true,
-			"add": "user_add",
-		},
-		"fields" : {
-			"columns": ["Email Address", "Group", "Role", "Delete"]
 		}
 	}
 };
