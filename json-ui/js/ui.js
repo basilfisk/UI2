@@ -516,7 +516,8 @@ var ui = {
 		// Hide the form and trigger the post-processing function
 		$('#' + id).modal('hide');
 //		try {
-//			console.log(id, _defs[id].buttons.save, data);
+			console.log(id, _defs[id].buttons.save, data);
+//			this.formFunctions.command.load(data);
 			_post[_defs[id].buttons.save](data);
 //		}
 //		catch (err) {
@@ -560,7 +561,7 @@ var ui = {
 		for (i=0; i<names.length; i++) {
 			switch (fields[names[i]].type) {
 				case 'list':
-					div += this._showField(names[i], fields[names[i]], '', _sortArrayObjects(list[names[i]], 'text'));
+					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[names[i]], 'text'));
 					break;
 				default:
 					div += this._showField(names[i], fields[names[i]], '');
@@ -660,7 +661,7 @@ var ui = {
 			// Add field
 			switch (fields[names[i]].type) {
 				case 'list':
-					div += this._showField(names[i], fields[names[i]], value, _sortArrayObjects(list[names[i]], 'text'));
+					div += this._showField(names[i], fields[names[i]], value, this._sortArrayObjects(list[names[i]], 'text'));
 					break;
 				default:
 					div += this._showField(names[i], fields[names[i]], value);
@@ -914,15 +915,14 @@ console.log(id, rows);
 
 		// Build the form header
 		body += '<div class="modal-header">';
-		body += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+		if (_defs[id].buttons && _defs[id].buttons.close) {
+			body += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+		}
 		body += '<br/>';
-//		body += '<h4>' + _defs[index].title;
 		body += '<h4>' + _defs[id].title;
 
 		// Display an Add button, if specified
-//		if (_defs[index].add) {
-		if (_defs[id].add) {
-//			body += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + _defs[index].add + '; return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+		if (_defs[id].buttons && _defs[id].buttons.add) {
 			body += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + _defs[id].add + '; return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
 		}
 		body += '</h4>';
@@ -936,8 +936,6 @@ console.log(id, rows);
 		// Build the table header
 		body += '<thead>';
 		body += '<tr>';
-//		for (i=0; i<_defs[index].columns.length; i++) {
-//			body += '<th>' + _defs[index].columns[i] + '</th>';
 		for (i=0; i<_defs[id].columns.length; i++) {
 			body += '<th>' + _defs[id].columns[i] + '</th>';
 		}
