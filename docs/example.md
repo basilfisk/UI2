@@ -67,7 +67,12 @@ The sample application files are stored in the `example/client` directory. These
 |common.js|Functions that are used across the web application.|
 |config.js|Defines configuration settings used by the application.|
 |forms.js|Defines how `json-ui` will display forms in the web application.|
-|functions.js|Functions for interchanging data entered via the UI with the database.|
+|functions/bundle.js|Functions for managing bundles.|
+|functions/command.js|Functions for managing commands.|
+|functions/company.js|Functions for managing companies.|
+|functions/connector.js|Functions for managing connectors.|
+|functions/general.js|General purpose functions.|
+|functions/user.js|Functions for managing users.|
 |login.js|Functions that control the application's login process.|
 |menu.js|Defines how `json-ui` will display menus in the web application.|
 |messages.js|Returns an object holding message definitions for the application.|
