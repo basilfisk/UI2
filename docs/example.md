@@ -70,6 +70,7 @@ The sample application files are stored in the `example/client` directory. These
 ||company.js|Functions for managing companies.|
 ||connector.js|Functions for managing connectors.|
 ||general.js|General purpose functions.|
+||report.js|Functions for reporting.|
 ||user.js|Functions for managing users.|
 |support||Support functions and data files for the sample application|
 ||common.js|Functions that are used across the web application.|
