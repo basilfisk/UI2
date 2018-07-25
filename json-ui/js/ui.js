@@ -723,7 +723,7 @@ var ui = {
 						// Skip if the menu option has not been defined
 						if (menu.menubar[i].options[n] !== undefined) {
 							option = menu.menubar[i].options[n];
-							div += '<li id="' + option.id + '-option" class="option"><a href="#' + option.id + '" onClick="' + option.action + '; return false;">' + option.title + '</a></li>';
+							div += '<li id="' + option.id + '-option" class="option"><a href="#' + option.id + '" onClick="' + option.action + '(); return false;">' + option.title + '</a></li>';
 						}
 					}
 				}
@@ -732,7 +732,7 @@ var ui = {
 			}
 			div += '</ul>';
 		}
-		
+
 		// Create page title and add to body
 		div += '</ul>';
 		div += this._pageTitle(menu.title.class, menu.title.text);
@@ -791,108 +791,6 @@ var ui = {
 	// ---------------------------------------------------------------------------------------
 	// Display a table of data
 	//
-	// Argument 1 :	ID of the table
-	// Argument 2 : Array of objects holding row data
-	//              id:     UID of the data record in the row
-	//              cols:   Array of objects holding column cell data for the row
-	//                  text:   Text to be shown in row/column cell
-	//                  link:   Function called when link is pressed (optional)
-	//                  button: Function called when a button is pressed (optional)
-	//                  style:  Name of Bootstrap button style (only for 'button')
-	//                  icon:   Name of Glyph icon (only for 'button')
-	// ---------------------------------------------------------------------------------------
-/*	table: function (id, rows) {
-		var body = '', i, n, row, rowid, cell = {};
-
-		// Build the container
-		body += '<div class="modal-dialog" role="document" style="width:50%">'; // TODO Make a parameter
-		body += '<div class="modal-content">';
-
-		// Build the form header
-		body += '<div class="modal-header">';
-		body += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-		body += '<br/>';
-		body += '<h4>' + structure.tables[id].title;
-
-		// Display an Add button, if specified
-		if (structure.tables[id].add) {
-			body += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + structure.tables[id].add + '; return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
-		}
-		body += '</h4>';
-		body += '</div>';
-
-		// Build the table container
-		body += '<div class="modal-body">';
-		body += '<form class="form-horizontal bv-form">';
-		body += '<table class="table table-striped table-condensed table-bordered" id="user-table-rows">';
-
-		// Build the table header
-		body += '<thead>';
-		body += '<tr>';
-		for (i=0; i<structure.tables[id].columns.length; i++) {
-			body += '<th>' + structure.tables[id].columns[i] + '</th>';
-		}
-		body += '</tr>';
-		body += '</thead>';
-
-		// Build the table body
-		body += '<tbody>';
-
-		// Add each element of the array as a table row
-		for (i=0; i<rows.length; i++) {
-			rowid = rows[i].id;
-			row = '<tr>';
-
-			// Add columns
-			for (n=0; n<rows[i].cols.length; n++) {
-				cell = rows[i].cols[n];
-				row += '<td>';
-				// Show hyperlink if 'link' property provided
-				if (cell.link) {
-					row += '<a data-dismiss="modal" onClick="' + cell.link + '(\'' + rowid + '\');">';
-				}
-
-				// Show text if provided
-				row += (cell.text) ? cell.text : '';
-
-				// Close edit link if 'edit' property provided
-				if (cell.link) {
-					row += '</a>';
-				}
-
-				// Only show icon link if 'button' property provided
-				if (cell.button) {
-					row += '<button type="button" class="btn btn-' + cell.style + ' btn-xs" data-dismiss="modal" onClick="' + cell.button + '(\'' + rowid + '\'); return false;"><span class="glyphicon glyphicon-' + cell.icon + '" aria-hidden="true"></span></button>';
-				}
-				row += '</td>';
-			}
-			
-			// Display a Delete button, if specified
-			if (structure.tables[id].delete) {
-				row += '<td>';
-				row += '<button type="button" class="btn btn-danger btn-xs" data-dismiss="modal" onClick="' + structure.tables[id].delete + '(\'' + rowid + '\'); return false;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
-				row += '</td>';
-			}
-
-			// Close row and add to bottom of table
-			row += '</tr>';
-			body += row;
-		}
-
-		// Close the table and form container
-		body += '</tbody>';
-		body += '</table>';
-		body += '</form>';
-		body += '</div></div></div>';
-
-		// Remove existing table, then add new table and display
-		this._showContainer(id, body);
-	},*/
-
-
-	// ---------------------------------------------------------------------------------------
-	// Display a table of data
-	//
 	// Argument 1 :	Reference name of the table
 	// Argument 2 : Array of objects holding row data
 	//              id:     UID of the data record in the row
@@ -921,7 +819,7 @@ console.log(id, rows);
 
 		// Display an Add button, if specified
 		if (_defs[id].buttons && _defs[id].buttons.add) {
-			body += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + _defs[id].add + '; return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+			body += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + _defs[id].add + '(); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
 		}
 		body += '</h4>';
 		body += '</div>';
