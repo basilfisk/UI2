@@ -10,7 +10,6 @@
  * @description Functions that control the display and validation of the web application.
  */
 var ui = {
-	_post: undefined,
 	_msgOK: undefined,
 
 	/**
@@ -398,8 +397,8 @@ var ui = {
 	//
 	// Argument 1 : Name of UI form
 	// ---------------------------------------------------------------------------------------
-	buttonDelete: function (form) {
-		var fields, i, field, data = {};
+	buttonDelete: function (id) {
+		var fields, i, field, data = {}, func;
 
 		// Read and validate each field
 		fields = Object.keys(structure.forms[form].fields);
@@ -409,8 +408,10 @@ var ui = {
 		}
 
 		// Hide the form and delete the data
-		$('#' + form).modal('hide');
-		_post(form + '-delete', data);
+		$('#' + id).modal('hide');
+//		_post(id + '-delete', data);
+		func = (id + '-delete').split('.');
+		window[func[0]][func[1]].apply(data);
 	},
 
 
@@ -421,7 +422,7 @@ var ui = {
 	 * @description Validate and save the data entered on a form.
 	 */
 	buttonSave: function (id) {
-		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
+		var fields, names, i, name, temp = {}, elem = [], e, text, data = {}, func;
 
 		// Read fields and their names
 		fields = _defs[id].fields;
@@ -516,9 +517,8 @@ var ui = {
 		// Hide the form and trigger the post-processing function
 		$('#' + id).modal('hide');
 //		try {
-			console.log(id, _defs[id].buttons.save, data);
-//			this.formFunctions.command.load(data);
-			_post[_defs[id].buttons.save](data);
+			func = _defs[id].buttons.save.split('.');
+			window[func[0]][func[1]].apply(data);
 //		}
 //		catch (err) {
 //			this._messageBox('UI005', [_defs[id].buttons.save, 'save']);
@@ -697,16 +697,14 @@ var ui = {
 	 * @author Basil Fisk
 	 * @param {object} menu User's menu definition.
 	 * @param {object} forms User's form definitions.
-	 * @param {object} functions User's functions to be triggered for post-processing.
 	 * @param {object} messages User message definitions.
 	 * @description Parse the user's UI data structures for building the menus, forms and reports.
 	 */
-	init: function (menu, forms, functions, messages) {
-		var i, n, option, div = '';
+	init: function (menu, forms, messages) {
+			var i, n, option, div = '';
 
 		// Save form definitions and post-processing function
 		_defs = forms;
-		_post = functions;
 		_msgs = messages;
 
 		// Open the container for the menus and titles
@@ -803,7 +801,7 @@ var ui = {
 	//                  style:  Name of Bootstrap button style (only for 'button')
 	//                  icon:   Name of Glyph icon (only for 'button')
 	// ---------------------------------------------------------------------------------------
-	table: function (id, rows) {
+/*	table: function (id, rows) {
 		var body = '', i, n, row, rowid, cell = {};
 
 		// Build the container
@@ -889,7 +887,7 @@ var ui = {
 
 		// Remove existing table, then add new table and display
 		this._showContainer(id, body);
-	},
+	},*/
 
 
 	// ---------------------------------------------------------------------------------------
