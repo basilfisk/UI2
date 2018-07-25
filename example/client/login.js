@@ -18,7 +18,7 @@ var login = {
 	init: function () {
 		// Initialize UI manager with menu and form definitions, post-processing functions
 		// and the messages TODO which ones ???????
-		ui.init(menuDefinitions, formDefinitions, formFunctions, messages);
+		ui.init(menuDefinitions, formDefinitions, messages);
 
 		// Display the login form for the Admin Console
 		ui.formEdit('login', {"username":'', "password":''});
