@@ -78,7 +78,7 @@ var formDefinitions = {
 	"commandAdd": {
 		"title": "Add Command",
 		"buttons": {
-			"add": "formFunctions.command.addSave()",
+			"add": "command.addSave",
 			"close": true
 		},
 		"fields": {
@@ -115,7 +115,7 @@ var formDefinitions = {
 		"title": "Edit Command",
 		"buttons": {
 			"close": true,
-			"save": "command.editSave()"
+			"save": "command.editSave"
 		},
 		"fields": {
 			"commandEditId": {
@@ -158,7 +158,7 @@ var formDefinitions = {
 		"buttons": {
 			"close": true,
 			"delete": true,
-			"save": "command.editSave()"
+			"save": "command.editSave"
 		},
 		"fields": {
 			"commandEditCommandId": {
@@ -204,7 +204,7 @@ var formDefinitions = {
 		"buttons": {
 			"close": true,
 			"delete": true,
-			"save": "command.editSave()"
+			"save": "command.editSave"
 		},
 		"fields": {
 			"commandEditParametersId": {
@@ -249,14 +249,14 @@ var formDefinitions = {
 		"title": "Commands",
 		"buttons": {
 			"close": true,
-			"add": "command.add()",
+			"add": "command.add",
 		},
 		"columns": ["Name", "Service", "Command", "Parameters", "Delete"]
 	},
 	"login": {
 		"title": "Login to the Console",
 		"buttons": {
-			"save": "loginCheck"
+			"save": "general.loginCheck"
 		},
 		"fields": {
 			"username": {

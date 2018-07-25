@@ -101,7 +101,7 @@ var menuDefinitions = {
 				{
 					"id": "about",
 					"title": "About",
-					"action": "formFunctions.aboutShow()",
+					"action": "general.aboutShow()",
 					"access": ["superuser","manager","user"]
 				},
 				{
