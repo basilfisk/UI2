@@ -2,25 +2,23 @@
 
 ## Notes
 
-- `ui.js` functions not fully tested yet
+- `ui.js` functions not tested yet
 	- buttonDelete
 	- formAdd
 	- formClose
-	- table
-	- tableShow
 	- userAccess
 - `init` in `login.js` has been hard-coded with the admin username & password
-- `server/config.json` holds SSL certificates pointing to VeryAPI. Sample should use HTTP only.
+- `server/config.json` holds SSL certs pointing to VeryAPI. Sample should use HTTP only.
 - `docs/example.md` references the VeryAPI SSL certificates.
 
 ## Issues with `json-ui`
 
 - ui.js
 	- move messages to config file and make language sensitive
+	- abstract out all formatting used when building HTML
 - messages.js
 	- make language sensitive
 	- How does the `access` element in `menu.js` work with `userAccess`?
-	- Match the names in message.func with the current function names
 - try/catch picks up later errors. How do I fix this?
 	- ui.buttonSave 
 	- admin.adminServer
