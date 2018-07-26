@@ -40,11 +40,10 @@ var general = {
 	/**
 	 * @method loginCheck
 	 * @author Basil Fisk
-	 * @param {string} data Data returned from the form.
 	 * @description Validate the user credentials.
 	 */
-	loginCheck: function (data) {
-		common.apiCall('userLogin', {"username":data.username, "password":data.password}, login.readUser);
+	loginCheck: function () {
+		common.apiCall('userLogin', {"username":this.username, "password":this.password}, login.readUser);
 	},
 
 
