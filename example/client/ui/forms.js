@@ -158,7 +158,7 @@ var formDefinitions = {
 		"buttons": {
 			"close": true,
 			"delete": true,
-			"save": "command.editSave"
+			"save": "command.editSaveCommand"
 		},
 		"fields": {
 			"commandEditCommandId": {
@@ -204,7 +204,7 @@ var formDefinitions = {
 		"buttons": {
 			"close": true,
 			"delete": true,
-			"save": "command.editSave"
+			"save": "command.editSaveParameters"
 		},
 		"fields": {
 			"commandEditParametersId": {
@@ -318,5 +318,213 @@ var formDefinitions = {
 			"add": "user.add",
 		},
 		"columns": ["Email Address", "Group", "Role", "Delete"]
+	},
+	"userAdd": {
+		"title": "Add User",
+		"buttons": {
+			"add": "user.add",
+			"close": true
+		},
+		"fields" : {
+			"userAddUsername": {
+				"element": "username",
+				"title": "User Name",
+				"description": "Enter name of user",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			},
+			"userAddPassword": {
+				"element": "password",
+				"title": "Password",
+				"description": "Enter password",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "password"
+					}
+				}
+			},
+			"userAddGroup": {
+				"element": "group",
+				"title": "Group",
+				"description": "Select group",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"userAddRole": {
+				"element": "role",
+				"title": "Role",
+				"description": "Select role",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"userAddClients": {
+				"element": "clients",
+				"title": "Clients",
+				"description": "Select clients",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": false,
+						"format": "ipv4"
+					},
+					"content": {
+						"type": "array",
+						"separator": ","
+					}
+				}
+			},
+			"userAddPackages": {
+				"element": "packages",
+				"title": "Packages",
+				"description": "Select packages",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "multiple",
+						"size": 5
+					}
+				}
+			}
+		}
+	},
+	"userEditForm": {
+		"title": "Edit User",
+		"buttons": {
+			"close": true,
+			"save": "user.edit"
+		},
+		"fields" : {
+			"userEditId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"userEditUsername": {
+				"element": "username",
+				"title": "User Name",
+				"description": "Enter name of user",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			},
+			"userEditPassword": {
+				"element": "password",
+				"title": "Password",
+				"description": "Enter password",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "password"
+					}
+				}
+			},
+			"userEditGroup": {
+				"element": "group",
+				"title": "Group",
+				"description": "Select group",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"userEditRole": {
+				"element": "role",
+				"title": "Role",
+				"description": "Select role",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"userEditClients": {
+				"element": "clients",
+				"title": "Clients",
+				"description": "Select clients",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": false,
+						"format": "ipv4"
+					},
+					"content": {
+						"type": "array",
+						"separator": ","
+					}
+				}
+			},
+			"userEditPackages": {
+				"element": "packages",
+				"title": "Packages",
+				"description": "Select packages",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "multiple",
+						"size": 5
+					}
+				}
+			},
+			"userEditJWT": {
+				"element": "jwt",
+				"title": "JSON Web Token",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"display": {
+						"size": 8
+					}
+				}
+			}
+		}
 	}
 };
