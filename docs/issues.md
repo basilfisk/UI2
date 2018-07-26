@@ -9,7 +9,7 @@
 	- table
 	- tableShow
 	- userAccess
-- `loginCheck` in `functions.js` has been hard-coded with the admin username & password
+- `init` in `login.js` has been hard-coded with the admin username & password
 - `server/config.json` holds SSL certificates pointing to VeryAPI. Sample should use HTTP only.
 - `docs/example.md` references the VeryAPI SSL certificates.
 

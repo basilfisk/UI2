@@ -44,8 +44,7 @@ var general = {
 	 * @description Validate the user credentials.
 	 */
 	loginCheck: function (data) {
-//		common.apiCall('userLogin', {"username":data.username, "password":data.password}, login.readUser);
-		common.apiCall('userLogin', {"username":"admin", "password":"password"}, login.readUser);
+		common.apiCall('userLogin', {"username":data.username, "password":data.password}, login.readUser);
 	},
 
 
