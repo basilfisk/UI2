@@ -35,7 +35,7 @@ class UserCalls {
 	
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM024', ['connector', err.message]);
+				msg = that.log('SVR022', ['connector', err.message]);
 				that.sendResponse(session, msg);
 			}
 			else {
@@ -50,7 +50,7 @@ class UserCalls {
 	
 					// Error trying to retrieve data
 					if (err) {
-						msg = that.log('ADM024', ['bundle', err.message]);
+						msg = that.log('SVR022', ['bundle', err.message]);
 						that.sendResponse(session, msg);
 					}
 					else {
@@ -107,12 +107,12 @@ class UserCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM007', ['user', err.message]);
+				msg = that.log('SVR007', ['user', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM008', ['user']);
+				msg = that.log('SVR008', ['user']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -133,7 +133,7 @@ class UserCalls {
 	
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM018', ['user', err.message]);
+				msg = that.log('SVR018', ['user', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Check that only 1 user was returned
@@ -145,7 +145,7 @@ class UserCalls {
 
 						// Error trying to retrieve data
 						if (err) {
-							msg = that.log('ADM021', ['user', err.message]);
+							msg = that.log('SVR019', ['user', err.message]);
 							that.sendResponse(session, msg);
 						}
 						// Return all user data
@@ -165,7 +165,7 @@ class UserCalls {
 					});
 				}
 				else {
-					msg = that.log('ADM022', []);
+					msg = that.log('SVR020', []);
 					that.sendResponse(session, msg);
 				}
 			}
@@ -209,12 +209,12 @@ class UserCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM009', ['user', err.message]);
+				msg = that.log('SVR009', ['user', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM010', ['user']);
+				msg = that.log('SVR010', ['user']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -240,7 +240,7 @@ class UserCalls {
 
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM011', ['user', err.message]);
+				msg = that.log('SVR011', ['user', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return all user data
@@ -295,12 +295,12 @@ class UserCalls {
 
 			// Error trying to update data
 			if (err) {
-				msg = that.log('ADM012', ['user', err.message]);
+				msg = that.log('SVR012', ['user', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM013', ['user']);
+				msg = that.log('SVR013', ['user']);
 				that.sendResponse(session, msg);
 			}
 		});

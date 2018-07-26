@@ -31,12 +31,12 @@ class BundleCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM007', ['bundle', err.message]);
+				msg = that.log('SVR007', ['bundle', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM008', ['bundle']);
+				msg = that.log('SVR008', ['bundle']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -56,12 +56,12 @@ class BundleCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM009', ['bundle', err.message]);
+				msg = that.log('SVR009', ['bundle', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM010', ['bundle']);
+				msg = that.log('SVR010', ['bundle']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -87,7 +87,7 @@ class BundleCalls {
 
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM011', ['bundle', err.message]);
+				msg = that.log('SVR011', ['bundle', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return all bundle data
@@ -112,7 +112,7 @@ class BundleCalls {
 
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM011', ['bundle', err.message]);
+				msg = that.log('SVR011', ['bundle', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return all bundle data
@@ -144,12 +144,12 @@ class BundleCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM012', ['bundle', err.message]);
+				msg = that.log('SVR012', ['bundle', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM013', ['bundle']);
+				msg = that.log('SVR013', ['bundle']);
 				that.sendResponse(session, msg);
 			}
 		});

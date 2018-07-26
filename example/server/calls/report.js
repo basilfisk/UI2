@@ -39,7 +39,7 @@ class ReportCalls {
 			this.reportFilterParse(filter_obj);
 		}
 		catch (err) {
-			msg = that.log('ADM014', [err.message]);
+			msg = that.log('SVR014', [err.message]);
 			that.sendResponse(session, msg);
 			return;
 		}
@@ -50,12 +50,12 @@ class ReportCalls {
 
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM015', [colln, err.message]);
+				msg = that.log('SVR015', [colln, err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return data
 			else {
-				that.log('ADM016', [session.command]);
+				that.log('SVR016', [session.command]);
 				msg = that.responseData(data);
 				that.sendResponse(session, msg);
 			}
@@ -124,12 +124,12 @@ class ReportCalls {
 		patt_date = new RegExp('(16|17)-(01|02|03|04|05|06|07|08|09|10|11|12)-[0-3][0-9]');
 		patt_time = new RegExp('[0-2][0-9]:[0-5][0-9]');
 		if (!patt_date.test(date)) {
-			msg = that.log('ADM033', [date]);
+			msg = that.log('SVR028', [date]);
 			that.sendResponse(session, msg);
 		}
 		else {
 			if (!patt_time.test(time)) {
-				msg = that.log('ADM034', [time]);
+				msg = that.log('SVR029', [time]);
 				that.sendResponse(session, msg);
 			}
 			else {
@@ -140,7 +140,7 @@ class ReportCalls {
 				that.mongoDB.db(that.admin.mongo.db).collection('va_event').find({timestamp:{$gte:start}}).sort({timestamp:-1}).toArray( (err, result) => {
 					var msg, i, sessions = {}, codes = [], data = {};
 					if (err) {
-						msg = that.log('ADM035', ['event', err.message]);
+						msg = that.log('SVR030', ['event', err.message]);
 						that.sendResponse(session, msg);
 					}
 					else {

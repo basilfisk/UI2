@@ -32,12 +32,12 @@ class CommandCalls {
 	
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM007', ['command', err.message]);
+				msg = that.log('SVR007', ['command', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM008', ['command']);
+				msg = that.log('SVR008', ['command']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -65,12 +65,12 @@ class CommandCalls {
 	
 				// Error trying to insert data
 				if (err) {
-					msg = that.log('ADM037', [type, err.message]);
+					msg = that.log('SVR031', [type, err.message]);
 					that.sendResponse(session, msg);
 				}
 				// Return result
 				else {
-					msg = that.log('ADM038', [type]);
+					msg = that.log('SVR032', [type]);
 					that.sendResponse(session, msg);
 				}
 			});
@@ -82,12 +82,12 @@ class CommandCalls {
 	
 				// Error trying to insert data
 				if (err) {
-					msg = that.log('ADM037', [type, err.message]);
+					msg = that.log('SVR031', [type, err.message]);
 					that.sendResponse(session, msg);
 				}
 				// Return result
 				else {
-					msg = that.log('ADM038', [type]);
+					msg = that.log('SVR032', [type]);
 					that.sendResponse(session, msg);
 				}
 			});
@@ -118,12 +118,12 @@ class CommandCalls {
 	
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM009', ['command', err.message]);
+				msg = that.log('SVR009', ['command', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM010', ['command']);
+				msg = that.log('SVR010', ['command']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -149,7 +149,7 @@ class CommandCalls {
 	
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM011', ['command', err.message]);
+				msg = that.log('SVR011', ['command', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return all command data
@@ -181,12 +181,12 @@ class CommandCalls {
 	
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM012', ['command', err.message]);
+				msg = that.log('SVR012', ['command', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM013', ['command']);
+				msg = that.log('SVR013', ['command']);
 				that.sendResponse(session, msg);
 			}
 		});

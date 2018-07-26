@@ -29,7 +29,7 @@ class GeneralCalls {
 
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM020', [err.message]);
+				msg = that.log('SVR021', [err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return data

@@ -32,12 +32,12 @@ class ConnectorCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM007', ['connector', err.message]);
+				msg = that.log('SVR007', ['connector', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM008', ['connector']);
+				msg = that.log('SVR008', ['connector']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -65,12 +65,12 @@ class ConnectorCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM009', ['connector', err.message]);
+				msg = that.log('SVR009', ['connector', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM010', ['connector']);
+				msg = that.log('SVR010', ['connector']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -96,7 +96,7 @@ class ConnectorCalls {
 
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM011', ['connector', err.message]);
+				msg = that.log('SVR011', ['connector', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return all connector data
@@ -127,12 +127,12 @@ class ConnectorCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM012', ['connector', err.message]);
+				msg = that.log('SVR012', ['connector', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM013', ['connector']);
+				msg = that.log('SVR013', ['connector']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -152,12 +152,12 @@ class ConnectorCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM012', ['connector', err.message]);
+				msg = that.log('SVR012', ['connector', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM013', ['connector']);
+				msg = that.log('SVR013', ['connector']);
 				that.sendResponse(session, msg);
 			}
 		});

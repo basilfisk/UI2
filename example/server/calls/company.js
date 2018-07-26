@@ -32,12 +32,12 @@ class CompanyCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM007', ['company', err.message]);
+				msg = that.log('SVR007', ['company', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM008', ['company']);
+				msg = that.log('SVR008', ['company']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -65,12 +65,12 @@ class CompanyCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM012', ['company', err.message]);
+				msg = that.log('SVR012', ['company', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM013', ['company']);
+				msg = that.log('SVR013', ['company']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -100,12 +100,12 @@ class CompanyCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM012', ['company', err.message]);
+				msg = that.log('SVR012', ['company', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM013', ['company']);
+				msg = that.log('SVR013', ['company']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -132,12 +132,12 @@ class CompanyCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM009', ['company', err.message]);
+				msg = that.log('SVR009', ['company', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM010', ['company']);
+				msg = that.log('SVR010', ['company']);
 				that.sendResponse(session, msg);
 			}
 		});
@@ -163,7 +163,7 @@ class CompanyCalls {
 
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM011', ['company', err.message]);
+				msg = that.log('SVR011', ['company', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return all company data
@@ -194,7 +194,7 @@ class CompanyCalls {
 
 			// Error trying to retrieve data
 			if (err) {
-				msg = that.log('ADM011', ['company', err.message]);
+				msg = that.log('SVR011', ['company', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return all company data
@@ -227,12 +227,12 @@ class CompanyCalls {
 
 			// Error trying to insert data
 			if (err) {
-				msg = that.log('ADM012', ['company', err.message]);
+				msg = that.log('SVR012', ['company', err.message]);
 				that.sendResponse(session, msg);
 			}
 			// Return result
 			else {
-				msg = that.log('ADM013', ['company']);
+				msg = that.log('SVR013', ['company']);
 				that.sendResponse(session, msg);
 			}
 		});

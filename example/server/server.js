@@ -41,7 +41,7 @@ class Server {
 	
 		// Create the server
 		if (Object.keys(this.admin.ssl).length > 0) {
-			this.log('ADM001', ['HTTPS']);
+			this.log('SVR001', ['HTTPS']);
 			options = {
 				ca: this.fs.readFileSync(this.admin.ssl.ca),
 				cert: this.fs.readFileSync(this.admin.ssl.cert),
@@ -50,13 +50,13 @@ class Server {
 			server = this.https.createServer(options);
 		}
 		else {
-			this.log('ADM001', ['HTTP']);
+			this.log('SVR001', ['HTTP']);
 			server = this.http.createServer();
 		}
 	
 		// Start listening on the port
 		server.listen(this.admin.port, () => {
-			this.log('ADM002', [this.admin.port]);
+			this.log('SVR002', [this.admin.port]);
 		});
 	
 		// Listen for requests from admin users
@@ -73,7 +73,7 @@ class Server {
 	
 			// Stop if no command parameters have been provided
 			if (url.length !== 2) {
-				msg = this.log('ADM039', []);
+				msg = this.log('SVR033', []);
 				this.sendResponse(session, msg);
 				return;
 			}
@@ -81,7 +81,7 @@ class Server {
 			// Extract command name from path
 			flds = url[0].split('/');
 			if (flds.length !== 3) {
-				msg = this.log('ADM029', []);
+				msg = this.log('SVR025', []);
 				this.sendResponse(session, msg);
 				return;
 			}
@@ -94,31 +94,31 @@ class Server {
 			str = str.replace(/%7D/g,"}");
 	
 			// Load parameters into an object and run the request
-//			try {
+			try {
 				session.params = JSON.parse(str);
-				this.log('ADM030', [str]);
+				this.log('SVR026', [str]);
 				this.runRequest(session);
-/*			}
+			}
 			// JSON format error
 			catch (err) {
-				msg = this.log('ADM031', [err.message, str]);
+				msg = this.log('SVR027', [err.message, str]);
 				this.sendResponse(session, msg);
 				return;
 			}
-*/
+
 			// Fire when request completes
 			request.on('end', (request, response) => {
-				this.log('ADM003', [session.id]);
+				this.log('SVR003', [session.id]);
 			});
 		});
 	
 		// Catch errors creating the socket
 		server.on('error', (err) => {
 			if (err.errno === 'EADDRINUSE') {
-				this.log('ADM004', [this.admin.port]);
+				this.log('SVR004', [this.admin.port]);
 			}
 			else {
-				this.log('ADM005', [err.syscall, err.errno]);
+				this.log('SVR005', [err.syscall, err.errno]);
 			}
 	
 			// Close database connection
@@ -161,7 +161,7 @@ class Server {
 						  '&authSource=' + this.admin.mongo.authdb;
 		this.mongo.connect(url, (err, db) => {
 			if (err) {
-				this.log('ADM017', [this.admin.mongo.url, err.message]);
+				this.log('SVR017', [this.admin.mongo.url, err.message]);
 			}
 			else {
 				// Save the database pointer for later use
@@ -302,7 +302,7 @@ class Server {
 				calls = new this.UserCalls();
 				break;
 			default:
-				msg = this.log('ADM006', [session.command]);
+				msg = this.log('SVR006', [session.command]);
 				this.sendResponse(session, msg);
 				found = false;
 		}
@@ -341,12 +341,12 @@ class Server {
 		// Successful response
 		if (data.result.status) {
 			tx.recs = (data.data) ? data.data.length : 0;
-			this.log('ADM027', [session.command], tx);
+			this.log('SVR023', [session.command], tx);
 		}
 		// Error response
 		else {
 			tx.recs = 1;
-			this.log('ADM028', [session.command, data.result.code, data.result.text], tx);
+			this.log('SVR024', [session.command, data.result.code, data.result.text], tx);
 		}
 
 		// Response stsus is always success from an application point of view

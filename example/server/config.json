@@ -16,238 +16,202 @@
 		"key": "/etc/veryapi/local.very-api.net.key"
 	},
 	"messages": {
-		"ADM001": {
+		"SVR001": {
 			"type" : "info",
-			"module" : "admin",
-			"function" : "admin_server",
+			"module" : "server",
+			"function" : "adminServer",
 			"internal" : "Starting the Administration daemon using _p1"
 		},
-		"ADM002": {
+		"SVR002": {
 			"type" : "info",
-			"module" : "admin",
-			"function" : "admin_server",
+			"module" : "server",
+			"function" : "adminServer",
 			"internal" : "Listening for requests on port _p1"
 		},
-		"ADM003": {
+		"SVR003": {
 			"type": "info",
-			"module" : "admin",
-			"function" : "on.request",
+			"module" : "server",
+			"function" : "adminServer",
 			"internal": "Client session '_p1' complete"
 		},
-		"ADM004": {
+		"SVR004": {
 			"type" : "error",
-			"module" : "admin",
-			"function" : "on.error",
+			"module" : "server",
+			"function" : "adminServer",
 			"internal" : "Cannot create HTTPS server as port _p1 is in use"
 		},
-		"ADM005": {
+		"SVR005": {
 			"type" : "error",
-			"module" : "admin",
-			"function" : "on.error",
+			"module" : "server",
+			"function" : "adminServer",
 			"internal" : "Socket communication error: _p1 _p2"
 		},
-		"ADM006": {
+		"SVR006": {
 			"type" : "error",
-			"module" : "admin",
-			"function" : "check_request",
+			"module" : "server",
+			"function" : "runRequest",
 			"internal" : "Unrecognized command '_p1'"
 		},
-		"ADM007": {
+		"SVR007": {
 			"type": "error",
-			"module" : "admin",
-			"function": "*_delete",
+			"module" : "calls",
+			"function": "*Delete",
 			"internal": "Can't delete document from collection '_p1': _p2"
 		},
-		"ADM008": {
+		"SVR008": {
 			"type": "info",
-			"module" : "admin",
-			"function": "*_delete",
+			"module" : "calls",
+			"function": "*Delete",
 			"internal": "Deleted document from collection '_p1'"
 		},
-		"ADM009": {
+		"SVR009": {
 			"type": "error",
-			"module" : "admin",
-			"function": "*_new",
+			"module" : "calls",
+			"function": "*New",
 			"internal": "Can't insert document into collection '_p1': _p2"
 		},
-		"ADM010": {
+		"SVR010": {
 			"type": "info",
-			"module" : "admin",
-			"function": "*_new",
+			"module" : "calls",
+			"function": "*New",
 			"internal": "Inserted document into collection '_p1'"
 		},
-		"ADM011": {
+		"SVR011": {
 			"type": "error",
-			"module" : "admin",
-			"function": "*_read",
+			"module" : "calls",
+			"function": "*Read",
 			"internal": "Can't retrieve data from collection '_p1': _p2"
 		},
-		"ADM012": {
+		"SVR012": {
 			"type": "error",
-			"module" : "admin",
-			"function": "*_update",
+			"module" : "calls",
+			"function": "*Update",
 			"internal": "Can't update document in collection '_p1': _p2"
 		},
-		"ADM013": {
+		"SVR013": {
 			"type": "info",
-			"module" : "admin",
-			"function": "*_update",
+			"module" : "calls",
+			"function": "*Update",
 			"internal": "Updated document in collection '_p1'"
 		},
-		"ADM014": {
+		"SVR014": {
 			"type": "error",
-			"module" : "admin",
+			"module" : "report",
 			"function": "report",
 			"internal": "Filter statement is not valid JSON: _p1"
 		},
-		"ADM015": {
+		"SVR015": {
 			"type": "error",
-			"module" : "admin",
+			"module" : "report",
 			"function": "report",
 			"internal": "Can't retrieve data from collection '_p1': _p2"
 		},
-		"ADM016": {
+		"SVR016": {
 			"type": "info",
-			"module": "admin",
+			"module": "report",
 			"function": "report",
 			"internal": "Administration report '_p1' ran successfully"
 		},
-		"ADM017": {
+		"SVR017": {
 			"type" : "error",
-			"module": "admin",
-			"function" : "open_mongo",
+			"module": "server",
+			"function" : "init",
 			"internal" : "Can't connect to Mongo database '_p1': _p2"
 		},
-		"ADM018": {
+		"SVR018": {
 			"type": "error",
-			"module" : "admin",
-			"function": "login_check",
+			"module" : "user",
+			"function": "userLogin",
 			"internal": "Can't retrieve data from collection '_p1': _p2"
 		},
-		"ADM019": {
+		"SVR019": {
 			"type": "error",
-			"module" : "admin",
-			"function": "ui_read",
-			"internal": "Can't retrieve list of '_p1' from collection 'ui': _p2"
-		},
-		"ADM020": {
-			"type": "error",
-			"module" : "admin",
-			"function": "list_plans",
-			"internal": "Can't retrieve data from collection 'plan': _p1"
-		},
-		"ADM021": {
-			"type": "error",
-			"module" : "admin",
-			"function": "login_group_users",
+			"module" : "user",
+			"function": "userLogin",
 			"internal": "Can't retrieve data from collection '_p1': _p2"
 		},
-		"ADM022": {
+		"SVR020": {
 			"type": "error",
-			"module" : "admin",
-			"function": "login_check",
+			"module" : "user",
+			"function": "userLogin",
 			"internal": "Invalid combination of user name and password entered"
 		},
-		"ADM023": {
+		"SVR021": {
 			"type": "error",
-			"module" : "admin",
-			"function": "admin_server",
-			"internal": "Invalid authorization header in request for session"
+			"module" : "general",
+			"function": "listPlans",
+			"internal": "Can't retrieve data from collection 'plan': _p1"
 		},
-		"ADM024": {
+		"SVR022": {
 			"type": "error",
-			"module" : "admin",
-			"function": "jwt_create",
+			"module" : "user",
+			"function": "jwtCreate",
 			"internal": "Can't retrieve data from collection '_p1': _p2"
 		},
-		"ADM025": {
-			"type": "error",
-			"module" : "admin",
-			"function": "open_mongo",
-			"internal": "User '_p1' failed authentication: _p2"
-		},
-		"ADM026": {
-			"type": "error",
-			"module" : "admin",
-			"function": "company_bundle",
-			"internal": "Can't retrieve company bundles from collection 'va_bundle': _p1"
-		},
-		"ADM027": {
+		"SVR023": {
 			"type" : "info",
-			"module" : "admin",
-			"function" : "send_response",
+			"module" : "server",
+			"function" : "sendResponse",
 			"internal" : "Successfully ran command '_p1'"
 		},
-		"ADM028": {
+		"SVR024": {
 			"type" : "error",
-			"module" : "admin",
-			"function" : "send_response",
+			"module" : "server",
+			"function" : "sendResponse",
 			"internal" : "Error running command '_p1': '_p2' _p3"
 		},
-		"ADM029": {
+		"SVR025": {
 			"type": "error",
-			"module": "admin",
-			"function": "admin_server",
+			"module": "server",
+			"function": "adminServer",
 			"internal": "Request paths must take the form: /{version}/{command}"
 		},
-		"ADM030": {
+		"SVR026": {
 			"type" : "debug",
-			"module" : "admin",
-			"function" : "admin_server",
+			"module" : "server",
+			"function" : "adminServer",
 			"internal" : "Version 1 API GET call received: _p1"
 		},
-		"ADM031": {
+		"SVR027": {
 			"type": "error",
-			"module": "admin",
-			"function": "admin_server",
+			"module": "server",
+			"function": "adminServer",
 			"internal": "Error parsing user parameters in JSON format: '_p1' : _p2"
 		},
-		"ADM032": {
-			"type": "info",
-			"module": "admin",
-			"function": "open_usage_publish",
-			"internal": "Administration push server started on port _p1"
-		},
-		"ADM033": {
+		"SVR028": {
 			"type": "error",
-			"module" : "admin",
-			"function": "event_summary",
+			"module" : "report",
+			"function": "reportEventSummary",
 			"internal": "Invalid date '_p1', use YY-MM-DD format"
 		},
-		"ADM034": {
+		"SVR029": {
 			"type": "error",
-			"module" : "admin",
-			"function": "event_summary",
+			"module" : "report",
+			"function": "reportEventSummary",
 			"internal": "Invalid time '_p1', use HH24-MI format"
 		},
-		"ADM035": {
+		"SVR030": {
 			"type": "error",
-			"module" : "admin",
-			"function": "event_summary",
+			"module" : "report",
+			"function": "reportEventSummary",
 			"internal": "Can't retrieve data from collection '_p1': _p2"
 		},
-		"ADM036": {
+		"SVR031": {
 			"type": "error",
-			"module" : "admin",
-			"function": "notify_interface",
-			"internal": "Notification channel '_p1' on RabbitMQ is not open"
-		},
-		"ADM037": {
-			"type": "error",
-			"module" : "admin",
-			"function": "command_delete_version",
+			"module" : "command",
+			"function": "commandDeleteVersion",
 			"internal": "Can't delete '_p1' version element from document in 'va_command' collection: _p2"
 		},
-		"ADM038": {
+		"SVR032": {
 			"type": "info",
-			"module" : "admin",
-			"function": "command_delete_version",
+			"module" : "command",
+			"function": "commandDeleteVersion",
 			"internal": "Delete '_p1' version element from document in 'va_command' collection"
 		},
-		"ADM039": {
+		"SVR033": {
 			"type": "error",
-			"module": "admin",
-			"function": "admin_server",
+			"module": "server",
+			"function": "adminServer",
 			"internal": "URL must take the form: http(s)://{domain}:{port}/{version}/{command}?{parameters}"
 		}
 	}
