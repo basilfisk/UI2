@@ -22,16 +22,16 @@ var bundle = {
 		for (i=0; i<admin.commands.length; i++) {
 			options.push({"value":admin.commands[i].name, "text":admin.commands[i].name});
 		}
-		lists['bundleAddCommand'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['bundleAddCommand'] = general.sortArrayObjects(options, 'text');
 
 		// Load connectors list
 		options = [];
 		for (i=0; i<admin.connectors.length; i++) {
 			options.push({"value":admin.connectors[i].name, "text":admin.connectors[i].name});
 		}
-		lists['bundleAddConnector'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['bundleAddConnector'] = general.sortArrayObjects(options, 'text');
 
-		ui.formAdd('bundleAddForm', lists);
+		ui.formAdd('bundleAdd', lists);
 	},
 
 
@@ -73,17 +73,17 @@ var bundle = {
 		for (i=0; i<admin.connectors.length; i++) {
 			options.push({"value":admin.connectors[i].name, "text":admin.connectors[i].name});
 		}
-		lists['bundleEditConnector'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['bundleEditConnector'] = general.sortArrayObjects(options, 'text');
 
 		// Load commands list
 		options = [];
 		for (i=0; i<admin.commands.length; i++) {
 			options.push({"value":admin.commands[i].name, "text":admin.commands[i].name});
 		}
-		lists['bundleEditCommand'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['bundleEditCommand'] = general.sortArrayObjects(options, 'text');
 
 		// Display form for editing data
-		ui.formEdit('bundleEditForm', data, lists);
+		ui.formEdit('bundleEdit', data, lists);
 	},
 
 
@@ -120,7 +120,7 @@ var bundle = {
 			// Add column with link to edit form - only if user has permission to edit data
 			obj = {};
 			obj.text = admin.bundles[i].name;
-			if (ui.userAccess('bundleEditForm')) {
+			if (ui.userAccess('bundleEdit')) {
 				obj.link = 'bundle.edit';
 			}
 			cols.push(obj);
@@ -133,7 +133,7 @@ var bundle = {
 			cols.push({"text":ver});
 
 			// Only add delete link if user has permission to edit data
-			if (ui.userAccess('bundleEditForm')) {
+			if (ui.userAccess('bundleEdit')) {
 				cols.push({"button":"bundle.delete", "style":"danger", "icon":"trash"});
 			}
 

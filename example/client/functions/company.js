@@ -16,7 +16,7 @@
 	 * @description Add a new company.
 	 */
 	add: function () {
-		ui.formAdd('companyAddForm');
+		ui.formAdd('companyAdd');
 	},
 
 
@@ -59,7 +59,7 @@
 		data.name = admin.companies[index].name;
 
 		// Display form for editing data
-		ui.formEdit('companyEditForm', data);
+		ui.formEdit('companyEdit', data);
 	},
 
 
@@ -176,9 +176,9 @@
 		for (i=0; i<admin.plans.length; i++) {
 			options.push({"value":admin.plans[i].id, "text":admin.plans[i].name});
 		}
-		lists['companyGroupAddPlan'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['companyGroupAddPlan'] = general.sortArrayObjects(options, 'text');
 
-		ui.formAdd('companyGroupAddForm', lists);
+		ui.formAdd('companyGroupAdd', lists);
 	},
 
 
@@ -225,10 +225,10 @@
 		for (i=0; i<admin.plans.length; i++) {
 			options.push({"value":admin.plans[i].id, "text":admin.plans[i].name});
 		}
-		lists['companyGroupEditPlan'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['companyGroupEditPlan'] = general.sortArrayObjects(options, 'text');
 
 		// Display form for editing data
-		ui.formEdit('companyGroupEditForm', data, lists);
+		ui.formEdit('companyGroupEdit', data, lists);
 	},
 
 
@@ -269,7 +269,7 @@
 			cols.push({"text":plan});
 
 			// Only add delete link if user has permission to edit data
-			if (ui.userAccess('companyGroupEditForm')) {
+			if (ui.userAccess('companyGroupEdit')) {
 				cols.push({"button":"company.groupDelete", "style":"danger", "icon":"trash"});
 			}
 

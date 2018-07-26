@@ -23,7 +23,7 @@ var user = {
 		for (i=0; i<keys.length; i++) {
 			options.push({"value":keys[i], "text":keys[i]});
 		}
-		lists['userAddGroup'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['userAddGroup'] = general.sortArrayObjects(options, 'text');
 
 		// Load role list - only role to list if role is same or lower than current user
 		options = [];
@@ -32,7 +32,7 @@ var user = {
 				options.push({"value":admin.roles[i].code, "text":admin.roles[i].name});
 			}
 		}
-		lists['userAddRole'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['userAddRole'] = general.sortArrayObjects(options, 'text');
 
 		// Load unique list of bundles
 		arr = [];
@@ -43,9 +43,9 @@ var user = {
 				options.push({"value":admin.bundles[i].name, "text":admin.bundles[i].name});
 			}
 		}
-		lists['userAddBundles'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['userAddBundles'] = general.sortArrayObjects(options, 'text');
 
-		ui.formAdd('userAddForm', lists);
+		ui.formAdd('userAdd', lists);
 	},
 
 
@@ -67,6 +67,7 @@ var user = {
 	 * @description Open the selected user document for editing.
 	 */
 	edit: function (id) {
+console.log(this);
 		var i, index = -1, data = {}, keys, arr = [], options = [], lists = [];
 
 		// Find the selected document
@@ -89,14 +90,14 @@ var user = {
 		for (i=0; i<keys.length; i++) {
 			options.push({"value":keys[i], "text":keys[i]});
 		}
-		lists['userEditGroup'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['userEditGroup'] = general.sortArrayObjects(options, 'text');
 
 		// Load role list
 		options = [];
 		for (i=0; i<admin.roles.length; i++) {
 			options.push({"value":admin.roles[i].code, "text":admin.roles[i].name});
 		}
-		lists['userEditRole'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['userEditRole'] = general.sortArrayObjects(options, 'text');
 
 		// Load unique list of bundles
 		arr = [];
@@ -107,10 +108,10 @@ var user = {
 				options.push({"value":admin.bundles[i].name, "text":admin.bundles[i].name});
 			}
 		}
-		lists['userEditBundles'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['userEditBundles'] = general.sortArrayObjects(options, 'text');
 
 		// Display form for editing data
-		ui.formEdit('userEditForm', data, lists);
+		ui.formEdit('userEdit', data, lists);
 	},
 
 
@@ -161,7 +162,7 @@ var user = {
 				// Add column with link to edit form - only if user has permission to edit data
 				obj = {};
 				obj.text = admin.users[i].username;
-				if (ui.userAccess('userEditForm')) {
+				if (ui.userAccess('userEdit')) {
 					obj.link = 'user.edit';
 				}
 				cols.push(obj);
@@ -171,7 +172,7 @@ var user = {
 				cols.push({"text":admin.users[i].role});
 
 				// Only add delete link if user has permission to edit data
-				if (ui.userAccess('userEditForm')) {
+				if (ui.userAccess('userEdit')) {
 					cols.push({"button":"user.delete", "style":"danger", "icon":"trash"});
 				}
 

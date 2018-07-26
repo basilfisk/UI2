@@ -21,9 +21,9 @@ var connector = {
 		for (i=0; i<admin.services.length; i++) {
 			options.push({"value":admin.services[i].code, "text":admin.services[i].name});
 		}
-		lists['connectorAddService'] = formFunctions.sortArrayObjects(options, 'text');
+		lists['connectorAddService'] = general.sortArrayObjects(options, 'text');
 
-		ui.formAdd('connectorAddForm', lists);
+		ui.formAdd('connectorAdd', lists);
 	},
 
 
@@ -58,7 +58,7 @@ var connector = {
 		data.config = admin.connectors[index].config;
 
 		// Display form for editing data
-		ui.formEdit('connectorEditForm-' + admin.connectors[index].service, data);
+		ui.formEdit('connectorEdit-' + admin.connectors[index].service, data);
 	},
 
 
