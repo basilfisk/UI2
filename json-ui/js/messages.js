@@ -18,10 +18,5 @@ var _messages = {
 		"type": "error",
 		"func": "_checkRange",
 		"text": "Entry in '_p1' must be _p2"
-	},
-	"UI005" : {
-		"type": "error",
-		"func": "buttonSave",
-		"text": "Function '_p1' for '_p2' post-processing is not defined"
 	}
 };
