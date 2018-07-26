@@ -38,7 +38,6 @@ var report = {
 		else {
 			// Problem running report
 			if (!result.result.status) {
-//				message_error('REP001', result);
 				ui.messageBox('REP001', [result]);
 			}
 			else {
@@ -113,7 +112,6 @@ var report = {
 		else {
 			// Problem running report
 			if (!result.result.status) {
-//				message_error('REP002', result);
 				ui.messageBox('REP002', [result]);
 			}
 			else {
@@ -177,7 +175,6 @@ var report = {
 		else {
 			// Problem running report
 			if (!result.result.status) {
-//				message_error('REP008', result);
 				ui.messageBox('REP008', [result]);
 			}
 			else {
@@ -248,7 +245,6 @@ var report = {
 		else {
 			// Problem running report
 			if (!result.result.status) {
-//				message_error('REP003', result);
 				ui.messageBox('REP003', [result]);
 			}
 			else {
@@ -347,7 +343,6 @@ var report = {
 		else {
 			// Problem running report
 			if (!result.result.status) {
-//				message_error('REP004', result);
 				ui.messageBox('REP004', [result]);
 			}
 			else {
@@ -457,7 +452,6 @@ var report = {
 		else {
 			// Problem running report
 			if (!result.result.status) {
-//				message_error('REP005', result);
 				ui.messageBox('REP005', [result]);
 			}
 			else {
@@ -525,7 +519,6 @@ var report = {
 		else {
 			// Problem running report
 			if (!result.result.status) {
-//				message_error('REP006', result);
 				ui.messageBox('REP006', [result]);
 			}
 			else {
@@ -643,7 +636,6 @@ var report = {
 		else {
 			// Problem running report
 			if (!result.result.status) {
-//				message_error('REP007', result);
 				ui.messageBox('REP007', [result]);
 			}
 			else {

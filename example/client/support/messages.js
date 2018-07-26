@@ -1,107 +1,116 @@
 var messages = {
-	"CON001" : {
+	"CMD001" : {
 		"type": "error",
-		"func": "company_commands_save",
-		"text": "No commands returned from Admin Server for '_p1'"
+		"module": "command",
+		"func": "command_edit_save",
+		"text": "Couldn't find command with ID '_p1'"
 	},
-	"CON002" : {
+	"CMD002" : {
 		"type": "error",
-		"func": "company_connectors_save",
-		"text": "No connectors returned from Admin Server for '_p1'"
+		"module": "command",
+		"func": "editSaveParameters",
+		"text": "Parameter name '_p1' must be alphanumeric"
 	},
-	"CON003" : {
+	"CMD003" : {
 		"type": "error",
-		"func": "company_bundles_save",
-		"text": "No bundles returned from Admin Server for '_p1'"
+		"module": "command",
+		"func": "editSaveParameters",
+		"text": "Parameter value '_p1' must be alphanumeric"
 	},
-	"zzzCON004" : {
+	"CMN001" : {
 		"type": "error",
-		"func": "load_company_data",
-		"text": "No companies returned from Admin Server"
-	},
-	"CON005" : {
-		"type": "error",
-		"func": "load_plan_list",
-		"text": "No plans returned from Admin Server"
-	},
-	"CON006" : {
-		"type": "error",
-		"func": "load_role_list",
-		"text": "No roles returned from Admin Server"
-	},
-	"CON007" : {
-		"type": "error",
-		"func": "loginReadUser",
-		"text": "Invalid user name or password entered"
-	},
-	"zzzCON008" : {
-		"type": "error",
-		"func": "socket_init",
-		"text": "Connected to Tracker live feed on port _p1"
-	},
-	"zzzCON009" : {
-		"type": "error",
-		"func": "socket_init",
-		"text": "Error connecting to Tracker live feed on port "
-	},
-	"CON010" : {
-		"type": "error",
+		"module": "common",
 		"func": "apiCall",
 		"text": "Failed to connect to the server at _p1:_p2 for command '_p3'"
 	},
-	"zzzCON011" : {
+	"LOG001" : {
 		"type": "error",
-		"func": "api_login",
-		"text": "Can't access the server at _p1:_p2.\n\nPlease contact the System Administrator and report this error."
+		"module": "login",
+		"func": "readCommands",
+		"text": "No commands returned from Admin Server for '_p1'"
 	},
-	"FRM001" : {
+	"LOG002" : {
 		"type": "error",
-		"func": "command_edit_save",
-		"text": "Parameter name '_p1' must be alphanumeric"
+		"module": "login",
+		"func": "readConnectors",
+		"text": "No connectors returned from Admin Server for '_p1'"
 	},
-	"FRM002" : {
+	"LOG003" : {
 		"type": "error",
-		"func": "command_edit_save",
-		"text": "Parameter value '_p1' must be alphanumeric"
+		"module": "login",
+		"func": "readBundles",
+		"text": "No bundles returned from Admin Server for '_p1'"
+	},
+	"LOG004" : {
+		"type": "error",
+		"module": "login",
+		"func": "readPlans",
+		"text": "No plans returned from Admin Server"
+	},
+	"LOG005" : {
+		"type": "error",
+		"module": "login",
+		"func": "readRoles",
+		"text": "No roles returned from Admin Server"
+	},
+	"LOG006" : {
+		"type": "error",
+		"module": "login",
+		"func": "readUser",
+		"text": "Invalid user name or password entered"
+	},
+	"LOG007" : {
+		"type": "error",
+		"module": "login",
+		"func": "readCompany",
+		"text": "No companies returned from Admin Server"
 	},
 	"REP001" : {
 		"type": "error",
+		"module": "report",
 		"func": "codes",
 		"text": "An error was raised during processing.  Please report the error code and reason to your System Administrator.\n\nCode: _p1\nReason: _p2"
 	},
 	"REP002" : {
 		"type": "error",
+		"module": "report",
 		"func": "commands",
 		"text": "An error was raised during processing.  Please report the error code and reason to your System Administrator.\n\nCode: _p1\nReason: _p2"
 	},
 	"REP003" : {
 		"type": "error",
+		"module": "report",
 		"func": "functions",
 		"text": "An error was raised during processing.  Please report the error code and reason to your System Administrator.\n\nCode: _p1\nReason: _p2"
 	},
 	"REP004" : {
 		"type": "error",
-		"func": "recent_errors",
+		"module": "report",
+		"func": "recentErrors",
 		"text": "An error was raised during processing.  Please report the error code and reason to your System Administrator.\n\nCode: _p1\nReason: _p2"
 	},
 	"REP005" : {
 		"type": "error",
-		"func": "recent_trans",
+		"module": "report",
+		"func": "recentTransactions",
 		"text": "An error was raised during processing.  Please report the error code and reason to your System Administrator.\n\nCode: _p1\nReason: _p2"
 	},
 	"REP006" : {
 		"type": "error",
+		"module": "report",
 		"func": "sessions",
 		"text": "An error was raised during processing.  Please report the error code and reason to your System Administrator.\n\nCode: _p1\nReason: _p2"
 	},
 	"REP007" : {
 		"type": "error",
-		"func": "usage_stats",
+		"module": "report",
+		"func": "usageStats",
 		"text": "An error was raised during processing.  Please report the error code and reason to your System Administrator.\n\nCode: _p1\nReason: _p2"
 	},
 	"REP008" : {
 		"type": "error",
-		"func": "event_summary",
+		"module": "report",
+		"func": "eventSummary",
 		"text": "An error was raised during processing.  Please report the error code and reason to your System Administrator.\n\nCode: _p1\nReason: _p2"
 	}
 };

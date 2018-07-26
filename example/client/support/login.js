@@ -42,7 +42,7 @@ var login = {
 			login.setProgress('bundle');
 		}
 		else {
-			ui.messageBox('CON003', [admin.company.name]);
+			ui.messageBox('LOG003', [admin.company.name]);
 		}
 	},
 
@@ -91,7 +91,7 @@ var login = {
 			login.setProgress('company');
 		}
 		else {
-			ui.messageBox('CON010', []);
+			ui.messageBox('LOG007', []);
 		}
 	},
 
@@ -113,7 +113,7 @@ var login = {
 			login.setProgress('command');
 		}
 		else {
-			ui.messageBox('CON001', [admin.company.name]);
+			ui.messageBox('LOG001', [admin.company.name]);
 		}
 	},
 
@@ -135,7 +135,7 @@ var login = {
 			login.setProgress('connector');
 		}
 		else {
-			ui.messageBox('CON002', [admin.company.name]);
+			ui.messageBox('LOG002', [admin.company.name]);
 		}
 	},
 
@@ -156,7 +156,7 @@ var login = {
 			login.setProgress('plan');
 		}
 		else {
-			ui.messageBox('CON005', []);
+			ui.messageBox('LOG004', []);
 		}
 	},
 
@@ -181,7 +181,7 @@ var login = {
 			login.setProgress('role');
 		}
 		else {
-			ui.messageBox('CON006', []);
+			ui.messageBox('LOG005', []);
 		}
 	},
 
@@ -221,7 +221,7 @@ var login = {
 		}
 		// Show error, then display login form again
 		else {
-			ui.messageBox('CON007', [], () => {
+			ui.messageBox('LOG006', [], () => {
 				ui.formEdit('login', {"username":'', "password":''});
 			});
 		}

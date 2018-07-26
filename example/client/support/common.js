@@ -28,7 +28,7 @@ var common = {
 			data: JSON.stringify(json),
 //			headers: { "Authorization": "Bearer " + me.jwt },	// THIS DOUBLES UP THE PROCESSING IN admin.js !!!!!!!!!
 			error: function (err) {
-				ui.messageBox('CON010', [system.api.host, system.api.port, command]);
+				ui.messageBox('CMN001', [system.api.host, system.api.port, command]);
 			},
 			success: function (result) {
 //console.log(result);
