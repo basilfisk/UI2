@@ -13,24 +13,24 @@
 - `server/config.json` holds SSL certificates pointing to VeryAPI. Sample should use HTTP only.
 - `docs/example.md` references the VeryAPI SSL certificates.
 
-## General Issues
+## Issues with `json-ui`
 
-- How does the `access` element in `menu.js` work?
+- ui.js
+	- move messages to config file and make language sensitive
+- messages.js
+	- make language sensitive
+	- How does the `access` element in `menu.js` work with `userAccess`?
+	- Match the names in message.func with the current function names
 - try/catch picks up later errors. How do I fix this?
 	- ui.buttonSave 
 	- admin.adminServer
-- Match the names in message.func with the current function names
-- Are these API calls used anywhere?
-	- bundleRead1
-	- connectorUpdateName
-	- report
-	- reportEventSummary
-- Is the admin.users element needed in login.js? Is it related to me.groupusers?
 
-## Issues Specific to Options
+## Issues Specific to Example Options
 
 - about form
 	- Company : name instead of code
+- login.js
+	- Is the admin.users element needed? Is it related to me.groupusers?
 - login form
 	- if login fails, show login form again
 	- display loading icon until `setProgress` has finished
