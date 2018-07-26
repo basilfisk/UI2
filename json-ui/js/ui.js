@@ -378,9 +378,15 @@ var ui = {
 	 * @description Sort an array of objects by a field in the object.
 	 */
 	_sortArrayObjects: function (arr, key) {
-		var sorted = arr.sort(function (a, b) {
-			return (a[key] < b[key]) ? -1 : (a[key] > b[key]) ? 1 : 0;
-		});
+		var sorted;
+		if (arr) {
+			sorted = arr.sort(function (a, b) {
+				return (a[key] < b[key]) ? -1 : (a[key] > b[key]) ? 1 : 0;
+			});
+		}
+		else {
+			sorted = [];
+		}
 		return sorted;
 	},
 
@@ -497,6 +503,7 @@ var ui = {
 
 			// Split dot separated element name into array of element names
 			elem = fields[name].element.split('.');
+//console.log('elem', elem);
 
 			// Assign data to element in object
 			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -513,16 +520,13 @@ var ui = {
 				data[elem[0]][elem[1]][elem[2]] = temp[name];
 			}
 		}
-
+		
 		// Hide the form and trigger the post-processing function
 		$('#' + id).modal('hide');
-//		try {
-			func = _defs[id].buttons.save.split('.');
-			window[func[0]][func[1]].apply(data);
-//		}
-//		catch (err) {
-//			this._messageBox('UI005', [_defs[id].buttons.save, 'save']);
-//		}
+		func = _defs[id].buttons.save.split('.');
+//console.log('func', func);
+console.log('data', data);
+		window[func[0]][func[1]].call(data);
 	},
 
 
@@ -536,7 +540,9 @@ var ui = {
 	 */
 	formAdd: function (id, list) {
 		var title, fields, names, i, div = '';
+console.log(_defs[id]);
 
+		// Read fields and their names
 		title = _defs[id].title;
 		fields = _defs[id].fields;
 		names = Object.keys(fields);
@@ -581,6 +587,7 @@ var ui = {
 
 		// Close form container
 		div += '</div></div>';
+console.log('formAdd', id, div);
 
 		// Remove existing form, then add new form and display
 		this._showContainer(id, div);
@@ -600,7 +607,7 @@ var ui = {
 	/**
 	 * @method formEdit
 	 * @author Basil Fisk
-	 * @param {id} id ID of the form.
+	 * @param {string} id ID of the form.
 	 * @param {object} data Data to be shown in fields for editing.
 	 * @param {object} list Object holding lists for dropdown fields.
 	 * {field: [values], ...}
@@ -671,7 +678,7 @@ var ui = {
 		// Close form body
 		div += '</form></div>';
 
-		// Save and/or delete buttons in form footer
+		// Save and/or Delete buttons in form footer
 		if (_defs[id].buttons) {
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
@@ -686,6 +693,7 @@ var ui = {
 
 		// Close form container
 		div += '</div></div>';
+console.log('formEdit', id, div);
 
 		// Remove existing form, then add new form and display
 		this._showContainer(id, div);
@@ -771,6 +779,7 @@ var ui = {
 		}
 		
 		// Display the message
+console.log(title, text, callback);
 		this._messageShow(title, text, callback);
 	},
 
@@ -802,44 +811,44 @@ var ui = {
 	//                  icon:   Name of Glyph icon (only for 'button')
 	// ---------------------------------------------------------------------------------------
 	tableShow: function (id, rows) {
-		var index, body = '', i, n, row, rowid, cell = {};
-console.log(id, rows);
+		var index, div = '', i, n, row, rowid, cell = {};
+console.log('tableShow', id, rows);
 
 		// Build the container
-		body += '<div class="modal-dialog" role="document" style="width:50%">'; // TODO Make a parameter
-		body += '<div class="modal-content">';
+		div += '<div class="modal-dialog" role="document" style="width:50%">'; // TODO Make a parameter
+		div += '<div class="modal-content">';
 
 		// Build the form header
-		body += '<div class="modal-header">';
+		div += '<div class="modal-header">';
 		if (_defs[id].buttons && _defs[id].buttons.close) {
-			body += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+			div += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
 		}
-		body += '<br/>';
-		body += '<h4>' + _defs[id].title;
+		div += '<br/>';
+		div += '<h4>' + _defs[id].title;
 
 		// Display an Add button, if specified
 		if (_defs[id].buttons && _defs[id].buttons.add) {
-			body += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + _defs[id].add + '(); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+			div += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + _defs[id].buttons.add + '(); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
 		}
-		body += '</h4>';
-		body += '</div>';
+		div += '</h4>';
+		div += '</div>';
 
 		// Build the table container
-		body += '<div class="modal-body">';
-		body += '<form class="form-horizontal bv-form">';
-		body += '<table class="table table-striped table-condensed table-bordered" id="user-table-rows">';
+		div += '<div class="modal-body">';
+		div += '<form class="form-horizontal bv-form">';
+		div += '<table class="table table-striped table-condensed table-bordered" id="user-table-rows">';
 
 		// Build the table header
-		body += '<thead>';
-		body += '<tr>';
+		div += '<thead>';
+		div += '<tr>';
 		for (i=0; i<_defs[id].columns.length; i++) {
-			body += '<th>' + _defs[id].columns[i] + '</th>';
+			div += '<th>' + _defs[id].columns[i] + '</th>';
 		}
-		body += '</tr>';
-		body += '</thead>';
+		div += '</tr>';
+		div += '</thead>';
 
 		// Build the table body
-		body += '<tbody>';
+		div += '<tbody>';
 
 		// Add each element of the array as a table row
 		for (i=0; i<rows.length; i++) {
@@ -872,17 +881,18 @@ console.log(id, rows);
 
 			// Close row and add to bottom of table
 			row += '</tr>';
-			body += row;
+			div += row;
 		}
 
 		// Close the table and form container
-		body += '</tbody>';
-		body += '</table>';
-		body += '</form>';
-		body += '</div></div></div>';
+		div += '</tbody>';
+		div += '</table>';
+		div += '</form>';
+		div += '</div></div></div>';
+console.log('formEdit', id, div);
 
 		// Remove existing table, then add new table and display
-		this._showContainer(id, body);
+		this._showContainer(id, div);
 	},
 
 

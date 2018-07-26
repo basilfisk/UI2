@@ -167,106 +167,149 @@ var command = {
 	/**
 	 * @method editSave
 	 * @author Basil Fisk
-	 * @param {string} type "common|command|parameters".
-	 * @param {object} data Object holding command or parameter data to be updated.
-	 * @description Save command or parameter data into the selected command document after editing.
+	 * @description Save command document after editing.
 	 */
-	editSave: function (type, data) {
-		var i, index = -1, temp = {}, cmd, found, add = {}, prms = [], arr, name, pattern, n, str, values, obj = {};
+	editSave: function () {
+		var i, index = -1, data;
 
 		// Find command using ID and save data in temporary object
 		for (i=0; i<admin.commands.length; i++) {
-			index = (admin.commands[i]._id === data.id) ? i : index;
+			index = (admin.commands[i]._id === this.id) ? i : index;
 		}
-		temp = admin.commands[index];
 
-		// Update specific elements for data depending on the form called
-		switch (type) {
-			case 'common':
-				temp.name = data.name;
-				temp.service = data.service;
-				break;
-			case 'command':
-				// Escape newline characters
-				cmd = data.command.replace(/(\n)+/g, '\\n');
+		if (index === -1) {
+			ui.messageBox('CMD001', [this.id]);
+		}
+		else {
+			data = admin.commands[index];
+			data.name = this.name;
+			data.service = this.service;
+console.log('editSave', data);
+			common.apiCall('commandUpdate', data, command.load);
+		}
+	},
 
-				// Assign command to version number
-				found = false;
-				for (i=0; i<temp.command.length; i++) {
-					if (temp.command[i].ver === parseInt(data.version)) {
-						temp.command[i].cmd = cmd;
-						found = true;
-					}
+
+	/**
+	 * @method editSaveCommand
+	 * @author Basil Fisk
+	 * @description Save command into the selected command document after editing.
+	 */
+	editSaveCommand: function () {
+		var i, index = -1, data, cmd, found, add = {};
+
+		// Find command using ID and save data in temporary object
+		for (i=0; i<admin.commands.length; i++) {
+			index = (admin.commands[i]._id === this.id) ? i : index;
+		}
+
+		if (index === -1) {
+			ui.messageBox('CMD001', [this.id]);
+		}
+		else {
+			data = admin.commands[index];
+
+			// Escape newline characters
+			cmd = this.command.replace(/(\n)+/g, '\\n');
+
+			// Assign command to version number
+			found = false;
+			for (i=0; i<data.command.length; i++) {
+				if (data.command[i].ver === parseInt(this.version)) {
+					data.command[i].cmd = cmd;
+					found = true;
+				}
+			}
+
+			// If no matching version found, add new version
+			if (!found) {
+				add = {};
+				add.ver = parseInt(this.version);
+				add.cmd = cmd;
+				data.command.push(add);
+console.log(data);
+				common.apiCall('commandUpdate', data, command.load);
+			}
+		}
+	},
+
+
+	/**
+	 * @method editSaveParameters
+	 * @author Basil Fisk
+	 * @description Save parameters into the selected command document after editing.
+	 */
+	editSaveParameters: function () {
+		var i, index = -1, data, cmd, found, prms = [], arr, name, pattern, n, str, values, obj = {};
+
+		// Find command using ID and save data in temporary object
+		for (i=0; i<admin.commands.length; i++) {
+			index = (admin.commands[i]._id === this.id) ? i : index;
+		}
+
+		if (index === -1) {
+			ui.messageBox('CMD001', [this.id]);
+		}
+		else {
+			data = admin.commands[index];
+
+			// Convert string of edited data back to an object
+			// site: *↵package: pack 3, pack 9
+			prms = this.parameters.split('\n');
+			for (i=0; i<prms.length; i++) {
+				// Name and value(s) are separated by colon
+				arr = prms[i].split(':');
+
+				// Clean up name and check that it contains:
+				// alphanumerics, minus, underscore, space, asterisk
+				name = cleanWhiteSpace(arr[0]);
+				name = name.replace(/\"/g, '');
+				pattern = /^[a-z\d\-_\*\s]+$/i;
+				if (!pattern.test(name)) {
+					message('CMD002', [name]);
+					return;
 				}
 
-				// If no matching version found, add new version
-				if (!found) {
-					add = {};
-					add.ver = parseInt(data.version);
-					add.cmd = cmd;
-					temp.command.push(add);
-				}
-				break;
-			case 'parameters':
-				// Convert string of edited data back to an object
-				// site: *↵package: pack 3, pack 9
-				prms = data.parameters.split('\n');
-				for (i=0; i<prms.length; i++) {
-					// Name and value(s) are separated by colon
-					arr = prms[i].split(':');
+				// Clean up parameters and remove quotes
+				str = cleanWhiteSpace(arr[1]);
+				str = str.replace(/\"/g, '');
 
-					// Clean up name and check that it contains:
-					// alphanumerics, minus, underscore, space, asterisk
-					name = cleanWhiteSpace(arr[0]);
-					name = name.replace(/\"/g, '');
-					pattern = /^[a-z\d\-_\*\s]+$/i;
-					if (!pattern.test(name)) {
-						message('FRM001', [name]);
+				// Values separated by commas
+				values = str.split(',');
+
+				// Check that parameters contain:
+				// alphanumerics, minus, underscore, space, asterisk
+				pattern = /^[a-z\d\-_\*\s]+$/i;
+				for (n=0; n<values.length; n++) {
+					if (!pattern.test(values[n])) {
+						message('CMD003', [values[n]]);
 						return;
 					}
-
-					// Clean up parameters and remove quotes
-					str = cleanWhiteSpace(arr[1]);
-					str = str.replace(/\"/g, '');
-
-					// Values separated by commas
-					values = str.split(',');
-
-					// Check that parameters contain:
-					// alphanumerics, minus, underscore, space, asterisk
-					pattern = /^[a-z\d\-_\*\s]+$/i;
-					for (n=0; n<values.length; n++) {
-						if (!pattern.test(values[n])) {
-							message('FRM002', [values[n]]);
-							return;
-						}
-					}
-
-					// Assign values to temp parameter object
-					obj[name] = values;
 				}
 
-				// Assign parameter object to correct version
-				found = false;
-				for (i=0; i<temp.parameters.length; i++) {
-					if (temp.parameters[i].ver === parseInt(data.version)) {
-						temp.parameters[i].prm = obj;
-						found = true;
-					}
-				}
+				// Assign values to temp parameter object
+				obj[name] = values;
+			}
 
-				// If no matching version found, add new version
-				if (!found) {
-					add = {};
-					add.ver = parseInt(data.version);
-					add.prm = obj;
-					temp.parameters.push(add);
+			// Assign parameter object to correct version
+			found = false;
+			for (i=0; i<data.parameters.length; i++) {
+				if (data.parameters[i].ver === parseInt(this.version)) {
+					data.parameters[i].prm = obj;
+					found = true;
 				}
-				break;
+			}
+
+			// If no matching version found, add new version
+			if (!found) {
+				add = {};
+				add.ver = parseInt(this.version);
+				add.prm = obj;
+				data.parameters.push(add);
+console.log(data);
+				common.apiCall('commandUpdate', data, command.load);
+			}
 		}
-
-		// Save data
-		common.apiCall('commandUpdate', temp, command.load);
 	},
 
 
