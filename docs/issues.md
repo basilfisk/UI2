@@ -29,7 +29,6 @@
 	- display loading icon until `setProgress` has finished
 - logout option
 	- clear `me` and `admin` variables before showing login form
-- messages: move to config file and make language sensitive
 
 ## Future Enhancements
 

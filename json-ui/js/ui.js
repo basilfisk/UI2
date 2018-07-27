@@ -802,7 +802,13 @@ console.log('formEdit', id, div);
 		
 		// Find message and substitute parameters
 		if (_msgs[code]) {
-			text = _msgs[code].text;
+console.log(_messages.language);
+			if (_msgs[code].external[_messages.language]) {
+				text = _msgs[code].external[_messages.language];
+			}
+			else {
+				text = _msgs[code].internal;
+			}
 			if (prms.length > 0) {
 				for (i=0; i<prms.length; i++) {
 					text = text.replace(new RegExp('_p'+(1+i),'g'), prms[i]);
