@@ -131,26 +131,8 @@ var bundle = {
 					text: ver
 				}
 			};
-/*			obj.text = admin.bundles[i].name;
-			if (ui.userAccess('bundleEdit')) {
-				obj.link = 'bundle.edit';
-			}
-			cols.push(obj);
-
-			// Add information columns
-			cols.push({"text":admin.bundles[i].command});
-			cols.push({"text":admin.bundles[i].connector});
-			ver = 'Cmd v' + admin.bundles[i].version.cmd + ' / ';
-			ver += 'Prm v' + admin.bundles[i].version.prms;
-			cols.push({"text":ver});
-
-			// Only add delete link if user has permission to edit data
-			if (ui.userAccess('bundleEdit')) {
-				cols.push({"button":"bundle.delete", "style":"danger", "icon":"trash"});
-			}*/
 
 			// Save row
-//			rows.push({"id":admin.bundles[i]._id, "cols":cols});
 			rows.push(cols);
 		}
 

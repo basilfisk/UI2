@@ -13,9 +13,7 @@
 ## Issues with `json-ui`
 
 - ui.js
-	- move messages to config file and make language sensitive
 	- abstract out all formatting used when building HTML
-- ui.userAccess: should this only be an internal UI command?
 - try/catch picks up later errors. How do I fix this?
 	- ui.buttonSave 
 	- admin.adminServer
@@ -31,10 +29,12 @@
 	- display loading icon until `setProgress` has finished
 - logout option
 	- clear `me` and `admin` variables before showing login form
+- messages: move to config file and make language sensitive
 
 ## Future Enhancements
 
 - Provide a tool for validating the menu and form schemas before running
+- Option to override edit/delete buttons on a per row basis
 
 # Useful References
 

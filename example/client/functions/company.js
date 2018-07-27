@@ -280,9 +280,7 @@
 			cols.push({"text":plan});
 
 			// Only add delete link if user has permission to edit data
-			if (ui.userAccess('companyGroupEdit')) {
-				cols.push({"button":"company.groupDelete", "style":"danger", "icon":"trash"});
-			}
+			cols.push({"button":"company.groupDelete", "style":"danger", "icon":"trash"});
 
 			// Row ID is a combination of document ID and group name (used by delete function)
 			rowid = data._id + ':' + groups[i];

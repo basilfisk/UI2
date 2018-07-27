@@ -394,6 +394,26 @@ var ui = {
 	},
 
 
+	/**
+	 * @method _userAccess
+	 * @author Basil Fisk
+	 * @param {string} level User's access level.
+	 * @param {array} access List of user levels that have access to this menu option.
+	 * @return {boolean} true or false.
+	 * @description Check whether the user has access to the menu option.
+	 */
+	_userAccess: function (level, access) {
+		var i, ok = false;
+
+		for (i=0; i<access.length; i++) {
+			if (access[i] === level) {
+				ok = true;
+			}
+		}
+		return ok;
+	}
+		
+
 
 	// ***************************************************************************************
 	//
@@ -744,7 +764,7 @@ console.log('formEdit', id, div);
 				opt = '';
 				for (n=0; n<menu.menubar[i].options.length; n++) {
 					// Skip if user doesn't have access to option
-					if (this.userAccess(role, menu.menubar[i].options[n].access)) {
+					if (this._userAccess(role, menu.menubar[i].options[n].access)) {
 						option = menu.menubar[i].options[n];
 						opt += '<li id="' + option.id + '-option" class="option"><a href="#' + option.id + '" onClick="' + option.action + '(); return false;">' + option.title + '</a></li>';
 					}
@@ -934,25 +954,4 @@ console.log('tableShow', id, rows);
 		// Remove existing table, then add new table and display
 		this._showContainer(id, div);
 	},
-
-
-	/**
-	 * @method userAccess
-	 * @author Basil Fisk
-	 * @param {string} level User's access level.
-	 * @param {array} access List of user levels that have access to this menu option.
-	 * @return {boolean} true or false.
-	 * @description Check whether the user has access to the menu option.
-	 */
-	userAccess: function (level, access) {
-/*		var i, ok = false;
-
-		for (i=0; i<access.length; i++) {
-			if (access[i] === level) {
-				ok = true;
-			}
-		}
-		return ok;*/
-		return true;
-	}
 };
