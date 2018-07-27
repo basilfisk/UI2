@@ -6,7 +6,6 @@
 	- buttonDelete
 	- formAdd
 	- formClose
-	- userAccess
 - `init` in `login.js` has been hard-coded with the admin username & password
 - `server/config.json` holds SSL certs pointing to VeryAPI. Sample should use HTTP only.
 - `docs/example.md` references the VeryAPI SSL certificates.
@@ -16,9 +15,7 @@
 - ui.js
 	- move messages to config file and make language sensitive
 	- abstract out all formatting used when building HTML
-- messages.js
-	- make language sensitive
-	- How does the `access` element in `menu.js` work with `userAccess`?
+- ui.userAccess: should this only be an internal UI command?
 - try/catch picks up later errors. How do I fix this?
 	- ui.buttonSave 
 	- admin.adminServer

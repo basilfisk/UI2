@@ -10,6 +10,7 @@
  * @description Functions that control the display and validation of the web application.
  */
 var ui = {
+	_language: 'ita',
 	_msgOK: undefined,
 
 	/**
@@ -147,7 +148,7 @@ var ui = {
 
 		// Find message and substitute parameters
 		msg = _messages[code];
-		text = msg.text;
+		text = msg.external[_language];
 		for (i=0; i<prms.length; i++) {
 			text = text.replace(new RegExp('_p'+(1+i),'g'), prms[i]);
 		}
@@ -717,12 +718,16 @@ console.log('formEdit', id, div);
 	 * @method menus
 	 * @author Basil Fisk
 	 * @param {object} menu User's menu definition.
-	 * @param {string} role User access level.
+	 * @param {string} role User's access level.
+	 * @param {string} language User's preferred language.
 	 * @description Build the menus and options based on the user's access level.
 	 */
-	menus: function (menu, role) {
+	menus: function (menu, role, language) {
 		var i, n, option, div = '', opt;
-	
+
+		// Save the language for messages
+		_language = language;
+
 		// Open the container for the menus and titles
 		div += '<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">';
 		div += '<ul class="nav navbar-nav">';

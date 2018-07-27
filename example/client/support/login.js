@@ -207,8 +207,11 @@ var login = {
 			me.role = result.data.role;
 			me.username = result.data.username;
 
+			// TODO Add user language
+			me.language = 'eng';
+
 			// Initialize UI manager with menu and form definitions, and messages
-			ui.menus(menuDefinitions, me.role);
+			ui.menus(menuDefinitions, me.role, me.language);
 
 			// The super user can view all companies, others can only see their company's data
 			filter = (me.role === 'superuser') ? 'all' : me.company;
