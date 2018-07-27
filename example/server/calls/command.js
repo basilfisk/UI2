@@ -27,7 +27,7 @@ class CommandCalls {
 		var	id;
 	
 		id = session.params['_id'];
-		that.mongoDB.db(that.admin.mongo.db).collection('va_command').deleteOne({'_id':new mongo.ObjectID(id)}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_command').deleteOne({'_id':new that.ObjectID(id)}, (err, result) => {
 			var msg = {};
 	
 			// Error trying to insert data
@@ -60,7 +60,7 @@ class CommandCalls {
 	
 		// Remove command version
 		if (type === 'command') {
-			that.mongoDB.db(that.admin.mongo.db).collection('va_command').update({'_id':new that.mongo.ObjectID(id)}, {"$pull":{"command":{"ver":ver}}}, (err, result) => {
+			that.mongoDB.db(that.admin.mongo.db).collection('va_command').update({'_id':new that.ObjectID(id)}, {"$pull":{"command":{"ver":ver}}}, (err, result) => {
 				var msg = {};
 	
 				// Error trying to insert data
@@ -77,7 +77,7 @@ class CommandCalls {
 		}
 		// Remove parameter version
 		else {
-			that.mongoDB.db(that.admin.mongo.db).collection('va_command').update({'_id':new that.mongo.ObjectID(id)}, {"$pull":{"parameters":{"ver":ver}}}, (err, result) => {
+			that.mongoDB.db(that.admin.mongo.db).collection('va_command').update({'_id':new that.ObjectID(id)}, {"$pull":{"parameters":{"ver":ver}}}, (err, result) => {
 				var msg = {};
 	
 				// Error trying to insert data
@@ -176,7 +176,7 @@ class CommandCalls {
 		delete session.params._id;
 	
 		// Update document
-		that.mongoDB.db(that.admin.mongo.db).collection('va_command').updateOne({'_id':new that.mongo.ObjectID(docid)}, {$set:session.params}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_command').updateOne({'_id':new that.ObjectID(docid)}, {$set:session.params}, (err, result) => {
 			var msg = {};
 	
 			// Error trying to insert data

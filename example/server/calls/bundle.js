@@ -26,7 +26,7 @@ class BundleCalls {
 	bundleDelete (that, session) {
 		var	id = session.params['_id'];
 
-		that.mongoDB.db(that.admin.mongo.db).collection('va_bundle').deleteOne({'_id':new that.mongo.ObjectID(id)}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_bundle').deleteOne({'_id':new that.ObjectID(id)}, (err, result) => {
 			var msg = {};
 
 			// Error trying to insert data
@@ -107,7 +107,7 @@ class BundleCalls {
 	 * @description Read 1 bundle document for a company.
 	 */
 	bundleRead1 (that, session) {
-		that.mongoDB.db(that.admin.mongo.db).collection('va_bundle').find({'_id':new that.mongo.ObjectID(session.params.id)}).toArray( (err, data) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_bundle').find({'_id':new that.ObjectID(session.params.id)}).toArray( (err, data) => {
 			var msg = {};
 
 			// Error trying to retrieve data
@@ -139,7 +139,7 @@ class BundleCalls {
 		delete session.params.id;
 
 		// Update document
-		that.mongoDB.db(that.admin.mongo.db).collection('va_bundle').updateOne({'_id':new that.mongo.ObjectID(docid)}, {$set:session.params}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_bundle').updateOne({'_id':new that.ObjectID(docid)}, {$set:session.params}, (err, result) => {
 			var msg = {};
 
 			// Error trying to insert data

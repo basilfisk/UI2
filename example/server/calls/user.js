@@ -102,7 +102,7 @@ class UserCalls {
 		var	id;
 
 		id = session.params['_id'];
-		that.mongoDB.db(that.admin.mongo.db).collection('va_user').deleteOne({'_id':new that.mongo.ObjectID(id)}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_user').deleteOne({'_id':new that.ObjectID(id)}, (err, result) => {
 			var msg = {};
 
 			// Error trying to insert data
@@ -290,7 +290,7 @@ class UserCalls {
 		delete data.id;
 
 		// Update document
-		that.mongoDB.db(that.admin.mongo.db).collection('va_user').updateOne({'_id':new that.mongo.ObjectID(docid)}, {$set:data}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_user').updateOne({'_id':new that.ObjectID(docid)}, {$set:data}, (err, result) => {
 			var msg = {};
 
 			// Error trying to update data

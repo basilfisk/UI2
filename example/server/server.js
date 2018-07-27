@@ -18,6 +18,7 @@ class Server {
 		this.jwt = require('jsonwebtoken');
 		this.moment = require('moment');
 		this.mongo = require('mongodb').MongoClient;
+		this.ObjectID = require('mongodb').ObjectID;
 		this.shortid = require('shortid');
 		this.BundleCalls = require(__dirname + '/calls/bundle.js');
 		this.CommandCalls = require(__dirname + '/calls/command.js');

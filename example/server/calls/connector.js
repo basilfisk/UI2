@@ -27,7 +27,7 @@ class ConnectorCalls {
 		var	id;
 
 		id = session.params['_id'];
-		that.mongoDB.db(that.admin.mongo.db).collection('va_connector').deleteOne({'_id':new that.mongo.ObjectID(id)}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_connector').deleteOne({'_id':new that.ObjectID(id)}, (err, result) => {
 			var msg = {};
 
 			// Error trying to insert data
@@ -122,7 +122,7 @@ class ConnectorCalls {
 		docid = session.params.id;
 
 		// Update document
-		that.mongoDB.db(that.admin.mongo.db).collection('va_connector').updateOne({'_id':new that.mongo.ObjectID(docid)}, {$set:{"name":session.params.name, "config":session.params.config}}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_connector').updateOne({'_id':new that.ObjectID(docid)}, {$set:{"name":session.params.name, "config":session.params.config}}, (err, result) => {
 			var msg = {};
 
 			// Error trying to insert data

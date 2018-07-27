@@ -27,7 +27,7 @@ class CompanyCalls {
 		var	id;
 
 		id = session.params['_id'];
-		that.mongoDB.db(that.admin.mongo.db).collection('va_company').deleteOne({'_id':new that.mongo.ObjectID(id)}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_company').deleteOne({'_id':new that.ObjectID(id)}, (err, result) => {
 			var msg = {};
 
 			// Error trying to insert data
@@ -60,7 +60,7 @@ class CompanyCalls {
 		docid = session.params.id;
 
 		// Update document
-		that.mongoDB.db(that.admin.mongo.db).collection('va_company').updateOne({'_id':new that.mongo.ObjectID(docid)}, {$unset:data}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_company').updateOne({'_id':new that.ObjectID(docid)}, {$unset:data}, (err, result) => {
 			var msg = {};
 
 			// Error trying to insert data
@@ -95,7 +95,7 @@ class CompanyCalls {
 		docid = session.params.id;
 
 		// Update document
-		that.mongoDB.db(that.admin.mongo.db).collection('va_company').updateOne({'_id':new that.mongo.ObjectID(docid)}, {$set:data}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_company').updateOne({'_id':new that.ObjectID(docid)}, {$set:data}, (err, result) => {
 			var msg = {};
 
 			// Error trying to insert data
@@ -186,7 +186,7 @@ class CompanyCalls {
 		var	filter;
 
 		// Read filter to be applied
-		filter = (session.params.filter === 'all') ? {} : {"_id":new that.mongo.ObjectID(session.params.filter)};
+		filter = (session.params.filter === 'all') ? {} : {"_id":new that.ObjectID(session.params.filter)};
 
 		// Run query
 		that.mongoDB.db(that.admin.mongo.db).collection('va_company').find(filter).sort({'name':1}).toArray( (err, data) => {
@@ -222,7 +222,7 @@ class CompanyCalls {
 		docid = session.params.id;
 
 		// Update document
-		that.mongoDB.db(that.admin.mongo.db).collection('va_company').updateOne({'_id':new that.mongo.ObjectID(docid)}, {$set:data}, (err, result) => {
+		that.mongoDB.db(that.admin.mongo.db).collection('va_company').updateOne({'_id':new that.ObjectID(docid)}, {$set:data}, (err, result) => {
 			var msg = {};
 
 			// Error trying to insert data
