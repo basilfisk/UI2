@@ -233,13 +233,13 @@ var ui = {
 	 * @description Run the set of checks defined for a field.
 	 */
 	_runChecks: function (checks, title, value) {
-		var mand;
+		var test;
 
 		// Field is optional if no check has been defined
-		mand = (checks.mandatory === undefined) ? false : checks.mandatory;
+		test = (checks.mandatory) ? checks.mandatory : false;
 
 		// If field is mandatory, check that a value has been entered
-		if (!this._checkMandatory(mand, title, value)) {
+		if (!this._checkMandatory(test, title, value)) {
 			return false;
 		}
 		// Field is optional
@@ -292,7 +292,7 @@ var ui = {
 	 * @param {string} name Field name.
 	 * @param {object} defs Field definitions.
 	 * @param {string} value Field value.
-	 * @param {array} list Array of values for a dropdown list field.
+	 * @param {array} list Array of values for a drop down list field.
 	 * @return A div with the field structure.
 	 * @description Add the fields to the form.
 	 */
@@ -318,7 +318,7 @@ var ui = {
 					divot += '</div>';
 					break;
 				case 'list':
-					// Initialise a multi select list
+					// Initialize a multi select list
 					multi = (defs.options.display.select === 'multiple') ? ' multiple' : '';
 					if (defs.options.display.size && defs.options.display.select === 'multiple') {
 						multi += ' size="' + defs.options.display.size + '"';
@@ -411,7 +411,7 @@ var ui = {
 			}
 		}
 		return ok;
-	}
+	},
 		
 
 
@@ -557,7 +557,7 @@ console.log('data', data);
 	 * @method formAdd
 	 * @author Basil Fisk
 	 * @param {string} id ID of form to be displayed.
-	 * @param {object} list Object holding lists for dropdown fields.
+	 * @param {object} list Object holding lists for drop down fields.
 	 * {field: [values], ...}
 	 * @description Display a form for adding data.
 	 */
@@ -633,7 +633,7 @@ console.log('formAdd', id, div);
 	 * @author Basil Fisk
 	 * @param {string} id ID of the form.
 	 * @param {object} data Data to be shown in fields for editing.
-	 * @param {object} list Object holding lists for dropdown fields.
+	 * @param {object} list Object holding lists for drop down fields.
 	 * {field: [values], ...}
 	 * @description Display a form for editing data.
 	 */

@@ -16,7 +16,7 @@ var login = {
 	 * @description Start up function called by 'body onload'.
 	 */
 	init: function () {
-		// Initialize UI manager withform definitions and messages
+		// Initialize UI manager with form definitions and messages
 		ui.init(formDefinitions, messages);
 
 		// Display the login form for the Admin Console
@@ -201,7 +201,7 @@ var login = {
 			me.company = result.data.company;
 			me.email = result.data.email;
 			me.group = result.data.group;
-			me.groupusers = result.data.groupusers;
+			me.groupUsers = result.data.groupUsers;
 			me.jwt = result.data.jwt;
 			me.name = result.data.name;
 			me.role = result.data.role;

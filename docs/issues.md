@@ -23,7 +23,7 @@
 - about form
 	- Company : name instead of code
 - login.js
-	- Is the admin.users element needed? Is it related to me.groupusers?
+	- Is the admin.users element needed? Is it related to me.groupUsers?
 - login form
 	- if login fails, show login form again
 	- display loading icon until `setProgress` has finished
