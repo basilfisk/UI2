@@ -10,8 +10,10 @@
  * @description Functions that control the display and validation of the web application.
  */
 var ui = {
-	_language: 'ita',
-	_msgOK: undefined,
+	_messages: {
+		language: 'ita',
+		callback: undefined
+	},
 
 	/**
 	 * @method _checkFormat
@@ -148,7 +150,7 @@ var ui = {
 
 		// Find message and substitute parameters
 		msg = _messages[code];
-		text = msg.external[_language];
+		text = msg.external[_messages.language];
 		for (i=0; i<prms.length; i++) {
 			text = text.replace(new RegExp('_p'+(1+i),'g'), prms[i]);
 		}
@@ -175,7 +177,7 @@ var ui = {
 
 		// Save the function
 		if (callback !== undefined) {
-			this._msgOK = callback;
+			this._messages.callback = callback;
 		}
 
 		// Build the message container
@@ -726,7 +728,7 @@ console.log('formEdit', id, div);
 		var i, n, option, div = '', opt;
 
 		// Save the language for messages
-		_language = language;
+		_messages.language = language;
 
 		// Open the container for the menus and titles
 		div += '<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">';
@@ -806,9 +808,9 @@ console.log(title, text, callback);
 	 * @description Run the post-processing script when the message OK button is pressed.
 	 */
 	messageConfirmed: function () {
-		if (this._msgOK !== undefined) {
-			this._msgOK();
-			this._msgOK = undefined;
+		if (this._messages.callback !== undefined) {
+			this._messages.callback();
+			this._messages.callback = undefined;
 		}
 	},
 
