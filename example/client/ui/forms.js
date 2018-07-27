@@ -75,6 +75,241 @@ var formDefinitions = {
 			}
 		}
 	},
+	"bundleTable": {
+		"title": "Bundles",
+		"width": 80,
+		"buttons": {
+			"add": "bundle.add",
+			"close": true,
+			"delete": {
+				"action": "bundle.delete",
+				"icon": {
+					"type": "trash",
+					"colour":"danger"
+				},
+				"style": "text-align: center;",
+				"title": "Delete"
+			},
+			"edit": {
+				"action": "bundle.edit",
+				"icon": {
+					"type": "pencil",
+					"colour":"success"
+				},
+				"style": "text-align: center;",
+				"title": "Edit"
+			}
+		},
+		"columns": [
+			{ "id": "name", "title": "Name" },
+			{ "id": "command", "title": "Command" },
+			{ "id": "connector", "title": "Connector" },
+			{ "id": "version", "title": "Versions" }
+		]
+	},
+	"bundleAdd": {
+		"title": "Add Bundle",
+		"buttons": {
+			"add": "bundle.addSave",
+			"close": true
+		},
+		"fields" : {
+			"bundleAddName": {
+				"element": "name",
+				"title": "Bundle Name",
+				"description": "Enter name of bundle",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"bundleAddCommand": {
+				"element": "command",
+				"title": "Command Name",
+				"description": "Enter name of command",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"bundleAddConnector": {
+				"element": "connector",
+				"title": "Connector Name",
+				"description": "Enter name of connector",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"bundleAddCommandVer": {
+				"element": "version.cmd",
+				"title": "Command Version",
+				"description": "Enter command version",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			},
+			"bundleAddParameterVer": {
+				"element": "version.prms",
+				"title": "Parameter Version",
+				"description": "Enter parameter version",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			}
+		}
+	},
+	"bundleEdit": {
+		"title": "Edit Bundle",
+		"buttons": {
+			"close": true,
+			"save": "bundle.editSave"
+		},
+		"fields" : {
+			"bundleEditId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"bundleEditName": {
+				"element": "name",
+				"title": "Bundle Name",
+				"description": "Enter name of bundle",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"bundleEditConnector": {
+				"element": "connector",
+				"title": "Connector Name",
+				"description": "Enter name of connector",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"bundleEditCommand": {
+				"element": "command",
+				"title": "Command Name",
+				"description": "Enter name of command",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			},
+			"bundleEditCommandVer": {
+				"element": "version.cmd",
+				"title": "Command Version",
+				"description": "Enter command version",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			},
+			"bundleEditParameterVer": {
+				"element": "version.prms",
+				"title": "Parameter Version",
+				"description": "Enter parameter version",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1
+						}
+					}
+				}
+			}
+		}
+	},
+	"commandTable": {
+		"title": "Commands",
+		"buttons": {
+			"add": "command.add",
+			"close": true,
+			"delete": {
+				"action": "command.delete",
+				"icon": {
+					"type": "trash",
+					"colour":"danger"
+				},
+				"style": "text-align: center;",
+				"title": "Delete"
+			},
+			"edit": {
+				"action": "command.edit",
+				"icon": {
+					"type": "pencil",
+					"colour":"success"
+				},
+				"style": "text-align: center;",
+				"title": "Edit"
+			}
+		},
+		"columns": [
+			{ "id": "name", "title": "Name" },
+			{ "id": "svc", "title": "Service" },
+			{ "id": "cmd", "title": "Command" },
+			{ "id": "prm", "title": "Parameters" }
+		]
+	},
 	"commandAdd": {
 		"title": "Add Command",
 		"buttons": {
@@ -115,7 +350,7 @@ var formDefinitions = {
 		"title": "Edit Command",
 		"buttons": {
 			"close": true,
-			"save": "command.editSave"
+			"save": "command.edit"
 		},
 		"fields": {
 			"commandEditId": {
@@ -245,37 +480,329 @@ var formDefinitions = {
 			}
 		}
 	},
-	"bundleTable": {
-		"title": "Bundles",
-		"buttons": {
-			"close": true,
-			"add": "bundle.add",
-		},
-		"columns": ["Name", "Command", "Connector", "Versions", "Delete"]
-	},
-	"commandTable": {
-		"title": "Commands",
-		"buttons": {
-			"close": true,
-			"add": "command.add",
-		},
-		"columns": ["Name", "Service", "Command", "Parameters", "Delete"]
-	},
 	"companyTable": {
 		"title": "Companies",
 		"buttons": {
-			"close": true,
 			"add": "company.add",
+			"close": true,
+			"delete": {
+				"action": "company.delete",
+				"icon": {
+					"type": "trash",
+					"colour":"danger"
+				},
+				"style": "text-align: center;",
+				"title": "Delete"
+			},
+			"edit": {
+				"action": "company.edit",
+				"icon": {
+					"type": "pencil",
+					"colour":"success"
+				},
+				"style": "text-align: center;",
+				"title": "Edit"
+			}
 		},
-		"columns": ["Company", "Select", "Update", "Delete"]
+		"columns": [
+			{ "id": "name", "title": "Company" },
+			{ "id": "select", "title": "Select", "style": "text-align: center;" },
+			{ "id": "update", "title": "Update", "style": "text-align: center;" }
+		]
+	},
+	"companyAdd": {
+		"title" : "Add Company",
+		"buttons": {
+			"add": "company.addSave",
+			"close": true
+		},
+		"fields" : {
+			"companyAddName": {
+				"element": "name",
+				"title": "Company Name",
+				"description": "Enter name of company",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			}
+		}
+	},
+	"companyEdit": {
+		"title": "Manage Company",
+		"buttons": {
+			"close": true,
+			"save": "company.editSave"
+		},
+		"fields" : {
+			"companyEditId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"companyEditName": {
+				"element": "name",
+				"title": "Company Name",
+				"description": "Enter name of company",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			}
+		}
+	},
+	"companyGroupAdd": {
+		"title" : "Add Company Group",
+		"buttons": {
+			"add": "company.groupAddSave",
+			"close": true
+		},
+		"fields" : {
+			"companyGroupAddName": {
+				"element": "groups.name",
+				"title": "Group",
+				"description": "Enter name of group",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"companyGroupAddDesc": {
+				"element": "groups.description",
+				"title": "Description",
+				"description": "Enter description of group",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"companyGroupAddPlan": {
+				"element": "groups.plan",
+				"title": "Plan",
+				"description": "Select plan",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			}
+		}
+	},
+	"companyGroupEdit": {
+		"title" : "Edit Company Group",
+		"buttons": {
+			"close": true,
+			"save": "company.groupEdit"
+		},
+		"fields" : {
+			"companyGroupEditId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"companyGroupEditName": {
+				"element": "groups.name",
+				"title": "Group Name",
+				"description": "Enter name of group",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"companyGroupEditDesc": {
+				"element": "groups.description",
+				"title": "Description",
+				"description": "Enter description of group",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"companyGroupEditPlan": {
+				"element": "groups.plan",
+				"title": "Plan",
+				"description": "Select plan",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			}
+		}
 	},
 	"connectorTable": {
 		"title": "Connectors",
 		"buttons": {
-			"close": true,
 			"add": "connector.add",
+			"close": true,
+			"delete": {
+				"action": "connector.delete",
+				"icon": {
+					"type": "trash",
+					"colour":"danger"
+				},
+				"style": "text-align: center;",
+				"title": "Delete"
+			},
+			"edit": {
+				"action": "connector.edit",
+				"icon": {
+					"type": "pencil",
+					"colour":"success"
+				},
+				"style": "text-align: center;",
+				"title": "Edit"
+			}
 		},
-		"columns": ["Name", "Service", "Delete"]
+		"columns": [
+			{ "id": "name", "title": "Name" },
+			{ "id": "service", "title": "Service" }
+		]
+	},
+	"connectorAdd": {
+		"title" : "Add Connector",
+		"buttons": {
+			"add": "connector.addSave",
+			"close": true
+		},
+		"fields" : {
+			"connectorAddName": {
+				"element": "name",
+				"title": "Connector Name",
+				"description": "Enter name of connector",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorAddService": {
+				"element": "service",
+				"title": "Service",
+				"description": "Select type of connector",
+				"type": "list",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"display": {
+						"select": "single"
+					}
+				}
+			}
+		}
+	},
+	"connectorEdit-mongo": {
+		"title" : "Edit MongoDB Connector Details",
+		"buttons": {
+			"close": true,
+			"save": "connector.edit"
+		},
+		"fields" : {
+			"connectorMongoId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"connectorMongoName": {
+				"element": "name",
+				"title": "Connector Name",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorMongoHost": {
+				"element": "config.host",
+				"title": "Server Name",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "url"
+					}
+				}
+			},
+			"connectorMongoPort": {
+				"element": "config.port",
+				"title": "Server Port",
+				"type": "integer",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "integer",
+						"range": {
+							"min": 1,
+							"max": 65535
+						}
+					}
+				}
+			},
+			"connectorMongoDatabase": {
+				"element": "config.db",
+				"title": "Database",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			}
+		}
 	},
 	"login": {
 		"title": "Login to the Console",
@@ -314,15 +841,37 @@ var formDefinitions = {
 	"userTable": {
 		"title": "Users",
 		"buttons": {
-			"close": true,
 			"add": "user.add",
+			"close": true,
+			"delete": {
+				"action": "user.delete",
+				"icon": {
+					"type": "trash",
+					"colour":"danger"
+				},
+				"style": "text-align: center;",
+				"title": "Delete"
+			},
+			"edit": {
+				"action": "user.edit",
+				"icon": {
+					"type": "pencil",
+					"colour":"success"
+				},
+				"style": "text-align: center;",
+				"title": "Edit"
+			}
 		},
-		"columns": ["Email Address", "Group", "Role", "Delete"]
+		"columns": [
+			{ "id": "user", "title":"User" },
+			{ "id": "group", "title":"Group" },
+			{ "id": "role", "title":"Role" }
+		]
 	},
 	"userAdd": {
 		"title": "Add User",
 		"buttons": {
-			"add": "user.add",
+			"add": "user.addSave",
 			"close": true
 		},
 		"fields" : {
@@ -398,10 +947,10 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userAddPackages": {
-				"element": "packages",
-				"title": "Packages",
-				"description": "Select packages",
+			"userAddBundles": {
+				"element": "bundles",
+				"title": "Bundles",
+				"description": "Select bundles",
 				"type": "list",
 				"visible": true,
 				"edit": true,
@@ -414,7 +963,7 @@ var formDefinitions = {
 			}
 		}
 	},
-	"userEditForm": {
+	"userEdit": {
 		"title": "Edit User",
 		"buttons": {
 			"close": true,
@@ -499,10 +1048,10 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userEditPackages": {
-				"element": "packages",
-				"title": "Packages",
-				"description": "Select packages",
+			"userEditBundles": {
+				"element": "bundles",
+				"title": "Bundles",
+				"description": "Select bundles",
 				"type": "list",
 				"visible": true,
 				"edit": true,

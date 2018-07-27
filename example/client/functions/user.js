@@ -122,19 +122,19 @@ console.log(this);
 	 * @description Show all users for the current company.
 	 */
 	load: function () {
-		common.apiCall('userRead', { "filter":admin.company.code }, user.showTable);
+		common.apiCall('userRead', { "filter":admin.company.code }, user.table);
 	},
 
 
 	/**
-	 * @method showTable
+	 * @method table
 	 * @author Basil Fisk
 	 * @param {string} action Action (not relevant).
 	 * @param {object} result Data object returned by the API call.
 	 * @description Display the user data in a table.
 	 */
-	showTable: function (action, result) {
-		var i, data, n, rows = [], cols = [], obj = {};
+	table: function (action, result) {
+		var i, data, n, rows = [], cols;
 
 		// Extract data from result set and load into global 'admin.users' variable
 		admin.users = [];
@@ -157,27 +157,20 @@ console.log(this);
 		for (i=0; i<admin.users.length; i++) {
 			// Only add to table if role is same or lower than current user
 			if (admin.users[i].level >= me.level) {
-				cols = [];
-
-				// Add column with link to edit form - only if user has permission to edit data
-				obj = {};
-				obj.text = admin.users[i].username;
-				if (ui.userAccess('userEdit')) {
-					obj.link = 'user.edit';
-				}
-				cols.push(obj);
-
-				// Add information columns
-				cols.push({"text":admin.users[i].group});
-				cols.push({"text":admin.users[i].role});
-
-				// Only add delete link if user has permission to edit data
-				if (ui.userAccess('userEdit')) {
-					cols.push({"button":"user.delete", "style":"danger", "icon":"trash"});
-				}
+				cols = {
+					user: {
+						text: admin.users[i].username
+					},
+					group: {
+						text: admin.users[i].group
+					},
+					role: {
+						text: admin.users[i].role
+					}
+				};
 
 				// Save row
-				rows.push({"id":admin.users[i]._id, "cols":cols});
+				rows.push(cols);
 			}
 		}
 

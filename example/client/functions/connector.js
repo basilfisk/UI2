@@ -68,19 +68,19 @@ var connector = {
 	 * @description Show all connectors for the current company.
 	 */
 	load: function () {
-		common.apiCall('connectorRead', { "filter":admin.company.code }, connector.showTable);
+		common.apiCall('connectorRead', { "filter":admin.company.code }, connector.table);
 	},
 
 
 	/**
-	 * @method showTable
+	 * @method table
 	 * @author Basil Fisk
 	 * @param {string} action Action (not relevant).
 	 * @param {object} result Data object returned by the API call.
 	 * @description Display the connector data in a table.
 	 */
-	showTable: function (action, result) {
-		var i, rows = [], cols = [], obj = {};
+	table: function (action, result) {
+		var i, rows = [], cols;
 
 		// Extract data from result set and load into global 'admin.connectors' variable
 		admin.connectors = [];
@@ -90,26 +90,18 @@ var connector = {
 
 		// Add each element of the array as a table row
 		for (i=0; i<admin.connectors.length; i++) {
-			cols = [];
-
 			// Add column with link to edit form - only if user has permission to edit data
-			obj = {};
-			obj.text = admin.connectors[i].name;
-			if (admin.connectors[i].name !== undefined) {
-				obj.link = 'connector.edit';
-			}
-			cols.push(obj);
-
-			// Add information columns
-			cols.push({"text":admin.connectors[i].service});
-
-			// Only add delete link if user has permission to edit data
-			if (admin.connectors[i].name !== undefined) {
-				cols.push({"button":"connector.delete", "style":"danger", "icon":"trash"});
-			}
+			cols = {
+				name: {
+					text: admin.connectors[i].name
+				},
+				service: {
+					text: admin.connectors[i].service
+				}
+			};
 
 			// Save row
-			rows.push({"id":admin.connectors[i]._id, "cols":cols});
+			rows.push(cols);
 		}
 
 		// Display the table

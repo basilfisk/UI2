@@ -542,7 +542,7 @@ console.log('data', data);
 	 * @description Display a form for adding data.
 	 */
 	formAdd: function (id, list) {
-		var title, fields, names, i, div = '';
+		var title, fields, names, width, i, div = '';
 console.log(_defs[id]);
 
 		// Read fields and their names
@@ -551,7 +551,8 @@ console.log(_defs[id]);
 		names = Object.keys(fields);
 
 		// Build form container
-		div += '<div class="modal-dialog" role="document" style="width:50%;">';
+		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
+		div += '<div class="modal-dialog" role="document" style="width:' + width + '%;">';
 		div += '<div class="modal-content">';
 
 		// Add form header and title
@@ -617,7 +618,7 @@ console.log('formAdd', id, div);
 	 * @description Display a form for editing data.
 	 */
 	formEdit: function (id, data, list) {
-		var title, fields, names, i, elem, value, div = '';
+		var title, fields, names, width, i, elem, value, div = '';
 
 		// Read fields and their names
 		title = _defs[id].title;
@@ -625,7 +626,8 @@ console.log('formAdd', id, div);
 		names = Object.keys(fields);
 
 		// Build form container
-		div += '<div class="modal-dialog" role="document" style="width:50%;">';
+		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
+		div += '<div class="modal-dialog" role="document" style="width:' + width + '%;">';
 		div += '<div class="modal-content">';
 
 		// Add form header and title
@@ -686,7 +688,7 @@ console.log('formAdd', id, div);
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
 			if (_defs[id].buttons.delete) {
-				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" onClick="ui.buttonDelete(' + index + '); return false;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" onClick="ui.buttonDelete(' + id + '); return false;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
 			}
 			if (_defs[id].buttons.save) {
 				div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + "'" + id + "'" + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
@@ -830,11 +832,12 @@ console.log(title, text, callback);
 	 * @description Display a table of data.
 	 */
 	tableShow: function (id, rows) {
-		var index, div = '', i, n, row, rowid, cell = {};
+		var width, div = '', i, key, row, n, cell, button;
 console.log('tableShow', id, rows);
 
 		// Build the container
-		div += '<div class="modal-dialog" role="document" style="width:50%">'; // TODO Make a parameter
+		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
+		div += '<div class="modal-dialog" role="document" style="width:' + width + '%">';
 		div += '<div class="modal-content">';
 
 		// Build the form header
@@ -861,7 +864,20 @@ console.log('tableShow', id, rows);
 		div += '<thead>';
 		div += '<tr>';
 		for (i=0; i<_defs[id].columns.length; i++) {
-			div += '<th>' + _defs[id].columns[i] + '</th>';
+			div += (_defs[id].columns[i].style) ? '<th style="' + _defs[id].columns[i].style + '">' : '<th>';
+			div += _defs[id].columns[i].title + '</th>';
+		}
+
+		// Column headings for optional edit and delete columns added later
+		if (_defs[id].buttons) {
+			if (_defs[id].buttons.edit && _defs[id].buttons.edit.title) {
+				div += (_defs[id].buttons.edit.style) ? '<th style="' + _defs[id].buttons.edit.style + '">' : '<th>'
+				div += _defs[id].buttons.edit.title + '</th>';
+			}
+			if (_defs[id].buttons.delete && _defs[id].buttons.delete.title) {
+				div += (_defs[id].buttons.delete.style) ? '<th style="' + _defs[id].buttons.delete.style + '">' : '<th>'
+				div += _defs[id].buttons.delete.title + '</th>';
+			}
 		}
 		div += '</tr>';
 		div += '</thead>';
@@ -871,30 +887,35 @@ console.log('tableShow', id, rows);
 
 		// Add each element of the array as a table row
 		for (i=0; i<rows.length; i++) {
-			rowid = rows[i].id;
 			row = '<tr>';
 
-			// Add columns
-			for (n=0; n<rows[i].cols.length; n++) {
-				cell = rows[i].cols[n];
-				row += '<td>';
-				// Show hyperlink if 'link' property provided
-				if (cell.link) {
-					row += '<a data-dismiss="modal" onClick="' + cell.link + '(\'' + rowid + '\');">';
+			// Add user defined columns in sequence specified in form definition
+			for (n=0; n<_defs[id].columns.length; n++) {
+				cell = _defs[id].columns[n].id;
+				if (rows[i][cell]) {
+					row += (rows[i][cell].style) ? '<td style="' + rows[i][cell].style + '">' : '<td>';
+					row += (rows[i][cell].text) ? rows[i][cell].text : '';
+					row += '</td>';
 				}
+			}
 
-				// Show text if provided
-				row += (cell.text) ? cell.text : '';
+			// Add an optional edit button at the end of the row
+			if (_defs[id].buttons && _defs[id].buttons.edit && _defs[id].buttons.edit.action) {
+				button = _defs[id].buttons.edit;
+				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
+				row += '<button type="button" class="btn btn-' + button.icon.colour + ' btn-xs" data-dismiss="modal" ';
+				row += 'onClick="' + button.action + "('" + rows[i].id + "'" + '); return false;">';
+				row += '<span class="glyphicon glyphicon-' + button.icon.type + '" aria-hidden="true"></span></button>';
+				row += '</td>';
+			}
 
-				// Close edit link if 'edit' property provided
-				if (cell.link) {
-					row += '</a>';
-				}
-
-				// Only show icon link if 'button' property provided
-				if (cell.button) {
-					row += '<button type="button" class="btn btn-' + cell.style + ' btn-xs" data-dismiss="modal" onClick="' + cell.button + '(\'' + rowid + '\'); return false;"><span class="glyphicon glyphicon-' + cell.icon + '" aria-hidden="true"></span></button>';
-				}
+			// Add an optional delete button at the end of the row
+			if (_defs[id].buttons && _defs[id].buttons.delete && _defs[id].buttons.delete.action) {
+				button = _defs[id].buttons.delete;
+				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
+				row += '<button type="button" class="btn btn-' + button.icon.colour + ' btn-xs" data-dismiss="modal" ';
+				row += 'onClick="' + button.action + "('" + rows[i].id + "'" + '); return false;">';
+				row += '<span class="glyphicon glyphicon-' + button.icon.type + '" aria-hidden="true"></span></button>';
 				row += '</td>';
 			}
 
@@ -908,7 +929,7 @@ console.log('tableShow', id, rows);
 		div += '</table>';
 		div += '</form>';
 		div += '</div></div></div>';
-console.log('formEdit', id, div);
+//console.log('formEdit', id, div);
 
 		// Remove existing table, then add new table and display
 		this._showContainer(id, div);
@@ -924,13 +945,14 @@ console.log('formEdit', id, div);
 	 * @description Check whether the user has access to the menu option.
 	 */
 	userAccess: function (level, access) {
-		var i, ok = false;
+/*		var i, ok = false;
 
 		for (i=0; i<access.length; i++) {
 			if (access[i] === level) {
 				ok = true;
 			}
 		}
-		return ok;
+		return ok;*/
+		return true;
 	}
 };

@@ -93,19 +93,19 @@ var bundle = {
 	 * @description Show all bundles for the current company.
 	 */
 	load: function () {
-		common.apiCall('bundleRead', { "filter":admin.company.code }, bundle.showTable);
+		common.apiCall('bundleRead', { "filter":admin.company.code }, bundle.table);
 	},
 
 
 	/**
-	 * @method showTable
+	 * @method table
 	 * @author Basil Fisk
 	 * @param {string} action Action (not relevant).
 	 * @param {object} result Data object returned by the API call.
 	 * @description Display the bundle data in a table.
 	 */
-	showTable: function (action, result) {
-		var i, rows = [], cols = [], obj = {}, ver;
+	table: function (action, result) {
+		var i, rows = [], cols, ver;
 
 		// Extract data from result set and load into global 'admin.bundles' variable
 		admin.bundles = [];
@@ -115,11 +115,23 @@ var bundle = {
 
 		// Add each element of the array as a table row
 		for (i=0; i<admin.bundles.length; i++) {
-			cols = [];
-
-			// Add column with link to edit form - only if user has permission to edit data
-			obj = {};
-			obj.text = admin.bundles[i].name;
+			ver = 'Cmd v' + admin.bundles[i].version.cmd + ' / ';
+			ver += 'Prm v' + admin.bundles[i].version.prms;
+			cols = {
+				name: {
+					text: admin.bundles[i].command
+				},
+				command: {
+					text: admin.bundles[i].command
+				},
+				connector: {
+					text: admin.bundles[i].connector
+				},
+				version: {
+					text: ver
+				}
+			};
+/*			obj.text = admin.bundles[i].name;
 			if (ui.userAccess('bundleEdit')) {
 				obj.link = 'bundle.edit';
 			}
@@ -135,10 +147,11 @@ var bundle = {
 			// Only add delete link if user has permission to edit data
 			if (ui.userAccess('bundleEdit')) {
 				cols.push({"button":"bundle.delete", "style":"danger", "icon":"trash"});
-			}
+			}*/
 
 			// Save row
-			rows.push({"id":admin.bundles[i]._id, "cols":cols});
+//			rows.push({"id":admin.bundles[i]._id, "cols":cols});
+			rows.push(cols);
 		}
 
 		// Display the table

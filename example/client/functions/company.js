@@ -90,7 +90,7 @@
 	 */
 	load: function () {
 		var filter = (me.role === 'superuser') ? 'all' : me.company;
-		common.apiCall('companyRead', { "filter":filter }, company.showTable);
+		common.apiCall('companyRead', { "filter":filter }, company.table);
 	},
 
 
@@ -115,7 +115,7 @@
 
 		// Replace the current company data
 		filter = (me.role === 'superuser') ? 'all' : id;
-		common.apiCall('companyReadId', { "filter":filter }, company.showTable);
+		common.apiCall('companyReadId', { "filter":filter }, company.table);
 
 		// Change the company name on the title bar
 		ui.pageTitle(admin.company.code);
@@ -123,39 +123,50 @@
 
 
 	/**
-	 * @method showTable
+	 * @method table
 	 * @author Basil Fisk
 	 * @param {string} action Action (not relevant).
 	 * @param {object} result Data object returned by the API call.
 	 * @description Display the company data in a table.
 	 */
-	showTable: function (action, result) {
-		var i, rows = [], cols = [];
+	table: function (action, result) {
+		var i, rows = [], cols, str;
 
 		// Extract data from result set and load into global 'admin.companies' variable
 		admin.companies = [];
 		for (i=0; i<result.data.length; i++) {
 			admin.companies.push(result.data[i]);
 		}
-
+		
 		// Add each element of the array as a table row
 		for (i=0; i<admin.companies.length; i++) {
-			cols = [];
-
+			cols = {};
+			
 			// Company name
-			cols.push({"text":admin.companies[i].name});
-
+			cols.name = {
+				"text": admin.companies[i].name
+			};
+			
 			// Select button
-			cols.push({"button":"company.select", "style":"success", "icon":"ok"});
+			str = '<button type="button" class="btn btn-success btn-xs" data-dismiss="modal" ';
+			str += 'onClick="company.select' + "('" + admin.companies[i]._id + "'" + '); return false;">';
+			str += '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
+			cols.select = {
+				"style": "text-align: center;",
+				"text": str
+			};
 
 			// Update button
-			cols.push({"button":"company.edit", "style":"info", "icon":"pencil"});
-
-			// Delete button
-			cols.push({"button":"company.delete", "style":"danger", "icon":"trash"});
+			str = '<button type="button" class="btn btn-warning btn-xs" data-dismiss="modal" ';
+			str += 'onClick="company.edit' + "('" + admin.companies[i]._id + "'" + '); return false;">';
+			str += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>';
+			cols.update = {
+				"style": "text-align: center;",
+				"text": str
+			};
 
 			// Save row
-			rows.push({"id":admin.companies[i]._id, "cols":cols});
+			rows.push(cols);
 		}
 
 		// Display the table

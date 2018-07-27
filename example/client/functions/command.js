@@ -88,6 +88,7 @@ var command = {
 	 * @description Open the selected command document for editing.
 	 */
 	edit: function (id) {
+console.log(id);
 		var i, index = -1, data = {}, arr = [], options = [], lists = [];
 
 		// Find the selected document
@@ -319,19 +320,19 @@ console.log(data);
 	 * @description Show all commands for the current company.
 	 */
 	load: function () {
-		common.apiCall('commandRead', { "filter":admin.company.code }, command.showTable);
+		common.apiCall('commandRead', { "filter":admin.company.code }, command.table);
 	},
 
 
 	/**
-	 * @method showTable
+	 * @method table
 	 * @author Basil Fisk
 	 * @param {string} action Action (not relevant).
 	 * @param {object} result Data object returned by the API call.
 	 * @description Display the command data in a table.
 	 */
-	showTable: function (action, result) {
-		var i, rows = [], cols = [], obj = {}, n, ver, cmd, prm, str;
+	table: function (action, result) {
+		var i, rows = [], cols, obj = {}, keys, n, ver, cmd, prm, str;
 
 		// Extract data from result set and load into global 'admin.commands' variable
 		admin.commands = [];
@@ -341,45 +342,46 @@ console.log(data);
 
 		// Add each element of the array as a table row
 		for (i=0; i<admin.commands.length; i++) {
-			cols = [];
+			cols = {};
 
-			// Add column with link to edit form - only if user has permission to edit data
-			obj = {};
-			obj.text = admin.commands[i].name;
-			if (ui.userAccess('commandEdit')) {
-				obj.link = 'command.edit';
-			}
-			cols.push(obj);
-
-			// Show service column
-			cols.push({"text":admin.commands[i].service});
+			// Add name and service columns
+			cols.name = {
+				"text": admin.commands[i].name
+			};
+			cols.svc = {
+				"text": admin.commands[i].service
+			};
 
 			// Add links to versions of the command
 			str = '';
-			for (n=0; n<admin.commands[i].command.length; n++) {
-				ver = admin.commands[i].command[n].ver;
-				cmd = admin.commands[i].command[n].cmd;
-				str += '<a onClick="command.editCommand(\'' + admin.commands[i]._id + '\',\'' + ver + '\',\'' + cmd + '\');" href="#" data-toggle="modal">v' + ver + ' </a>';
+			obj = admin.commands[i].command;
+			keys = Object.keys(obj);
+			for (n=0; n<keys.length; n++) {
+				ver = keys[n];
+				cmd = JSON.stringify(obj[ver]);
+				cmd = cmd.replace(/\"/g, '');
+				str += '<a onClick="command.editCommand(\'' + admin.commands[i]._id + '\',\'' + ver + '\',\'' + cmd + '\');" href="#" data-toggle="modal">v' + ver + '</a>';
 			}
-			cols.push({"text":str});
+			cols.cmd = {
+				"text": str
+			};
 
 			// Add links to versions of the parameters
 			str = '';
-			for (n=0; n<admin.commands[i].parameters.length; n++) {
-				ver = admin.commands[i].parameters[n].ver;
-				prm = JSON.stringify(admin.commands[i].parameters[n].prm);
+			obj = admin.commands[i].parameters;
+			keys = Object.keys(obj);
+			for (n=0; n<keys.length; n++) {
+				ver = keys[n];
+				prm = JSON.stringify(obj[ver]);
 				prm = prm.replace(/\"/g, '');
 				str += '<a onClick="command.editParameter(\'' + admin.commands[i]._id + '\',' + ver + ',\'' + prm + '\');" href="#" data-toggle="modal">v' + ver + '</a> ';
 			}
-			cols.push({"text":str});
-
-			// Only add delete link if user has permission to edit data
-			if (ui.userAccess('commandEdit')) {
-				cols.push({"button":"command.delete", "style":"danger", "icon":"trash"});
-			}
+			cols.prm = {
+				"text": str
+			};
 
 			// Save row
-			rows.push({"id":admin.commands[i]._id, "cols":cols});
+			rows.push(cols);
 		}
 
 		// Display the table
