@@ -79,7 +79,9 @@ var formDefinitions = {
 		"title": "Bundles",
 		"width": 80,
 		"buttons": {
-			"add": "bundle.add",
+			"add": {
+				"action": "bundle.add"
+			},
 			"close": true,
 			"delete": {
 				"action": "bundle.delete",
@@ -110,7 +112,9 @@ var formDefinitions = {
 	"bundleAdd": {
 		"title": "Add Bundle",
 		"buttons": {
-			"add": "bundle.addSave",
+			"add": {
+				"action": "bundle.addSave"
+			},
 			"close": true
 		},
 		"fields" : {
@@ -282,7 +286,9 @@ var formDefinitions = {
 	"commandTable": {
 		"title": "Commands",
 		"buttons": {
-			"add": "command.add",
+			"add": {
+				"action": "command.add"
+			},
 			"close": true,
 			"delete": {
 				"action": "command.delete",
@@ -313,7 +319,9 @@ var formDefinitions = {
 	"commandAdd": {
 		"title": "Add Command",
 		"buttons": {
-			"add": "command.addSave",
+			"add": {
+				"action": "command.addSave"
+			},
 			"close": true
 		},
 		"fields": {
@@ -483,7 +491,9 @@ var formDefinitions = {
 	"companyTable": {
 		"title": "Companies",
 		"buttons": {
-			"add": "company.add",
+			"add": {
+				"action": "company.add"
+			},
 			"close": true,
 			"delete": {
 				"action": "company.delete",
@@ -513,7 +523,9 @@ var formDefinitions = {
 	"companyAdd": {
 		"title" : "Add Company",
 		"buttons": {
-			"add": "company.addSave",
+			"add": {
+				"action": "company.addSave"
+			},
 			"close": true
 		},
 		"fields" : {
@@ -565,7 +577,9 @@ var formDefinitions = {
 	"companyGroupAdd": {
 		"title" : "Add Company Group",
 		"buttons": {
-			"add": "company.groupAddSave",
+			"add": {
+				"action": "company.groupAddSave"
+			},
 			"close": true
 		},
 		"fields" : {
@@ -671,7 +685,9 @@ var formDefinitions = {
 	"connectorTable": {
 		"title": "Connectors",
 		"buttons": {
-			"add": "connector.add",
+			"add": {
+				"action": "connector.add"
+			},
 			"close": true,
 			"delete": {
 				"action": "connector.delete",
@@ -700,7 +716,9 @@ var formDefinitions = {
 	"connectorAdd": {
 		"title" : "Add Connector",
 		"buttons": {
-			"add": "connector.addSave",
+			"add": {
+				"action": "connector.addSave"
+			},
 			"close": true
 		},
 		"fields" : {
@@ -807,7 +825,9 @@ var formDefinitions = {
 	"login": {
 		"title": "Login to the Console",
 		"buttons": {
-			"save": "general.loginCheck"
+			"save": {
+				"action": "general.loginCheck"
+			}
 		},
 		"fields": {
 			"username": {
@@ -841,7 +861,9 @@ var formDefinitions = {
 	"userTable": {
 		"title": "Users",
 		"buttons": {
-			"add": "user.add",
+			"add": {
+				"action": "user.add"
+			},
 			"close": true,
 			"delete": {
 				"action": "user.delete",
@@ -871,7 +893,9 @@ var formDefinitions = {
 	"userAdd": {
 		"title": "Add User",
 		"buttons": {
-			"add": "user.addSave",
+			"add": {
+				"action": "user.addSave"
+			},
 			"close": true
 		},
 		"fields" : {

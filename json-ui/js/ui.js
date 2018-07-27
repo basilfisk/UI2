@@ -223,6 +223,52 @@ var ui = {
 		return div;
 	},
 
+
+	/**
+	 * @method _postProcess
+	 * @author Basil Fisk
+	 * @param {string} action Action to be performed from the form (add|delete|save).
+	 * @param {string} id ID of form to being processed.
+	 * @param {object} data Object holding data read from the form.
+	 * @description Trigger the post-processing script to process the data captured on the form.
+	 */
+	_postProcess: function (action, id, data) {
+		var fn, parts;
+//id = 'bundleTable';
+/*		if (action === 'delete') {
+			try {
+console.log("_postProcess: '" + fn + "' function running");
+				window[parts[0]][parts[1]].call(data);
+			}
+			catch (err) {
+console.log("_postProcess: '" + fn + "' function failed: " + err.message);
+			}
+		}
+		else {*/
+			fn = _defs[id].buttons[action].action;
+			if (fn) {
+				parts = fn.split('.');
+console.log('data', data);
+				if (parts.length === 2) {
+					try {
+console.log("_postProcess: '" + fn + "' function running");
+						window[parts[0]][parts[1]].call(data);
+					}
+					catch (err) {
+console.log("_postProcess: '" + fn + "' function failed: " + err.message);
+					}
+				}
+				else {
+console.log("_postProcess: '" + fn + "' function '" + + "' must have 'aaa.bbb' format");
+				}
+			}
+			else {
+console.log("_postProcess: '" + fn + "' function not defined for form '" + id);
+			}
+//		}
+	},
+
+
 	/**
 	 * @method _runChecks
 	 * @author Basil Fisk
@@ -421,26 +467,48 @@ var ui = {
 	//
 	// ***************************************************************************************
 
+	/**
+	 * @method buttonSave
+	 * @author Basil Fisk
+	 * @param {string} id ID of UI form.
+	 * @description Validate and save the data entered on a form.
+	 */
+	buttonAdd: function (id) {
+		var data = this._buttonValidate(id);
+
+		// Hide the form and trigger the post-processing function
+		if (data) {
+			$('#' + id).modal('hide');
+			this._postProcess('add', id, data);
+		}
+		else {
+console.log("buttonAdd: error validating form '" + id);
+		}
+	},
+
+
 	// ---------------------------------------------------------------------------------------
 	// Delete the data on a form
 	//
 	// Argument 1 : Name of UI form
 	// ---------------------------------------------------------------------------------------
-	buttonDelete: function (id) {
-		var fields, i, field, data = {}, func;
+	buttonDelete: function (id, data) {
+console.log('buttonDelete', id, data);
+//		var fields, i, field, data = {};
 
 		// Read and validate each field
-		fields = Object.keys(structure.forms[form].fields);
+/*		fields = Object.keys(structure.forms[form].fields);
 		for (i=0; i<fields.length; i++) {
 			field = fields[i];
 			data[field] = document.getElementById(field).value;
 		}
-
+*/
 		// Hide the form and delete the data
 		$('#' + id).modal('hide');
 //		_post(id + '-delete', data);
-		func = (id + '-delete').split('.');
-		window[func[0]][func[1]].apply(data);
+//		func = (id + '-delete').split('.');
+//		window[func[0]][func[1]].apply(data);
+		this._postProcess('delete', id, {_id:data});
 	},
 
 
@@ -451,7 +519,21 @@ var ui = {
 	 * @description Validate and save the data entered on a form.
 	 */
 	buttonSave: function (id) {
-		var fields, names, i, name, temp = {}, elem = [], e, text, data = {}, func;
+		var data = this._buttonValidate(id);
+
+		// Hide the form and trigger the post-processing function
+		if (data) {
+			$('#' + id).modal('hide');
+			this._postProcess('save', id, data);
+		}
+		else {
+console.log("buttonSave: error validating form '" + id);
+		}
+	},
+
+
+	_buttonValidate: function (id) {
+		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
 
 		// Read fields and their names
 		fields = _defs[id].fields;
@@ -481,7 +563,6 @@ var ui = {
 								temp[name].push(elem[e].value);
 							}
 						}
-
 					}
 					else {
 						temp[name] = document.getElementById(name).value;
@@ -544,12 +625,8 @@ var ui = {
 			}
 		}
 		
-		// Hide the form and trigger the post-processing function
-		$('#' + id).modal('hide');
-		func = _defs[id].buttons.save.split('.');
-//console.log('func', func);
-console.log('data', data);
-		window[func[0]][func[1]].call(data);
+		// Success, so return data
+		return data;
 	},
 
 
@@ -563,7 +640,6 @@ console.log('data', data);
 	 */
 	formAdd: function (id, list) {
 		var title, fields, names, width, i, div = '';
-console.log(_defs[id]);
 
 		// Read fields and their names
 		title = _defs[id].title;
@@ -605,7 +681,9 @@ console.log(_defs[id]);
 		if (_defs[id].buttons && _defs[id].buttons.add) {
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-			div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + "'" + id + "'" + '); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+			div += '<button type="button" class="btn btn-success"';
+			div += 'onClick="ui.buttonAdd(' + "'" + id + "'" + '); return false;">';
+			div += '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
 			div += '</div></div>';
 		}
 
@@ -708,10 +786,14 @@ console.log('formAdd', id, div);
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
 			if (_defs[id].buttons.delete) {
-				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" onClick="ui.buttonDelete(' + id + '); return false;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" ';
+				div += 'onClick="ui.buttonDelete(' + id + '); return false;">';
+				div += '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
 			}
 			if (_defs[id].buttons.save) {
-				div += '<button type="button" class="btn btn-success" onClick="ui.buttonSave(' + "'" + id + "'" + '); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
+				div += '<button type="button" class="btn btn-success" ';
+				div += 'onClick="ui.buttonSave(' + "'" + id + "'" + '); return false;">';
+				div += '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
 			}
 			div += '</div></div>';
 		}
@@ -802,7 +884,6 @@ console.log('formEdit', id, div);
 		
 		// Find message and substitute parameters
 		if (_msgs[code]) {
-console.log(_messages.language);
 			if (_msgs[code].external[_messages.language]) {
 				text = _msgs[code].external[_messages.language];
 			}
@@ -859,7 +940,6 @@ console.log(title, text, callback);
 	 */
 	tableShow: function (id, rows) {
 		var width, div = '', i, key, row, n, cell, button;
-console.log('tableShow', id, rows);
 
 		// Build the container
 		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
@@ -875,8 +955,10 @@ console.log('tableShow', id, rows);
 		div += '<h4>' + _defs[id].title;
 
 		// Display an Add button, if specified
-		if (_defs[id].buttons && _defs[id].buttons.add) {
-			div += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" onClick="' + _defs[id].buttons.add + '(); return false;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+		if (_defs[id].buttons && _defs[id].buttons.add && _defs[id].buttons.add.action) {
+			div += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" ';
+			div += 'onClick="' + _defs[id].buttons.add.action + '(); return false;">';
+			div += '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
 		}
 		div += '</h4>';
 		div += '</div>';
@@ -931,6 +1013,7 @@ console.log('tableShow', id, rows);
 				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
 				row += '<button type="button" class="btn btn-' + button.icon.colour + ' btn-xs" data-dismiss="modal" ';
 				row += 'onClick="' + button.action + "('" + rows[i].id + "'" + '); return false;">';
+//				row += 'onClick="' + button.action + '(); return false;">';
 				row += '<span class="glyphicon glyphicon-' + button.icon.type + '" aria-hidden="true"></span></button>';
 				row += '</td>';
 			}
@@ -940,7 +1023,8 @@ console.log('tableShow', id, rows);
 				button = _defs[id].buttons.delete;
 				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
 				row += '<button type="button" class="btn btn-' + button.icon.colour + ' btn-xs" data-dismiss="modal" ';
-				row += 'onClick="' + button.action + "('" + rows[i].id + "'" + '); return false;">';
+				row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i]._id + "'" + '); return false;">';
+//				row += 'onClick="' + button.action + '(); return false;">';
 				row += '<span class="glyphicon glyphicon-' + button.icon.type + '" aria-hidden="true"></span></button>';
 				row += '</td>';
 			}
@@ -955,7 +1039,6 @@ console.log('tableShow', id, rows);
 		div += '</table>';
 		div += '</form>';
 		div += '</div></div></div>';
-//console.log('formEdit', id, div);
 
 		// Remove existing table, then add new table and display
 		this._showContainer(id, div);

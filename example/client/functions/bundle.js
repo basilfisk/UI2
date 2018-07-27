@@ -36,24 +36,44 @@ var bundle = {
 
 
 	/**
+	 * @method addSave
+	 * @author Basil Fisk
+	 * @description Save a new bundle.
+	 */
+	addSave: function () {
+		var data = {
+			name: this.name,
+			company: admin.company.code,
+			command: this.command,
+			connector: this.connector,
+			version: {
+				cmd: this.version.cmd,
+				prms: this.version.prms
+			}
+		};
+		common.apiCall('bundleNew', data, bundle.load);
+	},
+	
+	
+	/**
 	 * @method delete
 	 * @author Basil Fisk
-	 * @param {string} id ID of the bundle to be deleted.
-	 * @description Read the details for the selected company.
+	 * @description Delete the selected bundle.
 	 */
-	delete: function (id) {
-		common.apiCall('bundleDelete', {'_id': id}, bundle.load);
+	delete: function () {
+console.log(this);
+		common.apiCall('bundleDelete', {_id: this._id}, bundle.load);
 	},
 
 
 	/**
 	 * @method edit
 	 * @author Basil Fisk
-	 * @param {string} id ID of the bundle to be edited.
 	 * @description Open the selected bundle document for editing.
 	 */
-	edit: function (id) {
+	edit: function () {
 		var i, index = -1, data = {}, options = [], lists = [];
+console.log(this);
 
 		// Find the selected document
 		for (i=0; i<admin.bundles.length; i++) {
@@ -114,12 +134,14 @@ var bundle = {
 		}
 
 		// Add each element of the array as a table row
+		// Include _id so the record can be deleted
 		for (i=0; i<admin.bundles.length; i++) {
 			ver = 'Cmd v' + admin.bundles[i].version.cmd + ' / ';
 			ver += 'Prm v' + admin.bundles[i].version.prms;
 			cols = {
+				_id: admin.bundles[i]._id,
 				name: {
-					text: admin.bundles[i].command
+					text: admin.bundles[i].name
 				},
 				command: {
 					text: admin.bundles[i].command
