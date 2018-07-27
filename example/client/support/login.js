@@ -16,9 +16,8 @@ var login = {
 	 * @description Start up function called by 'body onload'.
 	 */
 	init: function () {
-		// Initialize UI manager with menu and form definitions, post-processing functions
-		// and the messages TODO which ones ???????
-		ui.init(menuDefinitions, formDefinitions, messages);
+		// Initialize UI manager withform definitions and messages
+		ui.init(formDefinitions, messages);
 
 		// Display the login form for the Admin Console
 		ui.formEdit('login', {"username":'admin', "password":'password'});
@@ -207,6 +206,9 @@ var login = {
 			me.name = result.data.name;
 			me.role = result.data.role;
 			me.username = result.data.username;
+
+			// Initialize UI manager with menu and form definitions, and messages
+			ui.menus(menuDefinitions, me.role);
 
 			// The super user can view all companies, others can only see their company's data
 			filter = (me.role === 'superuser') ? 'all' : me.company;

@@ -703,18 +703,26 @@ console.log('formEdit', id, div);
 	/**
 	 * @method init
 	 * @author Basil Fisk
-	 * @param {object} menu User's menu definition.
-	 * @param {object} forms User's form definitions.
-	 * @param {object} messages User message definitions.
-	 * @description Parse the user's UI data structures for building the menus, forms and reports.
+	 * @param {object} forms Application's form definitions.
+	 * @param {object} messages Application's message definitions.
+	 * @description Load the application's UI data structures for building forms and reports.
 	 */
-	init: function (menu, forms, messages) {
-			var i, n, option, div = '';
-
-		// Save form definitions and post-processing function
+	init: function (forms, messages) {
 		_defs = forms;
 		_msgs = messages;
+	},
 
+
+	/**
+	 * @method menus
+	 * @author Basil Fisk
+	 * @param {object} menu User's menu definition.
+	 * @param {string} role User access level.
+	 * @description Build the menus and options based on the user's access level.
+	 */
+	menus: function (menu, role) {
+		var i, n, option, div = '', opt;
+	
 		// Open the container for the menus and titles
 		div += '<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">';
 		div += '<ul class="nav navbar-nav">';
@@ -723,20 +731,23 @@ console.log('formEdit', id, div);
 		if (menu.menubar.length > 0) {
 			div += '<ul class="nav navbar-nav">';
 			for (i=0; i<menu.menubar.length; i++) {
-				div += '<li id="' + menu.menubar[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + menu.menubar[i].name + '" href="#">' + menu.menubar[i].title + '<span class="caret"></span></a>';
-				div += '<ul class="dropdown-menu">';
-				// Skip if no top level options have been defined
-				if (menu.menubar[i].options !== undefined) {
-					for (n=0; n<menu.menubar[i].options.length; n++) {
-						// Skip if the menu option has not been defined
-						if (menu.menubar[i].options[n] !== undefined) {
-							option = menu.menubar[i].options[n];
-							div += '<li id="' + option.id + '-option" class="option"><a href="#' + option.id + '" onClick="' + option.action + '(); return false;">' + option.title + '</a></li>';
-						}
+				// Build list of options
+				opt = '';
+				for (n=0; n<menu.menubar[i].options.length; n++) {
+					// Skip if user doesn't have access to option
+					if (this.userAccess(role, menu.menubar[i].options[n].access)) {
+						option = menu.menubar[i].options[n];
+						opt += '<li id="' + option.id + '-option" class="option"><a href="#' + option.id + '" onClick="' + option.action + '(); return false;">' + option.title + '</a></li>';
 					}
 				}
-				div += '</ul>';
-				div += '</li>';
+				// Dont add top level menu if no options in menu
+				if (opt !== '') {
+					div += '<li id="' + menu.menubar[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + menu.menubar[i].name + '" href="#">' + menu.menubar[i].title + '<span class="caret"></span></a>';
+					div += '<ul class="dropdown-menu">';
+					div += opt;
+					div += '</ul>';
+					div += '</li>';
+				}
 			}
 			div += '</ul>';
 		}
@@ -797,19 +808,20 @@ console.log(title, text, callback);
 	},
 
 
-	// ---------------------------------------------------------------------------------------
-	// Display a table of data
-	//
-	// Argument 1 :	Reference name of the table
-	// Argument 2 : Array of objects holding row data
-	//              id:     UID of the data record in the row
-	//              cols:   Array of objects holding column cell data
-	//                  text:   Text to be shown in row/column cell
-	//                  link:   Function called when link is pressed (optional)
-	//                  button: Function called when a button is pressed (optional)
-	//                  style:  Name of Bootstrap button style (only for 'button')
-	//                  icon:   Name of Glyph icon (only for 'button')
-	// ---------------------------------------------------------------------------------------
+	/**
+	 * @method tableShow
+	 * @author Basil Fisk
+	 * @param {string} id ID of the table.
+	 * @param {array} rows Array of objects holding row data.
+	 * id:     UID of the data record in the row.
+	 * cols:   Array of objects holding column cell data.
+	 * text:   Text to be shown in row/column cell.
+	 * link:   Function called when link is pressed (optional).
+	 * button: Function called when a button is pressed (optional).
+	 * style:  Name of Bootstrap button style (only for 'button').
+	 * icon:   Name of Glyph icon (only for 'button').
+	 * @description Display a table of data.
+	 */
 	tableShow: function (id, rows) {
 		var index, div = '', i, n, row, rowid, cell = {};
 console.log('tableShow', id, rows);
@@ -896,14 +908,22 @@ console.log('formEdit', id, div);
 	},
 
 
-	// ---------------------------------------------------------------------------------------
-	// Check whether user has access to the named UI element
-	//
-	// Argument 1 : Name of UI element
-	//
-	// Return true or false
-	// ---------------------------------------------------------------------------------------
-	userAccess: function (name) {
-		return true;
+	/**
+	 * @method userAccess
+	 * @author Basil Fisk
+	 * @param {string} level User's access level.
+	 * @param {array} access List of user levels that have access to this menu option.
+	 * @return {boolean} true or false.
+	 * @description Check whether the user has access to the menu option.
+	 */
+	userAccess: function (level, access) {
+		var i, ok = false;
+
+		for (i=0; i<access.length; i++) {
+			if (access[i] === level) {
+				ok = true;
+			}
+		}
+		return ok;
 	}
 };

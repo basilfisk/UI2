@@ -6,12 +6,11 @@ var menuDefinitions = {
 	"menubar": [
 		{
 			"id": "admin",
-			"access": ["superuser"],
-			"menu" : "main",
+			"menu": "main",
 			"title": "Admin",
 			"options": [
 				{
-					"id" : "companyTable",
+					"id": "companyTable",
 					"title": "Companies",
 					"action": "company.load",
 					"access": ["superuser"]
@@ -20,30 +19,29 @@ var menuDefinitions = {
 		},
 		{
 			"id": "forms",
-			"access": ["superuser","manager","user"],
-			"menu" : "main",
+			"menu": "main",
 			"title": "Data",
 			"options": [
 				{
-					"id" : "userTable",
+					"id": "userTable",
 					"title": "Users",
 					"action": "user.load",
 					"access": ["superuser","manager"]
 				},
 				{
-					"id" : "connectorTable",
+					"id": "connectorTable",
 					"title": "Connectors",
 					"action": "connector.load",
 					"access": ["superuser","manager"]
 				},
 				{
-					"id" : "commandTable",
+					"id": "commandTable",
 					"title": "Commands",
 					"action": "command.load",
 					"access": ["superuser","manager","user"]
 				},
 				{
-					"id" : "bundleTable",
+					"id": "bundleTable",
 					"title": "Bundles",
 					"action": "bundle.load",
 					"access": ["superuser","manager","user"]
@@ -52,8 +50,7 @@ var menuDefinitions = {
 		},
 		{
 			"id": "reports",
-			"access": ["superuser","manager","user"],
-			"menu" : "main",
+			"menu": "main",
 			"title": "Reports",
 			"options": [
 				{
@@ -84,8 +81,7 @@ var menuDefinitions = {
 		},
 		{
 			"id": "about",
-			"access": ["superuser","manager","user"],
-			"menu" : "main",
+			"menu": "main",
 			"title": "About",
 			"options": [
 				{
