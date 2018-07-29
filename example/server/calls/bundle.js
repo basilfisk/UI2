@@ -17,40 +17,13 @@ class BundleCalls {
 
 
 	/**
-	 * @method bundleDelete
-	 * @memberof BundleCalls
-	 * @param {object} that Current scope.
-	 * @param {object} session Session object.
-	 * @description Delete a bundle document.
-	 */
-	bundleDelete (that, session) {
-		var	id = session.params['_id'];
-
-		that.mongoDB.db(that.admin.mongo.db).collection('va_bundle').deleteOne({'_id':new that.ObjectID(id)}, (err, result) => {
-			var msg = {};
-
-			// Error trying to insert data
-			if (err) {
-				msg = that.log('SVR007', ['bundle', err.message]);
-				that.sendResponse(session, msg);
-			}
-			// Return result
-			else {
-				msg = that.log('SVR008', ['bundle']);
-				that.sendResponse(session, msg);
-			}
-		});
-	}
-
-
-	/**
-	 * @method bundleNew
+	 * @method bundleAdd
 	 * @memberof BundleCalls
 	 * @param {object} that Current scope.
 	 * @param {object} session Session object.
 	 * @description Add a bundle document.
 	 */
-	bundleNew (that, session) {
+	bundleAdd (that, session) {
 		that.mongoDB.db(that.admin.mongo.db).collection('va_bundle').insertOne(session.params, (err, result) => {
 			var msg = {};
 
@@ -66,6 +39,33 @@ class BundleCalls {
 			}
 		});
 	}
+
+
+	/**
+	 * @method bundleDelete
+	 * @memberof BundleCalls
+	 * @param {object} that Current scope.
+	 * @param {object} session Session object.
+	 * @description Delete a bundle document.
+	 */ 
+	bundleDelete (that, session) {
+		var	id = session.params['_id'];
+
+		that.mongoDB.db(that.admin.mongo.db).collection('va_bundle').deleteOne({'_id':new that.ObjectID(id)}, (err, result) => {
+			var msg = {};
+
+			// Error trying to insert data
+			if (err) {
+				msg = that.log('SVR007', ['bundle', err.message]);
+				that.sendResponse(session, msg);
+			}	
+			// Return result
+			else {
+				msg = that.log('SVR008', ['bundle']);
+				that.sendResponse(session, msg);
+			}	
+		});	
+	}	
 
 
 	/**

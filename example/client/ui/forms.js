@@ -85,7 +85,7 @@ var formDefinitions = {
 		"width": 80,
 		"buttons": {
 			"add": {
-				"action": "bundle.add",
+				"form": "bundleAdd",
 				"icon": {
 					"background": "btn btn-success pull-right",
 					"class": "glyphicon glyphicon-plus"
@@ -107,7 +107,8 @@ var formDefinitions = {
 				"title": "Delete"
 			},
 			"edit": {
-				"action": "bundle.edit",
+				"ZZZaction": "bundle.editForm",
+				"form": "bundleEdit",
 				"icon": {
 					"background": "btn btn-success btn-xs",
 					"class": "glyphicon glyphicon-pencil"
@@ -127,7 +128,7 @@ var formDefinitions = {
 		"title": "Add Bundle",
 		"buttons": {
 			"add": {
-				"action": "bundle.addSave",
+				"action": "bundle.add",
 				"icon": {
 					"background": "btn btn-success",
 					"class": "glyphicon glyphicon-plus"
@@ -227,7 +228,7 @@ var formDefinitions = {
 				}
 			},
 			"ok": {
-				"action": "bundle.editSave",
+				"action": "bundle.edit",
 				"icon": {
 					"background": "btn btn-success",
 					"class": "glyphicon glyphicon-ok"

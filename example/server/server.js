@@ -257,8 +257,8 @@ class Server {
 		var calls, found = true, msg;
 
 		switch (session.command) {
+			case 'bundleAdd':
 			case 'bundleDelete':
-			case 'bundleNew':
 			case 'bundleRead':
 			case 'bundleRead1':
 			case 'bundleUpdate':

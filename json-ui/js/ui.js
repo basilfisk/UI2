@@ -139,6 +139,178 @@ var ui = {
 
 
 	/**
+	 * @method _formAdd
+	 * @author Basil Fisk
+	 * @param {string} id ID of form to be displayed.
+	 * @param {object} list Object holding lists for drop down fields.
+	 * {field: [values], ...}
+	 * @description Display a form for adding data.
+	 */
+	_formAdd: function (id, list) {
+		var title, fields, names, width, i, div = '', button;
+
+		// Read fields and their names
+		title = _defs[id].title;
+		fields = _defs[id].fields;
+		names = Object.keys(fields);
+
+		// Build form container
+		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
+		div += '<div class="modal-dialog" role="document" style="width:' + width + '%;">';
+		div += '<div class="modal-content">';
+
+		// Add form header and title
+		div += '<div class="modal-header">';
+		if (_defs[id].buttons && _defs[id].buttons.close) {
+			button = _defs[id].buttons.close;
+			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
+		}
+		div += '<h4 class="modal-title">' + title + '</h4>';
+		div += '</div>';
+
+		// Add form body
+		div += '<div class="modal-body">';
+		div += '<form role="form">';
+
+		// Add fields
+		for (i=0; i<names.length; i++) {
+			switch (fields[names[i]].type) {
+				case 'list':
+					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[names[i]], 'text'));
+					break;
+				default:
+					div += this._showField(names[i], fields[names[i]], '');
+			}
+		}
+
+		// Close form body
+		div += '</form></div>';
+
+		// Add button in form footer
+		if (_defs[id].buttons && _defs[id].buttons.add) {
+			button = _defs[id].buttons.add;
+			div += '<div class="modal-footer">';
+			div += '<div class="col-md-12">';
+			div += '<button type="button" class="' + button.icon.background + '"';
+			div += 'onClick="ui.buttonAdd(' + "'" + id + "'" + '); return false;">';
+			div += '<span class="' + button.icon.class + '"></span></button>';
+			div += '</div></div>';
+		}
+
+		// Close form container
+		div += '</div></div>';
+
+		// Remove existing form, then add new form and display
+		this._showForm(id, div);
+	},
+
+
+	/**
+	 * @method _formEdit
+	 * @author Basil Fisk
+	 * @param {string} id ID of the form.
+	 * @param {object} data Data to be shown in fields for editing.
+	 * @param {object} list Object holding lists for drop down fields.
+	 * {field: [values], ...}
+	 * @description Display a form for editing data.
+	 */
+	_formEdit: function (id, data, list) {
+		var title, fields, names, width, i, elem, value, div = '', button;
+console.log(id, data, list);
+
+		// Read fields and their names
+		title = _defs[id].title;
+		fields = _defs[id].fields;
+		names = Object.keys(fields);
+
+		// Build form container
+		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
+		div += '<div class="modal-dialog" role="document" style="width:' + width + '%;">';
+		div += '<div class="modal-content">';
+
+		// Add form header and title
+		div += '<div class="modal-header">';
+		if (_defs[id].buttons && _defs[id].buttons.close) {
+			button = _defs[id].buttons.close;
+			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
+		}
+		div += '<h4 class="modal-title">' + title + '</h4>';
+		div += '</div>';
+
+		// Add form body
+		div += '<div class="modal-body">';
+		div += '<form role="form">';
+
+		// Add fields
+		for (i=0; i<names.length; i++) {
+			// Split dot separated element name into array of element names
+/*			elem = fields[names[i]].element.split('.');
+
+			// Read data from object
+			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
+			if (elem.length === 1) {
+				value = data[elem[0]];
+			}
+			else if (elem.length === 2) {
+				if (data[elem[0]] === undefined) {
+					value = '';
+				}
+				else {
+					value = data[elem[0]][elem[1]];
+				}
+			}
+			else if (elem.length === 3) {
+				if (data[elem[0]] === undefined || data[elem[0]][elem[1]] === undefined) {
+					value = '';
+				}
+				else {
+					value = data[elem[0]][elem[1]][elem[2]];
+				}
+			}
+			value = (value) ? value : '';*/
+console.log(names[i]);
+value = data[names[i]];
+
+			// Add field
+			switch (fields[names[i]].type) {
+				case 'list':
+					div += this._showField(names[i], fields[names[i]], value, this._sortArrayObjects(list[names[i]], 'text'));
+					break;
+				default:
+					div += this._showField(names[i], fields[names[i]], value);
+			}
+		}
+
+		// Close form body
+		div += '</form></div>';
+
+		// Save and/or Delete buttons in form footer
+		if (_defs[id].buttons) {
+			div += '<div class="modal-footer">';
+			div += '<div class="col-md-12">';
+//			if (_defs[id].buttons.delete) {
+//				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" ';
+//				div += 'onClick="ui.buttonDelete(' + id + '); return false;">';
+//				div += '<span class="glyphicon glyphicon-trash"></span></button>';
+//			}
+			if (_defs[id].buttons && _defs[id].buttons.ok) {
+				button = _defs[id].buttons.ok;
+				div += '<button type="button" class="' + button.icon.background + '" ';
+				div += 'onClick="ui.buttonOK(' + "'" + id + "'" + '); return false;">';
+				div += '<span class="' + button.icon.class + '"></span></button>';
+			}
+			div += '</div></div>';
+		}
+
+		// Close form container
+		div += '</div></div>';
+
+		// Remove existing form, then add new form and display
+		this._showForm(id, div);
+	},
+
+
+	/**
 	 * @method _messageBox
 	 * @author Basil Fisk
 	 * @param {string} code Message code.
@@ -314,25 +486,6 @@ var ui = {
 
 
 	/**
-	 * @method _showContainer
-	 * @author Basil Fisk
-	 * @param {id} id ID of the container.
-	 * @param {string} html HTML to be appended.
-	 * @description Remove existing container, then add new container and display. 
-	 * The container can be a form, table or report.
-	 */
-	_showContainer: function (id, html) {
-		// Add a div to hold the container
-		var div = '<div class="modal fade" id="' + id + '" tabindex="-1" role="dialog">' + html + '</div>';
-
-		// Remove the node, then add the new container to 'body' and display the new form
-		$('#' + id).remove();
-		$('body').append(div);
-		$('#' + id).modal('show');
-	},
-
-
-	/**
 	 * @method _showField
 	 * @author Basil Fisk
 	 * @param {string} name Field name.
@@ -416,6 +569,59 @@ var ui = {
 			divot += '</div>';
 		}
 		return divot;
+	},
+
+
+	/**
+	 * @method _showForm
+	 * @author Basil Fisk
+	 * @param {id} id ID of the form.
+	 * @param {string} html HTML to be appended.
+	 * @description Remove existing form, then add new form and display. 
+	 */
+	_showForm: function (id, html) {
+		// Add a div to hold the form
+		var div = '<div class="modal fade" id="' + id + '" tabindex="-1" role="dialog">' + html + '</div>';
+
+		// Remove the node, then add the new form to 'body' and display the new form
+		$('#' + id).remove();
+		$('body').append(div);
+		$('#' + id).modal('show');
+	},
+
+
+	/**
+	 * @method _showTable
+	 * @author Basil Fisk
+	 * @param {id} id ID of the table.
+	 * @param {string} html HTML to be appended.
+	 * @description Remove existing table, then add new table and display. 
+	 */
+	_showTable: function (ids, html, lists, data) {
+		// Add a div to hold the table
+		var div = '<div class="modal fade" id="' + ids.table + '" tabindex="-1" role="dialog">' + html + '</div>';
+
+		// Remove the node, then add the new table to 'body' and display the new form
+		$('#' + ids.table).remove();
+		$('body').append(div);
+
+		if (ids.add) {
+			$('#table-' + ids.add).click(() => {
+				this._formAdd(ids.add, lists);
+			});
+		}
+
+		if (ids.edit) {
+			for (var i=0; i<data.length; i++) {
+				row = data[i];
+				$('#table-' + ids.edit + '-' + i).click(() => {
+					this._formEdit(ids.edit, row, lists);
+				});
+			}
+		}
+//		row += 'onClick="' + _defs[id].buttons.edit.action + "('" + rows[i]._id + "'" + '); return false;">';
+
+		$('#' + ids.table).modal('show');
 	},
 
 
@@ -608,7 +814,6 @@ console.log("buttonOK: error validating form '" + id);
 
 			// Split dot separated element name into array of element names
 			elem = fields[name].element.split('.');
-//console.log('elem', elem);
 
 			// Assign data to element in object
 			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -632,80 +837,13 @@ console.log("buttonOK: error validating form '" + id);
 
 
 	/**
-	 * @method formAdd
+	 * @method formClose
 	 * @author Basil Fisk
-	 * @param {string} id ID of form to be displayed.
-	 * @param {object} list Object holding lists for drop down fields.
-	 * {field: [values], ...}
-	 * @description Display a form for adding data.
+	 * @param {string} name Name of the form.
+	 * @description Close a form.
 	 */
-	formAdd: function (id, list) {
-		var title, fields, names, width, i, div = '', button;
-
-		// Read fields and their names
-		title = _defs[id].title;
-		fields = _defs[id].fields;
-		names = Object.keys(fields);
-
-		// Build form container
-		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
-		div += '<div class="modal-dialog" role="document" style="width:' + width + '%;">';
-		div += '<div class="modal-content">';
-
-		// Add form header and title
-		div += '<div class="modal-header">';
-		if (_defs[id].buttons && _defs[id].buttons.close) {
-			button = _defs[id].buttons.close;
-			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
-		}
-		div += '<h4 class="modal-title">' + title + '</h4>';
-		div += '</div>';
-
-		// Add form body
-		div += '<div class="modal-body">';
-		div += '<form role="form">';
-
-		// Add fields
-		for (i=0; i<names.length; i++) {
-			switch (fields[names[i]].type) {
-				case 'list':
-					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[names[i]], 'text'));
-					break;
-				default:
-					div += this._showField(names[i], fields[names[i]], '');
-			}
-		}
-
-		// Close form body
-		div += '</form></div>';
-
-		// Add button in form footer
-		if (_defs[id].buttons && _defs[id].buttons.add) {
-			button = _defs[id].buttons.add;
-			div += '<div class="modal-footer">';
-			div += '<div class="col-md-12">';
-			div += '<button type="button" class="' + button.icon.background + '"';
-			div += 'onClick="ui.buttonAdd(' + "'" + id + "'" + '); return false;">';
-			div += '<span class="' + button.icon.class + '"></span></button>';
-			div += '</div></div>';
-		}
-
-		// Close form container
-		div += '</div></div>';
-console.log('formAdd', id, div);
-
-		// Remove existing form, then add new form and display
-		this._showContainer(id, div);
-	},
-
-
-	// ---------------------------------------------------------------------------------------
-	// Close a form
-	//
-	// Argument 1 : Name of form
-	// ---------------------------------------------------------------------------------------
-	formClose: function (form) {
-		$('#' + form).modal('hide');
+	formClose: function (name) {
+		$('#' + name).modal('hide');
 	},
 
 
@@ -719,96 +857,7 @@ console.log('formAdd', id, div);
 	 * @description Display a form for editing data.
 	 */
 	formEdit: function (id, data, list) {
-		var title, fields, names, width, i, elem, value, div = '', button;
-
-		// Read fields and their names
-		title = _defs[id].title;
-		fields = _defs[id].fields;
-		names = Object.keys(fields);
-
-		// Build form container
-		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
-		div += '<div class="modal-dialog" role="document" style="width:' + width + '%;">';
-		div += '<div class="modal-content">';
-
-		// Add form header and title
-		div += '<div class="modal-header">';
-		if (_defs[id].buttons && _defs[id].buttons.close) {
-			button = _defs[id].buttons.close;
-			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
-		}
-		div += '<h4 class="modal-title">' + title + '</h4>';
-		div += '</div>';
-
-		// Add form body
-		div += '<div class="modal-body">';
-		div += '<form role="form">';
-
-		// Add fields
-		for (i=0; i<names.length; i++) {
-			// Split dot separated element name into array of element names
-			elem = fields[names[i]].element.split('.');
-
-			// Read data from object
-			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
-			if (elem.length === 1) {
-				value = data[elem[0]];
-			}
-			else if (elem.length === 2) {
-				if (data[elem[0]] === undefined) {
-					value = '';
-				}
-				else {
-					value = data[elem[0]][elem[1]];
-				}
-			}
-			else if (elem.length === 3) {
-				if (data[elem[0]] === undefined || data[elem[0]][elem[1]] === undefined) {
-					value = '';
-				}
-				else {
-					value = data[elem[0]][elem[1]][elem[2]];
-				}
-			}
-			value = (value) ? value : '';
-
-			// Add field
-			switch (fields[names[i]].type) {
-				case 'list':
-					div += this._showField(names[i], fields[names[i]], value, this._sortArrayObjects(list[names[i]], 'text'));
-					break;
-				default:
-					div += this._showField(names[i], fields[names[i]], value);
-			}
-		}
-
-		// Close form body
-		div += '</form></div>';
-
-		// Save and/or Delete buttons in form footer
-		if (_defs[id].buttons) {
-			div += '<div class="modal-footer">';
-			div += '<div class="col-md-12">';
-//			if (_defs[id].buttons.delete) {
-//				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" ';
-//				div += 'onClick="ui.buttonDelete(' + id + '); return false;">';
-//				div += '<span class="glyphicon glyphicon-trash"></span></button>';
-//			}
-			if (_defs[id].buttons && _defs[id].buttons.ok) {
-				button = _defs[id].buttons.ok;
-				div += '<button type="button" class="' + button.icon.background + '" ';
-				div += 'onClick="ui.buttonOK(' + "'" + id + "'" + '); return false;">';
-				div += '<span class="' + button.icon.class + '"></span></button>';
-			}
-			div += '</div></div>';
-		}
-
-		// Close form container
-		div += '</div></div>';
-console.log('formEdit', id, div);
-
-		// Remove existing form, then add new form and display
-		this._showContainer(id, div);
+		this._formEdit (id, data, list);
 	},
 
 
@@ -943,8 +992,8 @@ console.log(title, text, callback);
 	 * icon:   Name of Glyph icon (only for 'button').
 	 * @description Display a table of data.
 	 */
-	tableShow: function (id, rows) {
-		var width, div = '', i, key, row, n, cell, button;
+	tableShow: function (id, rows, lists) {
+		var width, div = '', i, key, row, n, cell, button, data = [], ids;
 
 		// Build the container
 		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
@@ -963,8 +1012,7 @@ console.log(title, text, callback);
 		// Display an Add button, if specified
 		if (_defs[id].buttons && _defs[id].buttons.add) {
 			button = _defs[id].buttons.add;
-			div += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
-			div += 'onClick="' + _defs[id].buttons.add.action + '(); return false;">';
+			div += '<button id="table-' + button.form + '" type="button" class="' + button.icon.background + '" data-dismiss="modal">';
 			div += '<span class="' + button.icon.class + '"></span></button>';
 		}
 		div += '</h4>';
@@ -1003,11 +1051,12 @@ console.log(title, text, callback);
 		// Add each element of the array as a table row
 		for (i=0; i<rows.length; i++) {
 			row = '<tr>';
-
+			
 			// Add user defined columns in sequence specified in form definition
 			for (n=0; n<_defs[id].columns.length; n++) {
 				cell = _defs[id].columns[n].id;
 				if (rows[i][cell]) {
+//					data.push(rows[i][cell]);
 					row += (rows[i][cell].style) ? '<td style="' + rows[i][cell].style + '">' : '<td>';
 					row += (rows[i][cell].text) ? rows[i][cell].text : '';
 					row += '</td>';
@@ -1015,11 +1064,12 @@ console.log(title, text, callback);
 			}
 
 			// Add an optional edit button at the end of the row
-			if (_defs[id].buttons && _defs[id].buttons.edit && _defs[id].buttons.edit.action) {
+//			if (_defs[id].buttons && _defs[id].buttons.edit && _defs[id].buttons.edit.action) {
+			if (_defs[id].buttons && _defs[id].buttons.edit) {
 				button = _defs[id].buttons.edit;
 				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
-				row += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
-				row += 'onClick="' + _defs[id].buttons.edit.action + "('" + rows[i]._id + "'" + '); return false;">';
+				row += '<button id="table-' + button.form + '-' + i + '" type="button" class="' + button.icon.background + '" data-dismiss="modal">';
+//				row += 'onClick="' + _defs[id].buttons.edit.action + "('" + rows[i]._id + "'" + '); return false;">';
 				row += '<span class="' + button.icon.class + '"></span></button>';
 				row += '</td>';
 			}
@@ -1045,7 +1095,14 @@ console.log(title, text, callback);
 		div += '</form>';
 		div += '</div></div></div>';
 
+		// Add the table and form IDs
+		ids = {
+			table: id,
+			add: _defs[id].buttons.add.form,
+			edit: _defs[id].buttons.edit.form
+		};
+
 		// Remove existing table, then add new table and display
-		this._showContainer(id, div);
-	},
+		this._showTable(ids, div, lists, rows);
+	}
 };

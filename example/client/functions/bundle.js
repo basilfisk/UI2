@@ -11,11 +11,11 @@
  */
 var bundle = {
 	/**
-	 * @method add
+	 * @method addForm
 	 * @author Basil Fisk
 	 * @description Add a new bundle.
 	 */
-	add: function () {
+/*	addForm: function () {
 		var i, options = [], lists = {};
 
 		// Load commands list
@@ -32,15 +32,15 @@ var bundle = {
 		lists['bundleAddConnector'] = general.sortArrayObjects(options, 'text');
 
 		ui.formAdd('bundleAdd', lists);
-	},
+	},*/
 
 
 	/**
-	 * @method addSave
+	 * @method add
 	 * @author Basil Fisk
-	 * @description Save a new bundle.
+	 * @description Add a new bundle.
 	 */
-	addSave: function () {
+	add: function () {
 		var data = {
 			name: this.name,
 			company: admin.company.code,
@@ -51,7 +51,7 @@ var bundle = {
 				prms: this.version.prms
 			}
 		};
-		common.apiCall('bundleNew', data, bundle.load);
+		common.apiCall('bundleAdd', data, bundle.load);
 	},
 	
 	
@@ -67,11 +67,11 @@ console.log(this);
 
 
 	/**
-	 * @method edit
+	 * @method editForm
 	 * @author Basil Fisk
 	 * @description Open the selected bundle document for editing.
 	 */
-	edit: function (id) {
+	editForm: function (id) {
 		var i, index = -1, data = {}, options = [], lists = [];
 console.log(id);
 
@@ -125,7 +125,7 @@ console.log(id);
 	 * @description Display the bundle data in a table.
 	 */
 	table: function (action, result) {
-		var i, rows = [], cols, ver;
+		var i, rows = [], cols, ver, options = [], lists = {};
 
 		// Extract data from result set and load into global 'admin.bundles' variable
 		admin.bundles = [];
@@ -158,7 +158,26 @@ console.log(id);
 			rows.push(cols);
 		}
 
+		// Load list of commands
+		for (i=0; i<admin.commands.length; i++) {
+			options.push({
+				value: admin.commands[i].name,
+				text : admin.commands[i].name
+			});
+		}
+		lists['bundleAddCommand'] = general.sortArrayObjects(options, 'text');
+
+		// Load list of connectors
+		options = [];
+		for (i=0; i<admin.connectors.length; i++) {
+			options.push({
+				value: admin.connectors[i].name,
+				text: admin.connectors[i].name
+			});
+		}
+		lists['bundleAddConnector'] = general.sortArrayObjects(options, 'text');
+
 		// Display the table
-		ui.tableShow('bundleTable', rows);
+		ui.tableShow('bundleTable', rows, lists);
 	}
 };
