@@ -21,3 +21,17 @@
 
 - [Example Application](docs/example.md)
 - [WIP and Issues](docs/issues.md)
+
+# Triggering External Functions
+
+Pressing `_postProcess` which calls the external function using the `call` method!! so that the external function will have access to the data entered on the form through the `this` object.
+
+- `buttonAdd` is shown on:
+    - the footer of the form created with the `formAdd` method
+- `buttonDelete` is shown on:
+    - the footer of the form created with the `formEdit` method
+    - each row of the table created with the `tableShow` method
+- `buttonSave` is shown on:
+    - the footer of the form created with the `formEdit` method
+
+When clicking on the edit icon on a row of a table, the external function is called with the `id` of ???
