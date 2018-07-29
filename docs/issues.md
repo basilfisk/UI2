@@ -33,10 +33,19 @@
 ## Future Enhancements
 
 - Provide a tool for validating the menu and form schemas before running
-- Option to override edit/delete buttons on a per row basis
-- in a table row, allow data columns to be merged/prettified with changing underlying data
+- form.js
+	- define styles in `style.js` and substitute in `ui.js`
+- ui.js
+	- table row, allow data columns to be merged/prettified without changing underlying data
+	- remove all English text to `messages.js`
+	- move all styling data to `style.js`
+	- option to override edit/delete buttons on a per row basis
 
 # Useful References
+
+## JSON Editor
+
+https://github.com/josdejong/jsoneditor
 
 ## JSON Forms
 
