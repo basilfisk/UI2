@@ -23,3 +23,6 @@ example/server/node_modules/
 
 # Output of 'npm pack'
 *.tgz
+
+# BF files
+zzz
