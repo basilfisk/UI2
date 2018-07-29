@@ -173,26 +173,39 @@ var ui = {
 	 * @description Display a message in a dialogue box.
 	 */
 	_messageShow: function (title, msg, callback) {
-		var div = '';
+		var div = '', button;
 
 		// Save the function
 		if (callback !== undefined) {
 			this._messages.callback = callback;
 		}
 
-		// Build the message container
+		// Build message container
 		div += '<div id="messageBox" class="modal fade" tabindex="-1" role="dialog">';
 		div += '<div class="modal-dialog">';
 		div += '<div class="modal-content">';
+
+		// Form title and optional close button in header
+		button = _defs.messageBox.buttons.close;
 		div += '<div class="modal-header">';
-		div += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+		if (button) {
+			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
+		}
 		div += '<h4 class="modal-title" id="messageBoxLabel">' + title + '</h4>';
 		div += '</div>';
+
+		// Message text
 		div += '<div class="modal-body">';
 		div += '<textarea class="form-control" rows="5" id="messageBoxText" disabled>' + msg + '</textarea>';
 		div += '</div>';
+
+		// OK button in footer
+		button = _defs.messageBox.buttons.ok;
 		div += '<div class="modal-footer">';
-		div += '<button type="button" class="btn btn-success" data-dismiss="modal" onclick="ui.messageConfirmed(); return false;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
+		div += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
+		div += 'onclick="ui.messageConfirmed(); return false;">';
+		div += '<span class="' + button.icon.class + '"></span></button>';
+		
 		div += '</div>';
 		div += '</div>';
 		div += '</div>';
@@ -227,7 +240,7 @@ var ui = {
 	/**
 	 * @method _postProcess
 	 * @author Basil Fisk
-	 * @param {string} action Action to be performed from the form (add|delete|save).
+	 * @param {string} action Action to be performed from the form (add|delete|ok).
 	 * @param {string} id ID of form to being processed.
 	 * @param {object} data Object holding data read from the form.
 	 * @description Trigger the post-processing script to process the data captured on the form.
@@ -455,10 +468,10 @@ var ui = {
 	// ***************************************************************************************
 
 	/**
-	 * @method buttonSave
+	 * @method buttonAdd
 	 * @author Basil Fisk
 	 * @param {string} id ID of UI form.
-	 * @description Validate and save the data entered on a form.
+	 * @description Validate and save new data entered on a form.
 	 */
 	buttonAdd: function (id) {
 		var data = this._buttonValidate(id);
@@ -474,11 +487,12 @@ console.log("buttonAdd: error validating form '" + id);
 	},
 
 
-	// ---------------------------------------------------------------------------------------
-	// Delete the data on a form
-	//
-	// Argument 1 : Name of UI form
-	// ---------------------------------------------------------------------------------------
+	/**
+	 * @method buttonDelete
+	 * @author Basil Fisk
+	 * @param {string} id ID of UI form.
+	 * @description Delete the data on a form.
+	 */
 	buttonDelete: function (id, data) {
 console.log('buttonDelete', id, data);
 //		var fields, i, field, data = {};
@@ -500,21 +514,21 @@ console.log('buttonDelete', id, data);
 
 
 	/**
-	 * @method buttonSave
+	 * @method buttonOK
 	 * @author Basil Fisk
 	 * @param {string} id ID of UI form.
-	 * @description Validate and save the data entered on a form.
+	 * @description Validate and save data modified on a form.
 	 */
-	buttonSave: function (id) {
+	buttonOK: function (id) {
 		var data = this._buttonValidate(id);
 
 		// Hide the form and trigger the post-processing function
 		if (data) {
 			$('#' + id).modal('hide');
-			this._postProcess('save', id, data);
+			this._postProcess('ok', id, data);
 		}
 		else {
-console.log("buttonSave: error validating form '" + id);
+console.log("buttonOK: error validating form '" + id);
 		}
 	},
 
@@ -626,7 +640,7 @@ console.log("buttonSave: error validating form '" + id);
 	 * @description Display a form for adding data.
 	 */
 	formAdd: function (id, list) {
-		var title, fields, names, width, i, div = '';
+		var title, fields, names, width, i, div = '', button;
 
 		// Read fields and their names
 		title = _defs[id].title;
@@ -641,7 +655,8 @@ console.log("buttonSave: error validating form '" + id);
 		// Add form header and title
 		div += '<div class="modal-header">';
 		if (_defs[id].buttons && _defs[id].buttons.close) {
-			div += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+			button = _defs[id].buttons.close;
+			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
 		}
 		div += '<h4 class="modal-title">' + title + '</h4>';
 		div += '</div>';
@@ -666,11 +681,12 @@ console.log("buttonSave: error validating form '" + id);
 
 		// Add button in form footer
 		if (_defs[id].buttons && _defs[id].buttons.add) {
+			button = _defs[id].buttons.add;
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-			div += '<button type="button" class="btn btn-success"';
+			div += '<button type="button" class="' + button.icon.background + '"';
 			div += 'onClick="ui.buttonAdd(' + "'" + id + "'" + '); return false;">';
-			div += '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+			div += '<span class="' + button.icon.class + '"></span></button>';
 			div += '</div></div>';
 		}
 
@@ -703,7 +719,7 @@ console.log('formAdd', id, div);
 	 * @description Display a form for editing data.
 	 */
 	formEdit: function (id, data, list) {
-		var title, fields, names, width, i, elem, value, div = '';
+		var title, fields, names, width, i, elem, value, div = '', button;
 
 		// Read fields and their names
 		title = _defs[id].title;
@@ -718,7 +734,8 @@ console.log('formAdd', id, div);
 		// Add form header and title
 		div += '<div class="modal-header">';
 		if (_defs[id].buttons && _defs[id].buttons.close) {
-			div += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+			button = _defs[id].buttons.close;
+			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
 		}
 		div += '<h4 class="modal-title">' + title + '</h4>';
 		div += '</div>';
@@ -772,15 +789,16 @@ console.log('formAdd', id, div);
 		if (_defs[id].buttons) {
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-			if (_defs[id].buttons.delete) {
-				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" ';
-				div += 'onClick="ui.buttonDelete(' + id + '); return false;">';
-				div += '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
-			}
-			if (_defs[id].buttons.save) {
-				div += '<button type="button" class="btn btn-success" ';
-				div += 'onClick="ui.buttonSave(' + "'" + id + "'" + '); return false;">';
-				div += '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>';
+//			if (_defs[id].buttons.delete) {
+//				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" ';
+//				div += 'onClick="ui.buttonDelete(' + id + '); return false;">';
+//				div += '<span class="glyphicon glyphicon-trash"></span></button>';
+//			}
+			if (_defs[id].buttons && _defs[id].buttons.ok) {
+				button = _defs[id].buttons.ok;
+				div += '<button type="button" class="' + button.icon.background + '" ';
+				div += 'onClick="ui.buttonOK(' + "'" + id + "'" + '); return false;">';
+				div += '<span class="' + button.icon.class + '"></span></button>';
 			}
 			div += '</div></div>';
 		}
@@ -936,16 +954,18 @@ console.log(title, text, callback);
 		// Build the form header
 		div += '<div class="modal-header">';
 		if (_defs[id].buttons && _defs[id].buttons.close) {
-			div += '<button type="button" class="close" data-dismiss="modal">&times;</button>';
+			button = _defs[id].buttons.close;
+			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
 		}
 		div += '<br/>';
 		div += '<h4>' + _defs[id].title;
 
 		// Display an Add button, if specified
-		if (_defs[id].buttons && _defs[id].buttons.add && _defs[id].buttons.add.action) {
-			div += '<button type="button" class="btn btn-success btn-sm pull-right" data-dismiss="modal" ';
+		if (_defs[id].buttons && _defs[id].buttons.add) {
+			button = _defs[id].buttons.add;
+			div += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
 			div += 'onClick="' + _defs[id].buttons.add.action + '(); return false;">';
-			div += '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+			div += '<span class="' + button.icon.class + '"></span></button>';
 		}
 		div += '</h4>';
 		div += '</div>';
@@ -997,11 +1017,10 @@ console.log(title, text, callback);
 			// Add an optional edit button at the end of the row
 			if (_defs[id].buttons && _defs[id].buttons.edit && _defs[id].buttons.edit.action) {
 				button = _defs[id].buttons.edit;
-console.log(button.action, rows[i]);
 				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
-				row += '<button type="button" class="btn btn-' + button.icon.colour + ' btn-xs" data-dismiss="modal" ';
+				row += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
 				row += 'onClick="' + _defs[id].buttons.edit.action + "('" + rows[i]._id + "'" + '); return false;">';
-				row += '<span class="glyphicon glyphicon-' + button.icon.type + '" aria-hidden="true"></span></button>';
+				row += '<span class="' + button.icon.class + '"></span></button>';
 				row += '</td>';
 			}
 
@@ -1009,9 +1028,9 @@ console.log(button.action, rows[i]);
 			if (_defs[id].buttons && _defs[id].buttons.delete && _defs[id].buttons.delete.action) {
 				button = _defs[id].buttons.delete;
 				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
-				row += '<button type="button" class="btn btn-' + button.icon.colour + ' btn-xs" data-dismiss="modal" ';
+				row += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
 				row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i]._id + "'" + '); return false;">';
-				row += '<span class="glyphicon glyphicon-' + button.icon.type + '" aria-hidden="true"></span></button>';
+				row += '<span class="' + button.icon.class + '"></span></button>';
 				row += '</td>';
 			}
 
