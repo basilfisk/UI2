@@ -34,6 +34,7 @@
 
 - Provide a tool for validating the menu and form schemas before running
 - Option to override edit/delete buttons on a per row basis
+- in a table row, allow data columns to be merged/prettified with changing underlying data
 
 # Useful References
 
