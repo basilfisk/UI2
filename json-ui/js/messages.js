@@ -28,7 +28,31 @@ var _messages = {
 		"func": "_checkRange",
 		"internal": "Entry in '_p1' must be _p2",
 		"external": {
-			"eng": "Entry in '_p1' must be _p"
+			"eng": "Entry in '_p1' must be _p2"
+		}
+	},
+	"UI005" : {
+		"type": "error",
+		"func": "_postProcess",
+		"internal": "'_p1' function failed: _p2",
+		"external": {
+			"eng": "'_p1' function failed: _p2"
+		}
+	},
+	"UI006" : {
+		"type": "error",
+		"func": "_postProcess",
+		"internal": "'_p1' form '_p2' function '_p3' must have 'aaa.bbb' format",
+		"external": {
+			"eng": "'_p1' form '_p2' function '_p3' must have 'aaa.bbb' format"
+		}
+	},
+	"UI007" : {
+		"type": "error",
+		"func": "_postProcess",
+		"internal": "'_p1' form '_p2' function '_p3' does not exist",
+		"external": {
+			"eng": "'_p1' form '_p2' function '_p3' does not exist"
 		}
 	}
 };
