@@ -11,7 +11,7 @@
  */
 var ui = {
 	_messages: {
-		language: 'ita',
+		language: 'eng',
 		callback: undefined
 	},
 
@@ -234,38 +234,25 @@ var ui = {
 	 */
 	_postProcess: function (action, id, data) {
 		var fn, parts;
-//id = 'bundleTable';
-/*		if (action === 'delete') {
-			try {
-console.log("_postProcess: '" + fn + "' function running");
-				window[parts[0]][parts[1]].call(data);
-			}
-			catch (err) {
-console.log("_postProcess: '" + fn + "' function failed: " + err.message);
-			}
-		}
-		else {*/
-			fn = _defs[id].buttons[action].action;
-			if (fn) {
-				parts = fn.split('.');
-console.log('data', data);
-				if (parts.length === 2) {
-					try {
-console.log("_postProcess: '" + fn + "' function running");
-						window[parts[0]][parts[1]].call(data);
-					}
-					catch (err) {
-console.log("_postProcess: '" + fn + "' function failed: " + err.message);
-					}
+
+		fn = _defs[id].buttons[action].action;
+		if (fn) {
+			parts = fn.split('.');
+			if (parts.length === 2) {
+				try {
+					window[parts[0]][parts[1]].call(data);
 				}
-				else {
-console.log("_postProcess: '" + fn + "' function '" + + "' must have 'aaa.bbb' format");
+				catch (err) {
+					this._messageBox('UI005', [fn, err.message]);
 				}
 			}
 			else {
-console.log("_postProcess: '" + fn + "' function not defined for form '" + id);
+				this._messageBox('UI006', [id, action, fn]);
 			}
-//		}
+		}
+		else {
+			this._messageBox('UI007', [id, action, fn]);
+		}
 	},
 
 
@@ -1010,10 +997,10 @@ console.log(title, text, callback);
 			// Add an optional edit button at the end of the row
 			if (_defs[id].buttons && _defs[id].buttons.edit && _defs[id].buttons.edit.action) {
 				button = _defs[id].buttons.edit;
+console.log(button.action, rows[i]);
 				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
 				row += '<button type="button" class="btn btn-' + button.icon.colour + ' btn-xs" data-dismiss="modal" ';
-				row += 'onClick="' + button.action + "('" + rows[i].id + "'" + '); return false;">';
-//				row += 'onClick="' + button.action + '(); return false;">';
+				row += 'onClick="' + _defs[id].buttons.edit.action + "('" + rows[i]._id + "'" + '); return false;">';
 				row += '<span class="glyphicon glyphicon-' + button.icon.type + '" aria-hidden="true"></span></button>';
 				row += '</td>';
 			}
@@ -1024,7 +1011,6 @@ console.log(title, text, callback);
 				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
 				row += '<button type="button" class="btn btn-' + button.icon.colour + ' btn-xs" data-dismiss="modal" ';
 				row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i]._id + "'" + '); return false;">';
-//				row += 'onClick="' + button.action + '(); return false;">';
 				row += '<span class="glyphicon glyphicon-' + button.icon.type + '" aria-hidden="true"></span></button>';
 				row += '</td>';
 			}

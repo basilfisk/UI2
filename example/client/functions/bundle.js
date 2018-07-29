@@ -71,9 +71,9 @@ console.log(this);
 	 * @author Basil Fisk
 	 * @description Open the selected bundle document for editing.
 	 */
-	edit: function () {
+	edit: function (id) {
 		var i, index = -1, data = {}, options = [], lists = [];
-console.log(this);
+console.log(id);
 
 		// Find the selected document
 		for (i=0; i<admin.bundles.length; i++) {
