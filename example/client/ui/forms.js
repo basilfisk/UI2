@@ -161,6 +161,7 @@ var formDefinitions = {
 				"title": "Command Name",
 				"description": "Enter name of command",
 				"type": "list",
+				"listField": "bundleCommandList",
 				"visible": true,
 				"edit": true,
 				"options": {
@@ -174,6 +175,7 @@ var formDefinitions = {
 				"title": "Connector Name",
 				"description": "Enter name of connector",
 				"type": "list",
+				"listField": "bundleConnectorList",
 				"visible": true,
 				"edit": true,
 				"options": {
@@ -256,11 +258,12 @@ var formDefinitions = {
 					}
 				}
 			},
-			"bundleEditConnector": {
-				"element": "connector",
-				"title": "Connector Name",
-				"description": "Enter name of connector",
+			"bundleEditCommand": {
+				"element": "command",
+				"title": "Command Name",
+				"description": "Enter name of command",
 				"type": "list",
+				"listField": "bundleCommandList",
 				"visible": true,
 				"edit": true,
 				"options": {
@@ -269,11 +272,12 @@ var formDefinitions = {
 					}
 				}
 			},
-			"bundleEditCommand": {
-				"element": "command",
-				"title": "Command Name",
-				"description": "Enter name of command",
+			"bundleEditConnector": {
+				"element": "connector",
+				"title": "Connector Name",
+				"description": "Enter name of connector",
 				"type": "list",
+				"listField": "bundleConnectorList",
 				"visible": true,
 				"edit": true,
 				"options": {

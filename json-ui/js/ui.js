@@ -176,7 +176,8 @@ var ui = {
 		for (i=0; i<names.length; i++) {
 			switch (fields[names[i]].type) {
 				case 'list':
-					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[names[i]], 'text'));
+//					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[names[i]], 'text'));
+					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[fields[names[i]].listField], 'text'));
 					break;
 				default:
 					div += this._showField(names[i], fields[names[i]], '');

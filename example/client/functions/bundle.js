@@ -165,7 +165,7 @@ console.log(id);
 				text : admin.commands[i].name
 			});
 		}
-		lists['bundleAddCommand'] = general.sortArrayObjects(options, 'text');
+		lists['bundleCommandList'] = general.sortArrayObjects(options, 'text');
 
 		// Load list of connectors
 		options = [];
@@ -175,7 +175,7 @@ console.log(id);
 				text: admin.connectors[i].name
 			});
 		}
-		lists['bundleAddConnector'] = general.sortArrayObjects(options, 'text');
+		lists['bundleConnectorList'] = general.sortArrayObjects(options, 'text');
 
 		// Display the table
 		ui.tableShow('bundleTable', rows, lists);
