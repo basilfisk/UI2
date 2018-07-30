@@ -361,15 +361,10 @@ var ui = {
 		// Close form body
 		div += '</form></div>';
 
-		// Save and/or Delete buttons in form footer
+		// Optional save button in form footer
 		if (_defs[id].buttons) {
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-//			if (_defs[id].buttons.delete) {
-//				div += '<button type="button" class="btn btn-danger" data-dismiss="modal" ';
-//				div += 'onClick="ui.buttonDelete(' + id + '); return false;">';
-//				div += '<span class="glyphicon glyphicon-trash"></span></button>';
-//			}
 			if (_defs[id].buttons && _defs[id].buttons.ok) {
 				button = _defs[id].buttons.ok;
 				div += '<button type="button" class="' + button.icon.background + '" ';
@@ -784,9 +779,6 @@ var ui = {
 			$('#' + id).modal('hide');
 			this._postProcess('add', id, data);
 		}
-		else {
-console.log("buttonAdd: error validating form '" + id);
-		}
 	},
 
 
@@ -797,7 +789,6 @@ console.log("buttonAdd: error validating form '" + id);
 	 * @description Delete the data on a form.
 	 */
 	buttonDelete: function (id, data) {
-console.log('buttonDelete', id, data);
 		this._postProcess('delete', id, {_id:data});
 	},
 
@@ -815,9 +806,6 @@ console.log('buttonDelete', id, data);
 		if (data) {
 			$('#' + id).modal('hide');
 			this._postProcess('ok', id, data);
-		}
-		else {
-console.log("buttonOK: error validating form '" + id);
 		}
 	},
 
@@ -1014,9 +1002,6 @@ console.log("buttonOK: error validating form '" + id);
 		}
 		div += '</h4>';
 		div += '</div>';
-/*	$('#table-' + ids.add).click(() => {
-		this._formAdd(ids.add, lists);
-*/
 
 		// Build the table container
 		div += '<div class="modal-body">';
@@ -1073,11 +1058,11 @@ console.log("buttonOK: error validating form '" + id);
 			}
 			
 			// Add an optional delete button at the end of the row
-			if (_defs[id].buttons && _defs[id].buttons.delete && _defs[id].buttons.delete.action) {
+			if (_defs[id].buttons && _defs[id].buttons.delete) {
 				button = _defs[id].buttons.delete;
 				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
 				row += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
-				row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i]._id + "'" + '); return false;">';
+				row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i][_defs[id].key].text + "'" + '); return false;">';
 				row += '<span class="' + button.icon.class + '"></span></button>';
 				row += '</td>';
 			}

@@ -131,12 +131,12 @@ class BundleCalls {
 	 * @param {object} session Session object.
 	 * @description Update a bundle document.
 	 */
-	bundleUpdate (session) {
+	bundleUpdate (that, session) {
 		var	docid;
 
 		// Extract then remove Mongo document ID from object
-		docid = session.params.id;
-		delete session.params.id;
+		docid = session.params._id;
+		delete session.params._id;
 
 		// Update document
 		that.mongoDB.db(that.admin.mongo.db).collection('va_bundle').updateOne({'_id':new that.ObjectID(docid)}, {$set:session.params}, (err, result) => {

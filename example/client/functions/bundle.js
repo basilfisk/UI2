@@ -11,37 +11,12 @@
  */
 var bundle = {
 	/**
-	 * @method addForm
-	 * @author Basil Fisk
-	 * @description Add a new bundle.
-	 */
-/*	addForm: function () {
-		var i, options = [], lists = {};
-
-		// Load commands list
-		for (i=0; i<admin.commands.length; i++) {
-			options.push({"value":admin.commands[i].name, "text":admin.commands[i].name});
-		}
-		lists['bundleAddCommand'] = general.sortArrayObjects(options, 'text');
-
-		// Load connectors list
-		options = [];
-		for (i=0; i<admin.connectors.length; i++) {
-			options.push({"value":admin.connectors[i].name, "text":admin.connectors[i].name});
-		}
-		lists['bundleAddConnector'] = general.sortArrayObjects(options, 'text');
-
-		ui.formAdd('bundleAdd', lists);
-	},*/
-
-
-	/**
 	 * @method add
 	 * @author Basil Fisk
 	 * @description Add a new bundle.
 	 */
 	add: function () {
-		var data = {
+/*		var data = {
 			name: this.name,
 			company: admin.company.code,
 			command: this.command,
@@ -50,7 +25,9 @@ var bundle = {
 				cmd: this.version.cmd,
 				prms: this.version.prms
 			}
-		};
+		};*/
+		var data = this;
+		data.company = admin.company.code;
 		common.apiCall('bundleAdd', data, bundle.load);
 	},
 	
@@ -61,49 +38,19 @@ var bundle = {
 	 * @description Delete the selected bundle.
 	 */
 	delete: function () {
-console.log(this);
 		common.apiCall('bundleDelete', {_id: this._id}, bundle.load);
 	},
 
 
 	/**
-	 * @method editForm
+	 * @method edit
 	 * @author Basil Fisk
-	 * @description Open the selected bundle document for editing.
+	 * @description Save details of an edited bundle.
 	 */
-	editForm: function (id) {
-		var i, index = -1, data = {}, options = [], lists = [];
-console.log(id);
-
-		// Find the selected document
-		for (i=0; i<admin.bundles.length; i++) {
-			index = (admin.bundles[i]._id === id) ? i : index;
-		}
-
-		// Load bundle data into temporary object
-		data.id = admin.bundles[index]._id;
-		data.name = admin.bundles[index].name;
-		data.command = admin.bundles[index].command;
-		data.connector = admin.bundles[index].connector;
-		data.version = {};
-		data.version.cmd = admin.bundles[index].version.cmd;
-		data.version.prms = admin.bundles[index].version.prms;
-
-		// Load connectors list
-		for (i=0; i<admin.connectors.length; i++) {
-			options.push({"value":admin.connectors[i].name, "text":admin.connectors[i].name});
-		}
-		lists['bundleEditConnector'] = general.sortArrayObjects(options, 'text');
-
-		// Load commands list
-		options = [];
-		for (i=0; i<admin.commands.length; i++) {
-			options.push({"value":admin.commands[i].name, "text":admin.commands[i].name});
-		}
-		lists['bundleEditCommand'] = general.sortArrayObjects(options, 'text');
-
-		// Display form for editing data
-		ui.formEdit('bundleEdit', data, lists);
+	edit: function () {
+		var data = this;
+		data.company = admin.company.code;
+		common.apiCall('bundleUpdate', data, bundle.load);
 	},
 
 

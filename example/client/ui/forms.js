@@ -107,7 +107,6 @@ var formDefinitions = {
 				"title": "Delete"
 			},
 			"edit": {
-				"ZZZaction": "bundle.editForm",
 				"form": "bundleEdit",
 				"icon": {
 					"background": "btn btn-success btn-xs",
@@ -123,7 +122,8 @@ var formDefinitions = {
 			{ "id": "bundleEditConnector", "title": "Connector" },
 			{ "id": "bundleEditCommandVer", "title": "Cmd Ver" },
 			{ "id": "bundleEditParameterVer", "title": "Prm Ver" }
-		]
+		],
+		"key": "bundleEditId"
 	},
 	"bundleAdd": {
 		"title": "Add Bundle",
