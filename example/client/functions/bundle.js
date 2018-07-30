@@ -139,18 +139,23 @@ console.log(id);
 			ver = 'Cmd v' + admin.bundles[i].version.cmd + ' / ';
 			ver += 'Prm v' + admin.bundles[i].version.prms;
 			cols = {
-				_id: admin.bundles[i]._id,
-				name: {
+				bundleEditId: {
+					text: admin.bundles[i]._id
+				},
+				bundleEditName: {
 					text: admin.bundles[i].name
 				},
-				command: {
+				bundleEditCommand: {
 					text: admin.bundles[i].command
 				},
-				connector: {
+				bundleEditConnector: {
 					text: admin.bundles[i].connector
 				},
-				version: {
-					text: ver
+				bundleEditCommandVer: {
+					text: admin.bundles[i].version.cmd
+				},
+				bundleEditParameterVer: {
+					text: admin.bundles[i].version.prms
 				}
 			};
 

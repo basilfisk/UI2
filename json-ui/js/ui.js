@@ -10,10 +10,117 @@
  * @description Functions that control the display and validation of the web application.
  */
 var ui = {
+	_table: {
+		lists: undefined,
+		rows: undefined
+	},
 	_messages: {
 		language: 'eng',
 		callback: undefined
 	},
+
+	/**
+	 * @method _buttonValidate
+	 * @author Basil Fisk
+	 * @param {string} id ID of UI form.
+	 * @description Validate and save data modified on a form.
+	 */
+	_buttonValidate: function (id) {
+		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
+
+		// Read fields and their names
+		fields = _defs[id].fields;
+		names = Object.keys(fields);
+
+		// Read and validate each field
+		for (i=0; i<names.length; i++) {
+			name = names[i];
+
+			// Read the value(s) based on the stated data type of the field
+			switch (fields[name].type) {
+				// True or false, assign direct to data object
+				case 'checkbox':
+					temp[name] = (document.getElementById(name).checked) ? true : false;
+					break;
+				// ID field
+				case 'id':
+					temp[name] = document.getElementById(name).value;
+					break;
+				// Single value or an array of values, assign direct to data object
+				case 'list':
+					if (fields[name].options.display.select === 'multiple') {
+						temp[name] = [];
+						elem = document.getElementById(name);
+						for (e=0; e<elem.length; e++) {
+							if (elem[e].selected) {
+								temp[name].push(elem[e].value);
+							}
+						}
+					}
+					else {
+						temp[name] = document.getElementById(name).value;
+					}
+					break;
+				// All other field types (text, float, integer)
+				default:
+					// Read data as a text string
+					text = document.getElementById(name).value;
+
+					// Validate using 'options.checks' section
+					if (fields[name].options && fields[name].options.checks) {
+						// Field holds an array of values
+						if (fields[name].options.content && fields[name].options.content.type === 'array') {
+							// Validate each element of the field
+							temp[name] = [];
+							elem = text.split(fields[name].options.content.separator);
+							for (e=0; e<elem.length; e++) {
+								// Run the check
+								if (!this._runChecks(fields[name].options.checks, fields[name].title, elem[e])) {
+									return;
+								}
+								// Convert value to the correct type
+								temp[name].push(this._convertData(fields[name].type, elem[e]));
+							}
+						}
+						// Field holds a single value (default)
+						else {
+							// Run the check
+							if (!this._runChecks(fields[name].options.checks, fields[name].title, text)) {
+								return;
+							}
+							// Convert value to the correct type
+							temp[name] = this._convertData(fields[name].type, text);
+						}
+					}
+					// Nothing in the 'options.checks' section, so treat value as text
+					else {
+						temp[name] = text;
+					}
+			}
+
+			// Split dot separated element name into array of element names
+			elem = fields[name].element.split('.');
+
+			// Assign data to element in object
+			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
+			if (elem.length === 1) {
+				data[elem[0]] = temp[name];
+			}
+			else if (elem.length === 2) {
+				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
+				data[elem[0]][elem[1]] = temp[name];
+			}
+			else if (elem.length === 3) {
+				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
+				if (data[elem[0]][elem[1]] === undefined) { data[elem[0]][elem[1]] = {}; }
+				data[elem[0]][elem[1]][elem[2]] = temp[name];
+			}
+		}
+		
+		// Success, so return data
+		return data;
+	},
+
 
 	/**
 	 * @method _checkFormat
@@ -176,7 +283,6 @@ var ui = {
 		for (i=0; i<names.length; i++) {
 			switch (fields[names[i]].type) {
 				case 'list':
-//					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[names[i]], 'text'));
 					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[fields[names[i]].listField], 'text'));
 					break;
 				default:
@@ -216,8 +322,7 @@ var ui = {
 	 * @description Display a form for editing data.
 	 */
 	_formEdit: function (id, data, list) {
-		var title, fields, names, width, i, elem, value, div = '', button;
-console.log(id, data, list);
+	var title, fields, names, width, i, elem, div = '', button;
 
 		// Read fields and their names
 		title = _defs[id].title;
@@ -244,41 +349,12 @@ console.log(id, data, list);
 
 		// Add fields
 		for (i=0; i<names.length; i++) {
-			// Split dot separated element name into array of element names
-/*			elem = fields[names[i]].element.split('.');
-
-			// Read data from object
-			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
-			if (elem.length === 1) {
-				value = data[elem[0]];
-			}
-			else if (elem.length === 2) {
-				if (data[elem[0]] === undefined) {
-					value = '';
-				}
-				else {
-					value = data[elem[0]][elem[1]];
-				}
-			}
-			else if (elem.length === 3) {
-				if (data[elem[0]] === undefined || data[elem[0]][elem[1]] === undefined) {
-					value = '';
-				}
-				else {
-					value = data[elem[0]][elem[1]][elem[2]];
-				}
-			}
-			value = (value) ? value : '';*/
-console.log(names[i]);
-value = data[names[i]];
-
-			// Add field
 			switch (fields[names[i]].type) {
 				case 'list':
-					div += this._showField(names[i], fields[names[i]], value, this._sortArrayObjects(list[names[i]], 'text'));
+					div += this._showField(names[i], fields[names[i]], data[names[i]].text, this._sortArrayObjects(list[fields[names[i]].listField], 'text'));
 					break;
 				default:
-					div += this._showField(names[i], fields[names[i]], value);
+					div += this._showField(names[i], fields[names[i]], data[names[i]].text);
 			}
 		}
 
@@ -388,6 +464,36 @@ value = data[names[i]];
 		$('#messageBox').remove();
 		$('body').append(div);
 		$('#messageBox').modal('show');
+	},
+
+
+	// Read values from object
+	// TODO Is this obsolete ?????????????????????????????????????
+	_objectRead: function (data, field) {
+		var elem, value;
+
+		// Split dot separated element name into array of element names
+		elem = field.element.split('.');
+		if (elem.length === 1) {
+			value = data[elem[0]];
+		}
+		else if (elem.length === 2) {
+			if (data[elem[0]] === undefined) {
+				value = '';
+			}
+			else {
+				value = data[elem[0]][elem[1]];
+			}
+		}
+		else if (elem.length === 3) {
+			if (data[elem[0]] === undefined || data[elem[0]][elem[1]] === undefined) {
+				value = '';
+			}
+			else {
+				value = data[elem[0]][elem[1]][elem[2]];
+			}
+		}
+		value = (value) ? value : '';
 	},
 
 
@@ -612,16 +718,6 @@ value = data[names[i]];
 			});
 		}
 
-		if (ids.edit) {
-			for (var i=0; i<data.length; i++) {
-				row = data[i];
-				$('#table-' + ids.edit + '-' + i).click(() => {
-					this._formEdit(ids.edit, row, lists);
-				});
-			}
-		}
-//		row += 'onClick="' + _defs[id].buttons.edit.action + "('" + rows[i]._id + "'" + '); return false;">';
-
 		$('#' + ids.table).modal('show');
 	},
 
@@ -702,20 +798,6 @@ console.log("buttonAdd: error validating form '" + id);
 	 */
 	buttonDelete: function (id, data) {
 console.log('buttonDelete', id, data);
-//		var fields, i, field, data = {};
-
-		// Read and validate each field
-/*		fields = Object.keys(structure.forms[form].fields);
-		for (i=0; i<fields.length; i++) {
-			field = fields[i];
-			data[field] = document.getElementById(field).value;
-		}
-*/
-		// Hide the form and delete the data
-		$('#' + id).modal('hide');
-//		_post(id + '-delete', data);
-//		func = (id + '-delete').split('.');
-//		window[func[0]][func[1]].apply(data);
 		this._postProcess('delete', id, {_id:data});
 	},
 
@@ -737,103 +819,6 @@ console.log('buttonDelete', id, data);
 		else {
 console.log("buttonOK: error validating form '" + id);
 		}
-	},
-
-
-	_buttonValidate: function (id) {
-		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
-
-		// Read fields and their names
-		fields = _defs[id].fields;
-		names = Object.keys(fields);
-
-		// Read and validate each field
-		for (i=0; i<names.length; i++) {
-			name = names[i];
-
-			// Read the value(s) based on the stated data type of the field
-			switch (fields[name].type) {
-				// True or false, assign direct to data object
-				case 'checkbox':
-					temp[name] = (document.getElementById(name).checked) ? true : false;
-					break;
-				// ID field
-				case 'id':
-					temp[name] = document.getElementById(name).value;
-					break;
-				// Single value or an array of values, assign direct to data object
-				case 'list':
-					if (fields[name].options.display.select === 'multiple') {
-						temp[name] = [];
-						elem = document.getElementById(name);
-						for (e=0; e<elem.length; e++) {
-							if (elem[e].selected) {
-								temp[name].push(elem[e].value);
-							}
-						}
-					}
-					else {
-						temp[name] = document.getElementById(name).value;
-					}
-					break;
-				// All other field types (text, float, integer)
-				default:
-					// Read data as a text string
-					text = document.getElementById(name).value;
-
-					// Validate using 'options.checks' section
-					if (fields[name].options && fields[name].options.checks) {
-						// Field holds an array of values
-						if (fields[name].options.content && fields[name].options.content.type === 'array') {
-							// Validate each element of the field
-							temp[name] = [];
-							elem = text.split(fields[name].options.content.separator);
-							for (e=0; e<elem.length; e++) {
-								// Run the check
-								if (!this._runChecks(fields[name].options.checks, fields[name].title, elem[e])) {
-									return;
-								}
-								// Convert value to the correct type
-								temp[name].push(this._convertData(fields[name].type, elem[e]));
-							}
-						}
-						// Field holds a single value (default)
-						else {
-							// Run the check
-							if (!this._runChecks(fields[name].options.checks, fields[name].title, text)) {
-								return;
-							}
-							// Convert value to the correct type
-							temp[name] = this._convertData(fields[name].type, text);
-						}
-					}
-					// Nothing in the 'options.checks' section, so treat value as text
-					else {
-						temp[name] = text;
-					}
-			}
-
-			// Split dot separated element name into array of element names
-			elem = fields[name].element.split('.');
-
-			// Assign data to element in object
-			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
-			if (elem.length === 1) {
-				data[elem[0]] = temp[name];
-			}
-			else if (elem.length === 2) {
-				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
-				data[elem[0]][elem[1]] = temp[name];
-			}
-			else if (elem.length === 3) {
-				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
-				if (data[elem[0]][elem[1]] === undefined) { data[elem[0]][elem[1]] = {}; }
-				data[elem[0]][elem[1]][elem[2]] = temp[name];
-			}
-		}
-		
-		// Success, so return data
-		return data;
 	},
 
 
@@ -961,7 +946,6 @@ console.log("buttonOK: error validating form '" + id);
 		}
 		
 		// Display the message
-console.log(title, text, callback);
 		this._messageShow(title, text, callback);
 	},
 
@@ -976,6 +960,18 @@ console.log(title, text, callback);
 			this._messages.callback();
 			this._messages.callback = undefined;
 		}
+	},
+
+
+	/**
+	 * @method tableEditForm
+	 * @author Basil Fisk
+	 * @param {string} id ID of the form.
+	 * @param {object} row Row index of the data to be shown in fields for editing.
+	 * @description Display a form for editing data.
+	 */
+	tableEditForm: function (id, row) {
+		this._formEdit(id, this._table.rows[row], this._table.lists);
 	},
 
 
@@ -1018,6 +1014,9 @@ console.log(title, text, callback);
 		}
 		div += '</h4>';
 		div += '</div>';
+/*	$('#table-' + ids.add).click(() => {
+		this._formAdd(ids.add, lists);
+*/
 
 		// Build the table container
 		div += '<div class="modal-body">';
@@ -1057,7 +1056,6 @@ console.log(title, text, callback);
 			for (n=0; n<_defs[id].columns.length; n++) {
 				cell = _defs[id].columns[n].id;
 				if (rows[i][cell]) {
-//					data.push(rows[i][cell]);
 					row += (rows[i][cell].style) ? '<td style="' + rows[i][cell].style + '">' : '<td>';
 					row += (rows[i][cell].text) ? rows[i][cell].text : '';
 					row += '</td>';
@@ -1065,16 +1063,15 @@ console.log(title, text, callback);
 			}
 
 			// Add an optional edit button at the end of the row
-//			if (_defs[id].buttons && _defs[id].buttons.edit && _defs[id].buttons.edit.action) {
 			if (_defs[id].buttons && _defs[id].buttons.edit) {
 				button = _defs[id].buttons.edit;
 				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
-				row += '<button id="table-' + button.form + '-' + i + '" type="button" class="' + button.icon.background + '" data-dismiss="modal">';
-//				row += 'onClick="' + _defs[id].buttons.edit.action + "('" + rows[i]._id + "'" + '); return false;">';
+				row += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
+				row += 'onClick="ui.tableEditForm(' + "'" + _defs[id].buttons.edit.form + "', " + i + '); return false;">';
 				row += '<span class="' + button.icon.class + '"></span></button>';
 				row += '</td>';
 			}
-
+			
 			// Add an optional delete button at the end of the row
 			if (_defs[id].buttons && _defs[id].buttons.delete && _defs[id].buttons.delete.action) {
 				button = _defs[id].buttons.delete;
@@ -1084,7 +1081,7 @@ console.log(title, text, callback);
 				row += '<span class="' + button.icon.class + '"></span></button>';
 				row += '</td>';
 			}
-
+			
 			// Close row and add to bottom of table
 			row += '</tr>';
 			div += row;
@@ -1099,8 +1096,14 @@ console.log(title, text, callback);
 		// Add the table and form IDs
 		ids = {
 			table: id,
-			add: _defs[id].buttons.add.form,
-			edit: _defs[id].buttons.edit.form
+			add: _defs[id].buttons.add.form
+		};
+
+		// Save the table data for the edit form
+		// TODO make this work like the Add form, by adding a click event to each row
+		this._table = {
+			lists: lists,
+			rows: rows
 		};
 
 		// Remove existing table, then add new table and display

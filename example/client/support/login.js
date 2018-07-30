@@ -20,7 +20,15 @@ var login = {
 		ui.init(formDefinitions, messages);
 
 		// Display the login form for the Admin Console
-		ui.formEdit('login', {"username":'admin', "password":'password'});
+		var data = {
+			loginName: {
+				text: 'admin'
+			},
+			loginPassword: {
+				text: 'password'
+			}
+		};
+		ui.formEdit('login', data);
 	},
 
 

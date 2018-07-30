@@ -118,10 +118,11 @@ var formDefinitions = {
 			}
 		},
 		"columns": [
-			{ "id": "name", "title": "Name" },
-			{ "id": "command", "title": "Command" },
-			{ "id": "connector", "title": "Connector" },
-			{ "id": "version", "title": "Versions" }
+			{ "id": "bundleEditName", "title": "Name" },
+			{ "id": "bundleEditCommand", "title": "Command" },
+			{ "id": "bundleEditConnector", "title": "Connector" },
+			{ "id": "bundleEditCommandVer", "title": "Cmd Ver" },
+			{ "id": "bundleEditParameterVer", "title": "Prm Ver" }
 		]
 	},
 	"bundleAdd": {
@@ -239,7 +240,7 @@ var formDefinitions = {
 		},
 		"fields": {
 			"bundleEditId": {
-				"element": "id",
+				"element": "_id",
 				"type": "id",
 				"visible": false,
 				"edit": false
@@ -938,7 +939,7 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"username": {
+			"loginName": {
 				"element": "username",
 				"title": "User Name",
 				"type": "text",
@@ -951,7 +952,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"password": {
+			"loginPassword": {
 				"element": "password",
 				"title": "Password",
 				"type": "password",
