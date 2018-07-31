@@ -2,10 +2,6 @@
 
 ## Notes
 
-- `ui.js` functions not tested yet
-	- buttonDelete
-	- formAdd
-	- formClose
 - `init` in `login.js` has been hard-coded with the admin username & password
 - `server/config.json` holds SSL certs pointing to VeryAPI. Sample should use HTTP only.
 - `docs/example.md` references the VeryAPI SSL certificates.
@@ -22,17 +18,14 @@
 
 - about form
 	- Company : name instead of code
-- login.js
-	- Is the admin.users element needed? Is it related to me.groupUsers?
 - login form
-	- if login fails, show login form again
 	- display loading icon until `setProgress` has finished
 - logout option
 	- clear `me` and `admin` variables before showing login form
 
 ## Future Enhancements
 
-- Provide a tool for validating the menu and form schemas before running
+- Provide a tool for validating `menu.js` and `form.js` before running
 - form.js
 	- define styles in `style.js` and substitute in `ui.js`
 - ui.js
