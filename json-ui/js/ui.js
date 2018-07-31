@@ -1047,7 +1047,7 @@ var ui = {
 				}
 				else {
 					row += '<td>Undefined</td>';
-					console.log('"Missing definition for cell"', id, 'row', cell);
+					console.log('Missing definition for cell: ' + id + '.' + cell);
 				}
 			}
 
@@ -1070,7 +1070,7 @@ var ui = {
 					row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i][_defs[id].key].text + "'" + '); return false;">';
 				}
 				else {
-					console.log('"Missing definition for Delete button"', id, _defs[id].key, rows[i][_defs[id].key]);
+					console.log('Missing definition for Delete button: ' + id + '.' + _defs[id].key);
 				}
 				row += '<span class="' + button.icon.class + '"></span></button>';
 				row += '</td>';
