@@ -37,5 +37,20 @@ var common = {
 		};
 
 		$.ajax(url, options);
+	},
+
+
+	/**
+	 * @method sortArrayObjects
+	 * @author Basil Fisk
+	 * @param {array} arr Array of objects to be sorted.
+	 * @param {string} key Field in each object to sort by.
+	 * @description Sort an array of objects by a field in the object.
+	 */
+	sortArrayObjects: function (arr, key) {
+		var sorted = arr.sort(function (a, b) {
+			return (a[key] < b[key]) ? -1 : (a[key] > b[key]) ? 1 : 0;
+		});
+		return sorted;
 	}
 };

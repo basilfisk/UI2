@@ -22,7 +22,7 @@ var command = {
 		for (i=0; i<admin.connectors.length; i++) {
 			options.push({"value":admin.connectors[i].service, "text":admin.connectors[i].service});
 		}
-		lists['commandAddService'] = general.sortArrayObjects(options, 'text');
+		lists['commandAddService'] = common.sortArrayObjects(options, 'text');
 
 		ui.formAdd('commandAdd', lists);
 	},
@@ -107,7 +107,7 @@ console.log(id);
 		for (i=0; i<admin.connectors.length; i++) {
 			options.push({"value":admin.connectors[i].service, "text":admin.connectors[i].service});
 		}
-		lists['commandEditService'] = general.sortArrayObjects(options, 'text');
+		lists['commandEditService'] = common.sortArrayObjects(options, 'text');
 
 		// Display form for editing data
 		ui.formEdit('commandEdit', data, lists);

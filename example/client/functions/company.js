@@ -187,7 +187,7 @@
 		for (i=0; i<admin.plans.length; i++) {
 			options.push({"value":admin.plans[i].id, "text":admin.plans[i].name});
 		}
-		lists['companyGroupAddPlan'] = general.sortArrayObjects(options, 'text');
+		lists['companyGroupAddPlan'] = common.sortArrayObjects(options, 'text');
 
 		ui.formAdd('companyGroupAdd', lists);
 	},
@@ -236,7 +236,7 @@
 		for (i=0; i<admin.plans.length; i++) {
 			options.push({"value":admin.plans[i].id, "text":admin.plans[i].name});
 		}
-		lists['companyGroupEditPlan'] = general.sortArrayObjects(options, 'text');
+		lists['companyGroupEditPlan'] = common.sortArrayObjects(options, 'text');
 
 		// Display form for editing data
 		ui.formEdit('companyGroupEdit', data, lists);

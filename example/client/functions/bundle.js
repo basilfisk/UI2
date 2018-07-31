@@ -117,7 +117,7 @@ var bundle = {
 				text : admin.commands[i].name
 			});
 		}
-		lists['bundleCommandList'] = general.sortArrayObjects(options, 'text');
+		lists['bundleCommandList'] = common.sortArrayObjects(options, 'text');
 
 		// Load list of connectors
 		options = [];
@@ -127,7 +127,7 @@ var bundle = {
 				text: admin.connectors[i].name
 			});
 		}
-		lists['bundleConnectorList'] = general.sortArrayObjects(options, 'text');
+		lists['bundleConnectorList'] = common.sortArrayObjects(options, 'text');
 
 		// Display the table
 		ui.tableShow('bundleTable', rows, lists);

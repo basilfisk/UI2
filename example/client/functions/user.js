@@ -23,7 +23,7 @@ var user = {
 		for (i=0; i<keys.length; i++) {
 			options.push({"value":keys[i], "text":keys[i]});
 		}
-		lists['userAddGroup'] = general.sortArrayObjects(options, 'text');
+		lists['userAddGroup'] = common.sortArrayObjects(options, 'text');
 
 		// Load role list - only role to list if role is same or lower than current user
 		options = [];
@@ -32,7 +32,7 @@ var user = {
 				options.push({"value":admin.roles[i].code, "text":admin.roles[i].name});
 			}
 		}
-		lists['userAddRole'] = general.sortArrayObjects(options, 'text');
+		lists['userAddRole'] = common.sortArrayObjects(options, 'text');
 
 		// Load unique list of bundles
 		arr = [];
@@ -43,7 +43,7 @@ var user = {
 				options.push({"value":admin.bundles[i].name, "text":admin.bundles[i].name});
 			}
 		}
-		lists['userAddBundles'] = general.sortArrayObjects(options, 'text');
+		lists['userAddBundles'] = common.sortArrayObjects(options, 'text');
 
 		ui.formAdd('userAdd', lists);
 	},
@@ -90,14 +90,14 @@ console.log(this);
 		for (i=0; i<keys.length; i++) {
 			options.push({"value":keys[i], "text":keys[i]});
 		}
-		lists['userEditGroup'] = general.sortArrayObjects(options, 'text');
+		lists['userEditGroup'] = common.sortArrayObjects(options, 'text');
 
 		// Load role list
 		options = [];
 		for (i=0; i<admin.roles.length; i++) {
 			options.push({"value":admin.roles[i].code, "text":admin.roles[i].name});
 		}
-		lists['userEditRole'] = general.sortArrayObjects(options, 'text');
+		lists['userEditRole'] = common.sortArrayObjects(options, 'text');
 
 		// Load unique list of bundles
 		arr = [];
@@ -108,7 +108,7 @@ console.log(this);
 				options.push({"value":admin.bundles[i].name, "text":admin.bundles[i].name});
 			}
 		}
-		lists['userEditBundles'] = general.sortArrayObjects(options, 'text');
+		lists['userEditBundles'] = common.sortArrayObjects(options, 'text');
 
 		// Display form for editing data
 		ui.formEdit('userEdit', data, lists);

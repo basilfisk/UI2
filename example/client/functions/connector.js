@@ -21,7 +21,7 @@ var connector = {
 		for (i=0; i<admin.services.length; i++) {
 			options.push({"value":admin.services[i].code, "text":admin.services[i].name});
 		}
-		lists['connectorAddService'] = general.sortArrayObjects(options, 'text');
+		lists['connectorAddService'] = common.sortArrayObjects(options, 'text');
 
 		ui.formAdd('connectorAdd', lists);
 	},
