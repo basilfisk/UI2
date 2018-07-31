@@ -87,7 +87,7 @@ var menuDefinitions = {
 				{
 					"id": "about",
 					"title": "About",
-					"action": "general.aboutShow",
+					"action": "about.show",
 					"access": ["superuser","manager","user"]
 				},
 				{
