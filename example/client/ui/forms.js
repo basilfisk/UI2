@@ -7,7 +7,7 @@ var formDefinitions = {
 					"class": "close",
 					"image": "&times;"
 				}
-			},
+			}
 		},
 		"fields": {
 			"aboutUserName": {
@@ -1092,9 +1092,9 @@ var formDefinitions = {
 			}
 		},
 		"columns": [
-			{ "id": "userEditUsername", "title":"User" },
-			{ "id": "userEditGroup", "title":"Group" },
-			{ "id": "userEditRole", "title":"Role" }
+			{ "id": "userEditUsername", "title": "User" },
+			{ "id": "userEditGroup", "title": "Group" },
+			{ "id": "userEditRole", "title": "Role" }
 		],
 		"key": "userEditId"
 	},
