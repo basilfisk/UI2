@@ -22,30 +22,152 @@ class Validate {
 	 * @description Check the form definitions.
 	 */
 	checkForms () {
-		var keys, i;
+		var forms, i, form, list,
+			elem = form + ".";
 
-		keys = Object.keys(this.form);
-		for (i=0; i<keys.length; i++) {
-			this.checkForm(keys[i], this.form[keys[i]]);
-			return;
+		this.log("form", "Validating: " + this.file.form);
+
+		forms = Object.keys(this.form);
+		for (i=0; i<forms.length; i++) {
+			form = this.form[forms[i]];
+
+			// type element is mandatory
+			if (!form.type) {
+				this.log("form", forms[i] + ".type is mandatory");
+			}
+
+			// Valid types
+			list = ['form','table'];
+			if (!this.isInList([form.type], list)) {
+				this.log("form", forms[i] + ".type must only have these values: " + list.join(', '));
+			}
+
+			// Valid fields
+			if (form.type === 'form') {
+				list = ['buttons','fields','title','type','width'];
+			}
+			else {
+				list = ['buttons','columns','fields','key','title','type','width'];
+			}
+			if (!this.isInList(Object.keys(form), list)) {
+				this.log("form", "'" + forms[i] + "' form must only have these elements: " + list.join(', '));
+			}
+
+			// title element
+			if (!this.isString(form.title)) {
+				this.log("form", forms[i] + ".title must be a string");
+			}
+
+			// buttons element
+			this.checkFormButtons(forms[i], form.type, form.buttons);
+
+			// fields element
+			this.checkFormFields(forms[i], form.fields);
+//return;
 		}
-
-		this.log("form", "Successfully validated: " + this.file.form);
 	}
 
 
 	/**
-	 * @method checkForm
+	 * @method checkFormButtons
 	 * @memberof Validate
 	 * @param {string} form Name of the form.
-	 * @param {object} defn Definition of the form.
-	 * @description Check the definition of a single form.
+	 * @param {string} type Type of object to be displayed (form|table).
+	 * @param {object} def Definition of the buttons element.
+	 * @description Check the definition of the buttons element on a single form.
 	 */
-	checkForm (form, defn) {
-		var keys, i, elem, n, p;
+	checkFormButtons (form, type, def) {
+		var keys, i, n, p, list,
+			elem = form + ".buttons";
 
-//		keys = Object.keys(this.form);
-		console.log(form, defn);
+		if (!this.isObject(def)) {
+			this.log("form", elem + " must be an object");
+		}
+
+		// Valid fields
+		list = ['add','close','delete','edit','ok'];
+		if (!this.isInList(Object.keys(def), list)) {
+			this.log("form", elem + " must only have these elements: " + list.join(', '));
+		}
+
+		// add button
+		if (def.add) {
+			if (!this.isObject(def.add)) {
+				this.log("form", elem + ".add must be an object");
+			}
+			else {
+				// add.form on a table
+				if (type === 'table') {
+					if (!this.isString(def.add.form)) {
+						this.log("form", elem + ".add.form must be a string");
+					}
+					list = ['form','icon'];
+					if (!this.isInList(Object.keys(def.add), list)) {
+						this.log("form", elem + ".add must only have these elements: " + list.join(', '));
+					}
+				}
+				// add.action on a form
+				else {
+					if (!this.isString(def.add.action)) {
+						this.log("form", elem + ".add.action must be a string");
+					}
+					list = ['action','icon'];
+					if (!this.isInList(Object.keys(def.add), list)) {
+						this.log("form", elem + ".add must only have these elements: " + list.join(', '));
+					}
+				}
+				// add.icon
+				if (!this.isObject(def.add.icon)) {
+					this.log("form", elem + ".add.icon must be an object");
+				}
+				else {
+					list = ['background','class'];
+					if (!this.isInList(Object.keys(def.add.icon), list)) {
+						this.log("form", elem + ".add.icon must only have these elements: " + list.join(', '));
+					}
+				}
+			}
+		}
+
+		// close button
+		if (def.close) {
+			if (!this.isObject(def.close)) {
+				this.log("form", elem + ".close must be an object");
+			}
+			else {
+				list = ['icon'];
+				if (!this.isInList(Object.keys(def.close), list)) {
+					this.log("form", elem + ".close must only have these elements: " + list.join(', '));
+				}
+				else {
+					// close.icon
+					if (!this.isObject(def.close.icon)) {
+						this.log("form", elem + ".close.icon must be an object");
+					}
+					list = ['class','image'];
+					if (!this.isInList(Object.keys(def.close.icon), list)) {
+						this.log("form", elem + ".close.icon must only have these elements: " + list.join(', '));
+					}
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * @method checkFormFields
+	 * @memberof Validate
+	 * @param {string} form Name of the form.
+	 * @param {object} def Definition of the fields element.
+	 * @description Check the definition of the fields element on a single form.
+	 */
+	checkFormFields (form, def) {
+		var keys, i, elem, n, p;
+		elem = form + ".fields";
+		if (!this.isObject(def)) {
+//			this.log("form", elem + " must be an object");
+//			return;
+		}
 	}
 
 
@@ -55,7 +177,7 @@ class Validate {
 	 * @description Check the menu definitions.
 	 */
 	checkMenus () {
-		var keys, i, elem, n, p;
+		var list, keys, i, elem, n, p;
 
 		// title element
 		if (!this.menu.title) {
@@ -66,8 +188,9 @@ class Validate {
 			this.log("menu", "'title' element must be an object");
 			return;
 		}
-		if (!this.isInList(Object.keys(this.menu.title), ['text','class'])) {
-			this.log("menu", "'title' must have these elements: text, class");
+		list = ['text','class'];
+		if (!this.isInList(Object.keys(this.menu.title), list)) {
+			this.log("menu", "'title' must only have these elements: " + list.join(', '));
 			return;
 		}
 		
@@ -84,8 +207,9 @@ class Validate {
 		for (i=0; i<this.menu.menubar.length; i++) {
 			elem = "menubar[" + i + "]";
 			keys = Object.keys(this.menu.menubar[i]);
-			if (!this.isInList(Object.keys(this.menu.menubar[i]), ['id','menu','options','title'])) {
-				this.log("menu", elem + " must have these elements: id, menu, title, options");
+			list = ['id','menu','options','title'];
+			if (!this.isInList(Object.keys(this.menu.menubar[i]), list)) {
+				this.log("menu", elem + " must only have these elements: " + list.join(', '));
 				return;
 			}
 			for (n=0; n<keys.length; n++) {
@@ -98,8 +222,9 @@ class Validate {
 					}
 					for (p=0; p<this.menu.menubar[i].options.length; p++) {
 						elem = "menubar[" + i + "].options[" + p + "]";
-						if (!this.isInList(Object.keys(this.menu.menubar[i].options[p]), ['access','action','id','title'])) {
-							this.log("menu", elem + " must have these elements: access, action, id, title");
+						list = ['access','action','id','title'];
+						if (!this.isInList(Object.keys(this.menu.menubar[i].options[p]), list)) {
+							this.log("menu", elem + " must only have these elements: " + list.join(', '));
 							return;
 						}
 						// elements within nested options array
@@ -218,7 +343,7 @@ class Validate {
 					file = file.replace('};', '}');
 					try {
 						this.form = JSON.parse(file);
-						this.checkMenus();
+//						this.checkMenus();
 						this.checkForms();
 									}
 					catch (err) {

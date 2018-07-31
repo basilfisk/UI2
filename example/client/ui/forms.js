@@ -1,5 +1,6 @@
 var formDefinitions = {
 	"about": {
+		"type": "form",
 		"title": "Information About the Current User",
 		"buttons": {
 			"close": {
@@ -81,6 +82,7 @@ var formDefinitions = {
 		}
 	},
 	"bundleTable": {
+		"type": "table",
 		"title": "Bundles",
 		"width": 80,
 		"buttons": {
@@ -126,6 +128,7 @@ var formDefinitions = {
 		"key": "bundleEditId"
 	},
 	"bundleAdd": {
+		"type": "form",
 		"title": "Add Bundle",
 		"buttons": {
 			"add": {
@@ -222,6 +225,7 @@ var formDefinitions = {
 		}
 	},
 	"bundleEdit": {
+		"type": "form",
 		"title": "Edit Bundle",
 		"buttons": {
 			"close": {
@@ -324,6 +328,7 @@ var formDefinitions = {
 		}
 	},
 	"commandTable": {
+		"type": "table",
 		"title": "Commands",
 		"buttons": {
 			"add": {
@@ -367,6 +372,7 @@ var formDefinitions = {
 		"key": "commandEditId"
 	},
 	"commandAdd": {
+		"type": "form",
 		"title": "Add Command",
 		"buttons": {
 			"add": {
@@ -414,6 +420,7 @@ var formDefinitions = {
 		}
 	},
 	"commandEdit": {
+		"type": "form",
 		"title": "Edit Command",
 		"buttons": {
 			"close": {
@@ -422,10 +429,12 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"ok": "command.edit",
-			"icon": {
-				"background": "btn btn-success",
-				"class": "glyphicon glyphicon-ok"
+			"ok": {
+				"action": "command.edit",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-ok"
+				}
 			}
 		},
 		"fields": {
@@ -465,6 +474,7 @@ var formDefinitions = {
 		}
 	},
 	"commandEditCommand": {
+		"type": "form",
 		"title": "Edit Command Text",
 		"buttons": {
 			"close": {
@@ -474,7 +484,7 @@ var formDefinitions = {
 				}
 			},
 			"delete": true,
-			"save": "command.editSaveCommand"
+			"edit": "command.editSaveCommand"
 		},
 		"fields": {
 			"commandEditCommandId": {
@@ -516,6 +526,7 @@ var formDefinitions = {
 		}
 	},
 	"commandEditParameters": {
+		"type": "form",
 		"title": "Edit Parameters",
 		"buttons": {
 			"close": {
@@ -525,7 +536,7 @@ var formDefinitions = {
 				}
 			},
 			"delete": true,
-			"save": "command.editSaveParameters"
+			"edit": "command.editSaveParameters"
 		},
 		"fields": {
 			"commandEditParametersId": {
@@ -567,6 +578,7 @@ var formDefinitions = {
 		}
 	},
 	"companyTable": {
+		"type": "table",
 		"title": "Companies",
 		"buttons": {
 			"add": {
@@ -609,6 +621,7 @@ var formDefinitions = {
 		"key": "companyEditId"
 	},
 	"companyAdd": {
+		"type": "form",
 		"title": "Add Company",
 		"buttons": {
 			"add": {
@@ -643,6 +656,7 @@ var formDefinitions = {
 		}
 	},
 	"companyEdit": {
+		"type": "form",
 		"title": "Manage Company",
 		"buttons": {
 			"close": {
@@ -651,7 +665,7 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"ok": {
+			"edit": {
 				"action": "company.edit",
 				"icon": {
 					"background": "btn btn-success",
@@ -683,10 +697,15 @@ var formDefinitions = {
 		}
 	},
 	"companyGroupAdd": {
+		"type": "form",
 		"title": "Add Company Group",
 		"buttons": {
 			"add": {
-				"action": "company.groupAddSave"
+				"action": "company.groupAddSave",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
+				}
 			},
 			"close": {
 				"icon": {
@@ -740,6 +759,7 @@ var formDefinitions = {
 		}
 	},
 	"companyGroupEdit": {
+		"type": "form",
 		"title": "Edit Company Group",
 		"buttons": {
 			"close": {
@@ -748,7 +768,7 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"save": "company.groupEdit"
+			"edit": "company.groupEdit"
 		},
 		"fields": {
 			"companyGroupEditId": {
@@ -801,6 +821,7 @@ var formDefinitions = {
 		}
 	},
 	"connectorTable": {
+		"type": "table",
 		"title": "Connectors",
 		"buttons": {
 			"add": {
@@ -842,10 +863,15 @@ var formDefinitions = {
 		"key": "connectorEditId"
 	},
 	"connectorAdd": {
+		"type": "form",
 		"title": "Add Connector",
 		"buttons": {
 			"add": {
-				"action": "connector.addSave"
+				"action": "connector.addSave",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
+				}
 			},
 			"close": {
 				"icon": {
@@ -885,6 +911,7 @@ var formDefinitions = {
 		}
 	},
 	"connectorEdit": {
+		"type": "form",
 		"title": "Edit MongoDB Connector Details",
 		"buttons": {
 			"close": {
@@ -893,7 +920,7 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"save": "connector.edit"
+			"edit": "connector.edit"
 		},
 		"fields": {
 			"connectorEditId": {
@@ -931,6 +958,7 @@ var formDefinitions = {
 		}
 	},
 	"connectorEdit-mongo": {
+		"type": "form",
 		"title": "Edit MongoDB Connector Details",
 		"buttons": {
 			"close": {
@@ -939,7 +967,7 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"save": "connector.edit"
+			"edit": "connector.edit"
 		},
 		"fields": {
 			"connectorMongoId": {
@@ -1007,6 +1035,7 @@ var formDefinitions = {
 		}
 	},
 	"login": {
+		"type": "form",
 		"title": "Login to the Console",
 		"buttons": {
 			"ok": {
@@ -1047,6 +1076,8 @@ var formDefinitions = {
 		}
 	},
 	"messageBox": {
+		"type": "form",
+		"title": "",
 		"buttons": {
 			"ok": {
 				"icon": {
@@ -1057,6 +1088,7 @@ var formDefinitions = {
 		}
 	},
 	"userTable": {
+		"type": "table",
 		"title": "Users",
 		"buttons": {
 			"add": {
@@ -1099,6 +1131,7 @@ var formDefinitions = {
 		"key": "userEditId"
 	},
 	"userAdd": {
+		"type": "form",
 		"title": "Add User",
 		"buttons": {
 			"add": {
@@ -1205,6 +1238,7 @@ var formDefinitions = {
 		}
 	},
 	"userEdit": {
+		"type": "form",
 		"title": "Edit User",
 		"buttons": {
 			"close": {
