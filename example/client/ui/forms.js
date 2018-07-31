@@ -1007,7 +1007,7 @@ var formDefinitions = {
 		"title": "Login to the Console",
 		"buttons": {
 			"ok": {
-				"action": "general.loginCheck",
+				"action": "login.check",
 				"icon": {
 					"background": "btn btn-success",
 					"class": "glyphicon glyphicon-ok"

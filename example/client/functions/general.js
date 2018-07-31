@@ -38,16 +38,6 @@ var general = {
 
 
 	/**
-	 * @method loginCheck
-	 * @author Basil Fisk
-	 * @description Validate the user credentials.
-	 */
-	loginCheck: function () {
-		common.apiCall('userLogin', {"username":this.username, "password":this.password}, login.readUser);
-	},
-
-
-	/**
 	 * @method sortArrayObjects
 	 * @author Basil Fisk
 	 * @param {array} arr Array of objects to be sorted.

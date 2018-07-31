@@ -11,10 +11,20 @@
  */
 var login = {
 	/**
+	 * @method check
+	 * @author Basil Fisk
+	 * @description Validate the user credentials entered on the login page.
+	 */
+	check: function () {
+		common.apiCall('userLogin', {"username":this.username, "password":this.password}, login.readUser, login.init);
+	},
+
+
+	/**
 	 * @method init
 	 * @author Basil Fisk
 	 * @description Start up function called by 'body onload'.
-	 */
+	 */ 
 	init: function () {
 		// Initialize UI manager with form definitions and messages
 		ui.init(formDefinitions, messages);
@@ -23,11 +33,11 @@ var login = {
 		var data = {
 			loginName: {
 				text: 'admin'
-			},
+			},	
 			loginPassword: {
 				text: 'password'
-			}
-		};
+			}	
+		};	
 		ui.formEdit('login', data);
 	},
 
