@@ -327,7 +327,11 @@ var formDefinitions = {
 		"title": "Commands",
 		"buttons": {
 			"add": {
-				"action": "command.add"
+				"form": "commandAdd",
+				"icon": {
+					"background": "btn btn-success pull-right",
+					"class": "glyphicon glyphicon-plus"
+				}
 			},
 			"close": {
 				"icon": {
@@ -338,25 +342,25 @@ var formDefinitions = {
 			"delete": {
 				"action": "command.delete",
 				"icon": {
-					"type": "trash",
-					"colour":"danger"
+					"background": "btn btn-danger btn-xs",
+					"class": "glyphicon glyphicon-trash"
 				},
 				"style": "text-align: center;",
 				"title": "Delete"
 			},
 			"edit": {
-				"action": "command.edit",
+				"form": "commandEdit",
 				"icon": {
-					"type": "pencil",
-					"colour":"success"
+					"background": "btn btn-success btn-xs",
+					"class": "glyphicon glyphicon-pencil"
 				},
 				"style": "text-align: center;",
 				"title": "Edit"
 			}
 		},
 		"columns": [
-			{ "id": "name", "title": "Name" },
-			{ "id": "svc", "title": "Service" },
+			{ "id": "commandEditName", "title": "Name" },
+			{ "id": "commandEditService", "title": "Service" },
 			{ "id": "cmd", "title": "Command" },
 			{ "id": "prm", "title": "Parameters" }
 		]
@@ -365,7 +369,11 @@ var formDefinitions = {
 		"title": "Add Command",
 		"buttons": {
 			"add": {
-				"action": "command.addSave"
+				"action": "command.add",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
+				}
 			},
 			"close": {
 				"icon": {
@@ -413,7 +421,11 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"save": "command.edit"
+			"ok": "command.edit",
+			"icon": {
+				"background": "btn btn-success",
+				"class": "glyphicon glyphicon-ok"
+			}
 		},
 		"fields": {
 			"commandEditId": {
@@ -557,7 +569,11 @@ var formDefinitions = {
 		"title": "Companies",
 		"buttons": {
 			"add": {
-				"action": "company.add"
+				"form": "companyAdd",
+				"icon": {
+					"background": "btn btn-success pull-right",
+					"class": "glyphicon glyphicon-plus"
+				}
 			},
 			"close": {
 				"icon": {
@@ -568,24 +584,24 @@ var formDefinitions = {
 			"delete": {
 				"action": "company.delete",
 				"icon": {
-					"type": "trash",
-					"colour":"danger"
+					"background": "btn btn-danger btn-xs",
+					"class": "glyphicon glyphicon-trash"
 				},
 				"style": "text-align: center;",
 				"title": "Delete"
 			},
 			"edit": {
-				"action": "company.edit",
+				"action": "companyEdit",
 				"icon": {
-					"type": "pencil",
-					"colour":"success"
+					"background": "btn btn-success btn-xs",
+					"class": "glyphicon glyphicon-pencil"
 				},
 				"style": "text-align: center;",
 				"title": "Edit"
 			}
 		},
 		"columns": [
-			{ "id": "name", "title": "Company" },
+			{ "id": "companyEditName", "title": "Company" },
 			{ "id": "select", "title": "Select", "style": "text-align: center;" },
 			{ "id": "update", "title": "Update", "style": "text-align: center;" }
 		]
@@ -594,7 +610,11 @@ var formDefinitions = {
 		"title": "Add Company",
 		"buttons": {
 			"add": {
-				"action": "company.addSave"
+				"action": "company.add",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
+				}
 			},
 			"close": {
 				"icon": {
@@ -629,7 +649,13 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"save": "company.editSave"
+			"ok": {
+				"action": "company.edit",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-ok"
+				}
+			}
 		},
 		"fields": {
 			"companyEditId": {
@@ -776,7 +802,11 @@ var formDefinitions = {
 		"title": "Connectors",
 		"buttons": {
 			"add": {
-				"action": "connector.add"
+				"form": "connectorAdd",
+				"icon": {
+					"background": "btn btn-success pull-right",
+					"class": "glyphicon glyphicon-plus"
+				}
 			},
 			"close": {
 				"icon": {
@@ -787,25 +817,25 @@ var formDefinitions = {
 			"delete": {
 				"action": "connector.delete",
 				"icon": {
-					"type": "trash",
-					"colour":"danger"
+					"background": "btn btn-danger btn-xs",
+					"class": "glyphicon glyphicon-trash"
 				},
 				"style": "text-align: center;",
 				"title": "Delete"
 			},
 			"edit": {
-				"action": "connector.edit",
+				"action": "connectorEdit",
 				"icon": {
-					"type": "pencil",
-					"colour":"success"
+					"background": "btn btn-success btn-xs",
+					"class": "glyphicon glyphicon-pencil"
 				},
 				"style": "text-align: center;",
 				"title": "Edit"
 			}
 		},
 		"columns": [
-			{ "id": "name", "title": "Name" },
-			{ "id": "service", "title": "Service" }
+			{ "id": "connectorName", "title": "Name" },
+			{ "id": "connectorService", "title": "Service" }
 		]
 	},
 	"connectorAdd": {
@@ -846,6 +876,52 @@ var formDefinitions = {
 				"options": {
 					"display": {
 						"select": "single"
+					}
+				}
+			}
+		}
+	},
+	"connectorEdit": {
+		"title": "Edit MongoDB Connector Details",
+		"buttons": {
+			"close": {
+				"icon": {
+					"class": "close",
+					"image": "&times;"
+				}
+			},
+			"save": "connector.edit"
+		},
+		"fields": {
+			"connectorMongoId": {
+				"element": "id",
+				"type": "id",
+				"visible": false,
+				"edit": false
+			},
+			"connectorName": {
+				"element": "name",
+				"title": "Connector Name",
+				"type": "text",
+				"visible": true,
+				"edit": false,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
+					}
+				}
+			},
+			"connectorService": {
+				"element": "service",
+				"title": "Connector Service",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaMixed"
 					}
 				}
 			}
@@ -981,7 +1057,11 @@ var formDefinitions = {
 		"title": "Users",
 		"buttons": {
 			"add": {
-				"action": "user.add"
+				"form": "userAdd",
+				"icon": {
+					"background": "btn btn-success pull-right",
+					"class": "glyphicon glyphicon-plus"
+				}
 			},
 			"close": {
 				"icon": {
@@ -992,33 +1072,37 @@ var formDefinitions = {
 			"delete": {
 				"action": "user.delete",
 				"icon": {
-					"type": "trash",
-					"colour":"danger"
+					"background": "btn btn-danger btn-xs",
+					"class": "glyphicon glyphicon-trash"
 				},
 				"style": "text-align: center;",
 				"title": "Delete"
 			},
 			"edit": {
-				"action": "user.edit",
+				"action": "userEdit",
 				"icon": {
-					"type": "pencil",
-					"colour":"success"
+					"background": "btn btn-success btn-xs",
+					"class": "glyphicon glyphicon-pencil"
 				},
 				"style": "text-align: center;",
 				"title": "Edit"
 			}
 		},
 		"columns": [
-			{ "id": "user", "title":"User" },
-			{ "id": "group", "title":"Group" },
-			{ "id": "role", "title":"Role" }
+			{ "id": "userEditUsername", "title":"User" },
+			{ "id": "userEditGroup", "title":"Group" },
+			{ "id": "userEditRole", "title":"Role" }
 		]
 	},
 	"userAdd": {
 		"title": "Add User",
 		"buttons": {
 			"add": {
-				"action": "user.addSave"
+				"action": "user.add",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
+				}
 			},
 			"close": {
 				"icon": {
@@ -1125,7 +1209,13 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"save": "user.edit"
+			"ok": {
+				"action": "user.edit",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-ok"
+				}
+			}
 		},
 		"fields": {
 			"userEditId": {
