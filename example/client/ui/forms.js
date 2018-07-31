@@ -363,7 +363,8 @@ var formDefinitions = {
 			{ "id": "commandEditService", "title": "Service" },
 			{ "id": "cmd", "title": "Command" },
 			{ "id": "prm", "title": "Parameters" }
-		]
+		],
+		"key": "commandEditId"
 	},
 	"commandAdd": {
 		"title": "Add Command",
@@ -604,7 +605,8 @@ var formDefinitions = {
 			{ "id": "companyEditName", "title": "Company" },
 			{ "id": "select", "title": "Select", "style": "text-align: center;" },
 			{ "id": "update", "title": "Update", "style": "text-align: center;" }
-		]
+		],
+		"key": "companyEditId"
 	},
 	"companyAdd": {
 		"title": "Add Company",
@@ -836,7 +838,8 @@ var formDefinitions = {
 		"columns": [
 			{ "id": "connectorName", "title": "Name" },
 			{ "id": "connectorService", "title": "Service" }
-		]
+		],
+		"key": "connectorEditId"
 	},
 	"connectorAdd": {
 		"title": "Add Connector",
@@ -893,13 +896,13 @@ var formDefinitions = {
 			"save": "connector.edit"
 		},
 		"fields": {
-			"connectorMongoId": {
+			"connectorEditId": {
 				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
-			"connectorName": {
+			"connectorEditName": {
 				"element": "name",
 				"title": "Connector Name",
 				"type": "text",
@@ -1092,7 +1095,8 @@ var formDefinitions = {
 			{ "id": "userEditUsername", "title":"User" },
 			{ "id": "userEditGroup", "title":"Group" },
 			{ "id": "userEditRole", "title":"Role" }
-		]
+		],
+		"key": "userEditId"
 	},
 	"userAdd": {
 		"title": "Add User",

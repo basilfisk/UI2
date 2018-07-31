@@ -1045,6 +1045,10 @@ var ui = {
 					row += (rows[i][cell].text) ? rows[i][cell].text : '';
 					row += '</td>';
 				}
+				else {
+					row += '<td>Undefined</td>';
+					console.log('"Missing definition for cell"', id, 'row', cell);
+				}
 			}
 
 			// Add an optional edit button at the end of the row
@@ -1062,7 +1066,12 @@ var ui = {
 				button = _defs[id].buttons.delete;
 				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
 				row += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
-				row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i][_defs[id].key].text + "'" + '); return false;">';
+				if (_defs[id].key && rows[i][_defs[id].key] && rows[i][_defs[id].key].text) {
+					row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i][_defs[id].key].text + "'" + '); return false;">';
+				}
+				else {
+					console.log('"Missing definition for Delete button"', id, _defs[id].key, rows[i][_defs[id].key]);
+				}
 				row += '<span class="' + button.icon.class + '"></span></button>';
 				row += '</td>';
 			}
