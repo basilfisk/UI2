@@ -13,44 +13,35 @@ var bundle = {
 	/**
 	 * @method add
 	 * @author Basil Fisk
-	 * @description Add a new bundle.
+	 * @param {object} this Object holding the data entered on the form.
+	 * @description Add a new bundle after including the company code.
 	 */
 	add: function () {
-/*		var data = {
-			name: this.name,
-			company: admin.company.code,
-			command: this.command,
-			connector: this.connector,
-			version: {
-				cmd: this.version.cmd,
-				prms: this.version.prms
-			}
-		};*/
-		var data = this;
-		data.company = admin.company.code;
-		common.apiCall('bundleAdd', data, bundle.load);
+		this.company = admin.company.code;
+		common.apiCall('bundleAdd', this, bundle.load);
 	},
 	
 	
 	/**
 	 * @method delete
 	 * @author Basil Fisk
+	 * @param {object} this Object holding the ID of the bundle to be deleted.
 	 * @description Delete the selected bundle.
 	 */
 	delete: function () {
-		common.apiCall('bundleDelete', {_id: this._id}, bundle.load);
+		common.apiCall('bundleDelete', this, bundle.load);
 	},
 
 
 	/**
 	 * @method edit
 	 * @author Basil Fisk
-	 * @description Save details of an edited bundle.
+	 * @param {object} this Object holding the edited data from the form.
+	 * @description Save details of an edited bundle after including the company code.
 	 */
 	edit: function () {
-		var data = this;
-		data.company = admin.company.code;
-		common.apiCall('bundleUpdate', data, bundle.load);
+		this.company = admin.company.code;
+		common.apiCall('bundleUpdate', this, bundle.load);
 	},
 
 
