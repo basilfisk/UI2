@@ -93,11 +93,13 @@ class Validate {
 
 					// buttons element
 					this.checkFormButtons(forms[i], form.type, form.buttons);
+
+					// fields element
+					if (form.type === 'form') {
+						this.checkFormFields(forms[i], form.fields);
+					}
 				}
 			}
-
-			// fields element ???????????????????????????????????????
-			this.checkFormFields(forms[i], form.fields);
 		}
 
 		this.done("form");
@@ -151,6 +153,14 @@ class Validate {
 						if (!this.isInList(Object.keys(def.add.button), list)) {
 							this.log("form", elem + ".add.button must only have these elements: " + list.join(', '));
 						}
+						else {
+							if (!this.isString(def.add.button.background)) {
+								this.log("form", elem + ".add.button.background must be a string");
+							}
+							if (!this.isString(def.add.button.class)) {
+								this.log("form", elem + ".add.button.class must be a string");
+							}
+						}
 					}
 				}
 			}
@@ -177,6 +187,14 @@ class Validate {
 					list = ['class','image'];
 					if (!this.isInList(Object.keys(def.close.button), list)) {
 						this.log("form", elem + ".close.button must only have these elements: " + list.join(', '));
+					}
+					else {
+						if (!this.isString(def.close.button.class)) {
+							this.log("form", elem + ".close.button.class must be a string");
+						}
+						if (!this.isString(def.close.button.image)) {
+							this.log("form", elem + ".close.button.image must be a string");
+						}
 					}
 				}
 			}
@@ -207,6 +225,14 @@ class Validate {
 						if (!this.isInList(Object.keys(def.delete.button), list)) {
 							this.log("form", elem + ".delete.button must only have these elements: " + list.join(', '));
 						}
+						else {
+							if (!this.isString(def.delete.button.background)) {
+								this.log("form", elem + ".delete.button.background must be a string");
+							}
+							if (!this.isString(def.delete.button.class)) {
+								this.log("form", elem + ".delete.button.class must be a string");
+							}
+						}
 					}
 					// column object
 					if (!this.isObject(def.delete.column)) {
@@ -216,6 +242,14 @@ class Validate {
 						list = ['style','title'];
 						if (!this.isInList(Object.keys(def.delete.column), list)) {
 							this.log("form", elem + ".delete.column must only have these elements: " + list.join(', '));
+						}
+						else {
+							if (!this.isString(def.delete.column.style)) {
+								this.log("form", elem + ".delete.column.style must be a string");
+							}
+							if (!this.isString(def.delete.column.title)) {
+								this.log("form", elem + ".delete.column.title must be a string");
+							}
 						}
 					}
 				}
@@ -250,6 +284,14 @@ class Validate {
 						if (!this.isInList(Object.keys(def.edit.button), list)) {
 							this.log("form", elem + ".edit.button must only have these elements: " + list.join(', '));
 						}
+						else {
+							if (!this.isString(def.edit.button.background)) {
+								this.log("form", elem + ".edit.button.background must be a string");
+							}
+							if (!this.isString(def.edit.button.class)) {
+								this.log("form", elem + ".edit.button.class must be a string");
+							}
+						}
 					}
 					// column object
 					if (!this.isObject(def.edit.column)) {
@@ -259,6 +301,14 @@ class Validate {
 						list = ['style','title'];
 						if (!this.isInList(Object.keys(def.edit.column), list)) {
 							this.log("form", elem + ".edit.column must only have these elements: " + list.join(', '));
+						}
+						else {
+							if (!this.isString(def.edit.column.style)) {
+								this.log("form", elem + ".edit.column.style must be a string");
+							}
+							if (!this.isString(def.edit.column.title)) {
+								this.log("form", elem + ".edit.column.title must be a string");
+							}
 						}
 					}
 				}
@@ -293,6 +343,14 @@ class Validate {
 						if (!this.isInList(Object.keys(def.ok.button), list)) {
 							this.log("form", elem + ".ok.button must only have these elements: " + list.join(', '));
 						}
+						else {
+							if (!this.isString(def.ok.button.background)) {
+								this.log("form", elem + ".ok.button.background must be a string");
+							}
+							if (!this.isString(def.ok.button.class)) {
+								this.log("form", elem + ".ok.button.class must be a string");
+							}
+						}
 					}
 				}
 			}
@@ -311,11 +369,78 @@ class Validate {
 	 * @description Check the definition of the fields element on a single form.
 	 */
 	checkFormFields (form, def) {
-		var keys, i, elem, n, p;
-		elem = form + ".fields";
+		var flds, keys, i, n, p, list,
+			elem = form + ".fields";
+
 		if (!this.isObject(def)) {
-//			this.log("form", elem + " must be an object");
-//			return;
+			this.log("form", elem + " must be an object");
+		}
+
+		// loop through fields
+		flds = Object.keys(def);
+		for (i=0; i<flds.length; i++) {
+			elem = form + ".fields." + flds[i];
+			// Valid fields
+			list = ['description','edit','element','options','title','type','visible'];
+			if (!this.isInList(Object.keys(def[flds[i]]), list)) {
+				this.log("form", elem + " must only have these elements: " + list.join(', '));
+			}
+			else {
+				// edit - mandatory
+				if (!this.isTrueFalse(def[flds[i]].edit)) {
+					this.log("form", elem + ".edit must be true|false");
+				}
+				// visible - mandatory
+				if (!this.isTrueFalse(def[flds[i]].visible)) {
+					this.log("form", elem + ".visible must be true|false");
+				}
+				else {
+					// description - optional if visible
+					if (def[flds[i]].visible && def[flds[i]].description && !this.isString(def[flds[i]].description)) {
+						this.log("form", elem + ".description must be a string");
+					}
+					// title - mandatory if visible
+					if (def[flds[i]].visible && !this.isString(def[flds[i]].title)) {
+						this.log("form", elem + ".title must be a string");
+					}
+				}
+				// element - mandatory
+				if (!this.isString(def[flds[i]].element)) {
+					this.log("form", elem + ".element must be a string");
+				}
+				// type - mandatory
+				if (!this.isString(def[flds[i]].type)) {
+					this.log("form", elem + ".type must be a string");
+				}
+				else {
+					// type - must be a permitted value
+					if (def[flds[i]].type !== 'id' && 
+						def[flds[i]].type !== 'integer' && 
+						def[flds[i]].type !== 'list' && 
+						def[flds[i]].type !== 'password' &&
+						def[flds[i]].type !== 'text') {
+						this.log("form", elem + ".type must be one of 'id|integer|list|password|text'");
+					}
+					// list options - mandatory
+					if (def[flds[i]].type === 'list') {
+						if (!this.isObject(def[flds[i]].options)) {
+							this.log("form", elem + ".options must be defined for a list");
+						}
+						else {
+							this.log("form", elem + ".options validate list options HERE");
+						}
+					}
+					// integer options - optional object
+					if (def[flds[i]].options && def[flds[i]].type === 'integer') {
+						if (!this.isObject(def[flds[i]].options)) {
+							this.log("form", elem + ".options must be an object");
+						}
+						else {
+							this.log("form", elem + ".options validate integer options HERE");
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -492,6 +617,17 @@ class Validate {
 
 
 	/**
+	 * @method isTrueFalse
+	 * @memberof Validate
+	 * @param {string} data Data to be validated.
+	 * @description Check the data is either 'true' or 'false'.
+	 */
+	isTrueFalse (data) {
+		return (typeof data === 'boolean') ? true : false;
+	}
+
+
+	/**
 	 * @method init
 	 * @memberof Validate
 	 * @description Read the files to be validated.
@@ -509,7 +645,7 @@ class Validate {
 			file = data.toString();
 			file = file.replace('var menuDefinitions = {', '{');
 			file = file.replace('};', '}');
-			try {
+//			try {
 				this.menu = JSON.parse(file);
 
 				// Read form definition file and remove Javascript wrapper
@@ -517,19 +653,19 @@ class Validate {
 					file = data.toString();
 					file = file.replace('var formDefinitions = {', '{');
 					file = file.replace('};', '}');
-					try {
+//					try {
 						this.form = JSON.parse(file);
 						this.checkMenus();
 						this.checkForms();
-									}
-					catch (err) {
-						this.log("form", "Invalid JSON in forms.js: " + err.message);
-					}
+//					}
+//					catch (err) {
+//						this.log("form", "Invalid JSON in forms.js: " + err.message);
+//					}
 				});
-			}
-			catch (err) {
-				this.log("menu", "Invalid JSON in menu.js: " + err.message);
-			}
+//			}
+//			catch (err) {
+//				this.log("menu", "Invalid JSON in menu.js: " + err.message);
+//			}
 		});
 	}
 
