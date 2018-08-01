@@ -68,6 +68,7 @@ class Validate {
 			// fields element
 			this.checkFormFields(forms[i], form.fields);
 		}
+
 		this.done("form");
 	}
 

@@ -491,8 +491,13 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"delete": true,
-			"ok": "command.editSaveCommand"
+			"ok": {
+				"action": "command.editSaveCommand",
+				"button": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
+				}
+			}
 		},
 		"fields": {
 			"commandEditCommandId": {
@@ -543,8 +548,13 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"delete": true,
-			"ok": "command.editSaveParameters"
+			"ok": {
+				"action": "command.editSaveParameters",
+				"button": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
+				}
+			}
 		},
 		"fields": {
 			"commandEditParametersId": {
@@ -780,7 +790,13 @@ var formDefinitions = {
 					"image": "&times;"
 				}
 			},
-			"ok": "company.groupEdit"
+			"ok": {
+				"action": "company.groupEdit",
+				"button": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
+				}
+			}
 		},
 		"fields": {
 			"companyGroupEditId": {
@@ -1108,6 +1124,7 @@ var formDefinitions = {
 		"title": "",
 		"buttons": {
 			"ok": {
+				"action": "",
 				"button": {
 					"background": "btn btn-success",
 					"class": "glyphicon glyphicon-ok"
