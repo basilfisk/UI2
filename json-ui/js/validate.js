@@ -13,6 +13,11 @@
 class Validate {
 	constructor () {
 		this.fs = require('fs');
+		this.msgs = [];
+		this.status = {
+			form: false,
+			menu: false
+		}
 	}
 
 
@@ -25,7 +30,7 @@ class Validate {
 		var forms, i, form, list,
 			elem = form + ".";
 
-		this.log("form", "Validating: " + this.file.form);
+//		this.log("form", "Validating: " + this.file.form);
 
 		forms = Object.keys(this.form);
 		for (i=0; i<forms.length; i++) {
@@ -35,22 +40,23 @@ class Validate {
 			if (!form.type) {
 				this.log("form", forms[i] + ".type is mandatory");
 			}
-
-			// Valid types
-			list = ['form','table'];
-			if (!this.isInList([form.type], list)) {
-				this.log("form", forms[i] + ".type must only have these values: " + list.join(', '));
-			}
-
-			// Valid fields
-			if (form.type === 'form') {
-				list = ['buttons','fields','title','type','width'];
-			}
 			else {
-				list = ['buttons','columns','fields','key','title','type','width'];
-			}
-			if (!this.isInList(Object.keys(form), list)) {
-				this.log("form", "'" + forms[i] + "' form must only have these elements: " + list.join(', '));
+				// Valid types
+				list = ['form','table'];
+				if (!this.isInList([form.type], list)) {
+					this.log("form", forms[i] + ".type must only have these values: " + list.join(', '));
+				}
+
+				// Valid fields
+				if (form.type === 'form') {
+					list = ['buttons','fields','title','type','width'];
+				}
+				else {
+					list = ['buttons','columns','fields','key','title','type','width'];
+				}
+				if (!this.isInList(Object.keys(form), list)) {
+					this.log("form", "'" + forms[i] + "' form must only have these elements: " + list.join(', '));
+				}
 			}
 
 			// title element
@@ -63,8 +69,8 @@ class Validate {
 
 			// fields element
 			this.checkFormFields(forms[i], form.fields);
-//return;
 		}
+		this.done("form");
 	}
 
 
@@ -182,26 +188,26 @@ class Validate {
 		// title element
 		if (!this.menu.title) {
 			this.log("menu", "Top level element 'title' is mandatory");
-			return;
+//			return;
 		}
 		if (!this.isObject(this.menu.title)) {
 			this.log("menu", "'title' element must be an object");
-			return;
+//			return;
 		}
 		list = ['text','class'];
 		if (!this.isInList(Object.keys(this.menu.title), list)) {
 			this.log("menu", "'title' must only have these elements: " + list.join(', '));
-			return;
+//			return;
 		}
 		
 		// menubar element
 		if (!this.menu.menubar) {
 			this.log("menu", "Top level element 'menubar' is mandatory");
-			return;
+//			return;
 		}
 		if (!this.isArray(this.menu.menubar)) {
 			this.log("menu", "'menubar' element must be an array");
-			return;
+//			return;
 		}
 		// menubar array objects
 		for (i=0; i<this.menu.menubar.length; i++) {
@@ -210,7 +216,7 @@ class Validate {
 			list = ['id','menu','options','title'];
 			if (!this.isInList(Object.keys(this.menu.menubar[i]), list)) {
 				this.log("menu", elem + " must only have these elements: " + list.join(', '));
-				return;
+//				return;
 			}
 			for (n=0; n<keys.length; n++) {
 				// menubar array, nested options array
@@ -218,31 +224,31 @@ class Validate {
 					elem = "menubar[" + i + "].options";
 					if (!this.isArray(this.menu.menubar[i].options)) {
 						this.log("menu", elem + " must be an array");
-						return;
+//						return;
 					}
 					for (p=0; p<this.menu.menubar[i].options.length; p++) {
 						elem = "menubar[" + i + "].options[" + p + "]";
 						list = ['access','action','id','title'];
 						if (!this.isInList(Object.keys(this.menu.menubar[i].options[p]), list)) {
 							this.log("menu", elem + " must only have these elements: " + list.join(', '));
-							return;
+//							return;
 						}
 						// elements within nested options array
 						if (!this.isArray(this.menu.menubar[i].options[p].access)) {
 							this.log("menu", elem + ".access must be an array");
-							return;
+//							return;
 						}
 						if (!this.isString(this.menu.menubar[i].options[p].action)) {
 							this.log("menu", elem + ".action must be a string");
-							return;
+//							return;
 						}
 						if (!this.isString(this.menu.menubar[i].options[p].id)) {
 							this.log("menu", elem + ".id must be a string");
-							return;
+//							return;
 						}
 						if (!this.isString(this.menu.menubar[i].options[p].title)) {
 							this.log("menu", elem + ".title must be a string");
-							return;
+//							return;
 						}
 					}
 				}
@@ -250,13 +256,35 @@ class Validate {
 				else {
 					if (!this.isString(this.menu.menubar[i][keys[n]])) {
 						this.log("menu", elem + "." + keys[n] + " must be a string");
-						return;
+//						return;
 					}
 				}
 			}
 		}
 
-		this.log("menu", "Successfully validated: " + this.file.menu);
+//		this.log("menu", "Successfully validated: " + this.file.menu);
+		this.done("menu");
+	}
+
+
+	/**
+	 * @method done
+	 * @memberof Validate
+	 * @param {array} data Type of data tht has been validated.
+	 * @description Display the messages that have been raised.
+	 */
+	done (type) {
+		this.status[type] = true;
+		if (this.status.form && this.status.menu) {
+			if (this.msgs.length === 0) {
+				console.log("Successfully validated");
+			}
+			else {
+				for (var i=0; i<this.msgs.length; i++) {
+					console.log(this.msgs[i]);
+				}
+			}
+		}
 	}
 
 
@@ -343,7 +371,7 @@ class Validate {
 					file = file.replace('};', '}');
 					try {
 						this.form = JSON.parse(file);
-//						this.checkMenus();
+						this.checkMenus();
 						this.checkForms();
 									}
 					catch (err) {
@@ -358,8 +386,9 @@ class Validate {
 	}
 
 
-	log (defn, msg) {
-		console.log("[" + defn + "] " + msg);
+	log (type, msg) {
+//		console.log("[" + type + "] " + msg);
+		this.msgs.push("[" + type + "] " + msg);
 	}
 }
 
