@@ -131,17 +131,17 @@ var formDefinitions = {
 		"type": "form",
 		"title": "Add Bundle",
 		"buttons": {
-			"add": {
-				"action": "bundle.add",
-				"icon": {
-					"background": "btn btn-success",
-					"class": "glyphicon glyphicon-plus"
-				}
-			},
 			"close": {
 				"icon": {
 					"class": "close",
 					"image": "&times;"
+				}
+			},
+			"ok": {
+				"action": "bundle.add",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
 				}
 			}
 		},
@@ -375,17 +375,17 @@ var formDefinitions = {
 		"type": "form",
 		"title": "Add Command",
 		"buttons": {
-			"add": {
-				"action": "command.add",
-				"icon": {
-					"background": "btn btn-success",
-					"class": "glyphicon glyphicon-plus"
-				}
-			},
 			"close": {
 				"icon": {
 					"class": "close",
 					"image": "&times;"
+				}
+			},
+			"ok": {
+				"action": "command.add",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
 				}
 			}
 		},
@@ -624,17 +624,17 @@ var formDefinitions = {
 		"type": "form",
 		"title": "Add Company",
 		"buttons": {
-			"add": {
-				"action": "company.add",
-				"icon": {
-					"background": "btn btn-success",
-					"class": "glyphicon glyphicon-plus"
-				}
-			},
 			"close": {
 				"icon": {
 					"class": "close",
 					"image": "&times;"
+				}
+			},
+			"ok": {
+				"action": "company.add",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
 				}
 			}
 		},
@@ -700,17 +700,17 @@ var formDefinitions = {
 		"type": "form",
 		"title": "Add Company Group",
 		"buttons": {
-			"add": {
-				"action": "company.groupAddSave",
-				"icon": {
-					"background": "btn btn-success",
-					"class": "glyphicon glyphicon-plus"
-				}
-			},
 			"close": {
 				"icon": {
 					"class": "close",
 					"image": "&times;"
+				}
+			},
+			"ok": {
+				"action": "company.groupAddSave",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
 				}
 			}
 		},
@@ -866,17 +866,17 @@ var formDefinitions = {
 		"type": "form",
 		"title": "Add Connector",
 		"buttons": {
-			"add": {
-				"action": "connector.addSave",
-				"icon": {
-					"background": "btn btn-success",
-					"class": "glyphicon glyphicon-plus"
-				}
-			},
 			"close": {
 				"icon": {
 					"class": "close",
 					"image": "&times;"
+				}
+			},
+			"ok": {
+				"action": "connector.addSave",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
 				}
 			}
 		},
@@ -1134,17 +1134,17 @@ var formDefinitions = {
 		"type": "form",
 		"title": "Add User",
 		"buttons": {
-			"add": {
-				"action": "user.add",
-				"icon": {
-					"background": "btn btn-success",
-					"class": "glyphicon glyphicon-plus"
-				}
-			},
 			"close": {
 				"icon": {
 					"class": "close",
 					"image": "&times;"
+				}
+			},
+			"ok": {
+				"action": "user.add",
+				"icon": {
+					"background": "btn btn-success",
+					"class": "glyphicon glyphicon-plus"
 				}
 			}
 		},

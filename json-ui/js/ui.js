@@ -294,12 +294,12 @@ var ui = {
 		div += '</form></div>';
 
 		// Add button in form footer
-		if (_defs[id].buttons && _defs[id].buttons.add) {
-			button = _defs[id].buttons.add;
+		if (_defs[id].buttons && _defs[id].buttons.ok) {
+			button = _defs[id].buttons.ok;
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
 			div += '<button type="button" class="' + button.icon.background + '"';
-			div += 'onClick="ui.buttonAdd(' + "'" + id + "'" + '); return false;">';
+			div += 'onClick="ui.buttonOK(' + "'" + id + "'" + '); return false;">';
 			div += '<span class="' + button.icon.class + '"></span></button>';
 			div += '</div></div>';
 		}
@@ -771,7 +771,7 @@ var ui = {
 	 * @param {string} id ID of UI form.
 	 * @description Validate and save new data entered on a form.
 	 */
-	buttonAdd: function (id) {
+/*	buttonAdd: function (id) {
 		var data = this._buttonValidate(id);
 
 		// Hide the form and trigger the post-processing function
@@ -779,7 +779,7 @@ var ui = {
 			$('#' + id).modal('hide');
 			this._postProcess('add', id, data);
 		}
-	},
+	},*/
 
 
 	/**
