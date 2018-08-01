@@ -30,8 +30,6 @@ class Validate {
 		var forms, i, form, list,
 			elem = form + ".";
 
-//		this.log("form", "Validating: " + this.file.form);
-
 		forms = Object.keys(this.form);
 		for (i=0; i<forms.length; i++) {
 			form = this.form[forms[i]];
@@ -188,81 +186,73 @@ class Validate {
 		// title element
 		if (!this.menu.title) {
 			this.log("menu", "Top level element 'title' is mandatory");
-//			return;
 		}
-		if (!this.isObject(this.menu.title)) {
-			this.log("menu", "'title' element must be an object");
-//			return;
-		}
-		list = ['text','class'];
-		if (!this.isInList(Object.keys(this.menu.title), list)) {
-			this.log("menu", "'title' must only have these elements: " + list.join(', '));
-//			return;
+		else {
+			if (!this.isObject(this.menu.title)) {
+				this.log("menu", "'title' element must be an object");
+			}
+			list = ['text','class'];
+			if (!this.isInList(Object.keys(this.menu.title), list)) {
+				this.log("menu", "'title' must only have these elements: " + list.join(', '));
+			}
 		}
 		
 		// menubar element
 		if (!this.menu.menubar) {
 			this.log("menu", "Top level element 'menubar' is mandatory");
-//			return;
 		}
-		if (!this.isArray(this.menu.menubar)) {
-			this.log("menu", "'menubar' element must be an array");
-//			return;
-		}
-		// menubar array objects
-		for (i=0; i<this.menu.menubar.length; i++) {
-			elem = "menubar[" + i + "]";
-			keys = Object.keys(this.menu.menubar[i]);
-			list = ['id','menu','options','title'];
-			if (!this.isInList(Object.keys(this.menu.menubar[i]), list)) {
-				this.log("menu", elem + " must only have these elements: " + list.join(', '));
-//				return;
+		else {
+			if (!this.isArray(this.menu.menubar)) {
+				this.log("menu", "'menubar' element must be an array");
 			}
-			for (n=0; n<keys.length; n++) {
-				// menubar array, nested options array
-				if (keys[n] === 'options') {
-					elem = "menubar[" + i + "].options";
-					if (!this.isArray(this.menu.menubar[i].options)) {
-						this.log("menu", elem + " must be an array");
-//						return;
-					}
-					for (p=0; p<this.menu.menubar[i].options.length; p++) {
-						elem = "menubar[" + i + "].options[" + p + "]";
-						list = ['access','action','id','title'];
-						if (!this.isInList(Object.keys(this.menu.menubar[i].options[p]), list)) {
-							this.log("menu", elem + " must only have these elements: " + list.join(', '));
-//							return;
-						}
-						// elements within nested options array
-						if (!this.isArray(this.menu.menubar[i].options[p].access)) {
-							this.log("menu", elem + ".access must be an array");
-//							return;
-						}
-						if (!this.isString(this.menu.menubar[i].options[p].action)) {
-							this.log("menu", elem + ".action must be a string");
-//							return;
-						}
-						if (!this.isString(this.menu.menubar[i].options[p].id)) {
-							this.log("menu", elem + ".id must be a string");
-//							return;
-						}
-						if (!this.isString(this.menu.menubar[i].options[p].title)) {
-							this.log("menu", elem + ".title must be a string");
-//							return;
-						}
-					}
+			// menubar array objects
+			for (i=0; i<this.menu.menubar.length; i++) {
+				elem = "menubar[" + i + "]";
+				keys = Object.keys(this.menu.menubar[i]);
+				list = ['id','menu','options','title'];
+				if (!this.isInList(Object.keys(this.menu.menubar[i]), list)) {
+					this.log("menu", elem + " must only have these elements: " + list.join(', '));
 				}
-				// menubar array, nested non-options array
-				else {
-					if (!this.isString(this.menu.menubar[i][keys[n]])) {
-						this.log("menu", elem + "." + keys[n] + " must be a string");
-//						return;
+				for (n=0; n<keys.length; n++) {
+					// menubar array, nested options array
+					if (keys[n] === 'options') {
+						elem = "menubar[" + i + "].options";
+						if (!this.isArray(this.menu.menubar[i].options)) {
+							this.log("menu", elem + " must be an array");
+						}
+						else {
+							for (p=0; p<this.menu.menubar[i].options.length; p++) {
+								elem = "menubar[" + i + "].options[" + p + "]";
+								list = ['access','action','id','title'];
+								if (!this.isInList(Object.keys(this.menu.menubar[i].options[p]), list)) {
+									this.log("menu", elem + " must only have these elements: " + list.join(', '));
+								}
+								// elements within nested options array
+								if (!this.isArray(this.menu.menubar[i].options[p].access)) {
+									this.log("menu", elem + ".access must be an array");
+								}
+								if (!this.isString(this.menu.menubar[i].options[p].action)) {
+									this.log("menu", elem + ".action must be a string");
+								}
+								if (!this.isString(this.menu.menubar[i].options[p].id)) {
+									this.log("menu", elem + ".id must be a string");
+								}
+								if (!this.isString(this.menu.menubar[i].options[p].title)) {
+									this.log("menu", elem + ".title must be a string");
+								}
+							}
+						}
+					}
+					// menubar array, nested non-options array
+					else {
+						if (!this.isString(this.menu.menubar[i][keys[n]])) {
+							this.log("menu", elem + "." + keys[n] + " must be a string");
+						}
 					}
 				}
 			}
 		}
 
-//		this.log("menu", "Successfully validated: " + this.file.menu);
 		this.done("menu");
 	}
 
@@ -276,10 +266,12 @@ class Validate {
 	done (type) {
 		this.status[type] = true;
 		if (this.status.form && this.status.menu) {
+			var files = "\n\t" + this.file.form + "\n\t" + this.file.menu;
 			if (this.msgs.length === 0) {
-				console.log("Successfully validated");
+				console.log("Successfully validated" + files);
 			}
 			else {
+				console.log("Errors found during validation" + files);
 				for (var i=0; i<this.msgs.length; i++) {
 					console.log(this.msgs[i]);
 				}
@@ -386,8 +378,12 @@ class Validate {
 	}
 
 
+	/**
+	 * @method log
+	 * @memberof Validate
+	 * @description Add message to the log array.
+	 */
 	log (type, msg) {
-//		console.log("[" + type + "] " + msg);
 		this.msgs.push("[" + type + "] " + msg);
 	}
 }
