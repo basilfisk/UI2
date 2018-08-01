@@ -27,12 +27,22 @@ class Validate {
 	 * @description Check the form definitions.
 	 */
 	checkForms () {
-		var forms, i, form, list,
+		var forms, i, form, list, n,
 			elem = form + ".";
 
 		forms = Object.keys(this.form);
 		for (i=0; i<forms.length; i++) {
 			form = this.form[forms[i]];
+
+			// title element
+			if (!this.isString(form.title)) {
+				this.log("form", forms[i] + ".title must be a string");
+			}
+
+			// width element
+			if (form.width && !this.isNumber(form.width)) {
+				this.log("form", forms[i] + ".width must be a number");
+			}
 
 			// type element is mandatory
 			if (!form.type) {
@@ -44,28 +54,49 @@ class Validate {
 				if (!this.isInList([form.type], list)) {
 					this.log("form", forms[i] + ".type must only have these values: " + list.join(', '));
 				}
-
-				// Valid fields
-				if (form.type === 'form') {
-					list = ['buttons','fields','title','type','width'];
-				}
 				else {
-					list = ['buttons','columns','fields','key','title','type','width'];
-				}
-				if (!this.isInList(Object.keys(form), list)) {
-					this.log("form", "'" + forms[i] + "' form must only have these elements: " + list.join(', '));
+					// elements in form or table
+					if (form.type === 'form') {
+						list = ['buttons','fields','title','type','width'];
+					}
+					else {
+						list = ['buttons','columns','fields','key','title','type','width'];
+					}
+					if (!this.isInList(Object.keys(form), list)) {
+						this.log("form", "'" + forms[i] + "' form must only have these elements: " + list.join(', '));
+					}
+
+					// key & column elements - table only
+					if (form.type === 'table') {
+						if (!this.isString(form.key)) {
+							this.log("form", forms[i] + ".key must be a string");
+						}
+						if (!this.isArray(form.columns)) {
+							this.log("form", forms[i] + ".columns must be an array");
+						}
+						else {
+							for (n=0; n<form.columns.length; n++) {
+								elem = forms[i] + ".columns";
+								list = ['id','title'];
+								if (!this.isInList(Object.keys(form.columns[n]), list)) {
+									this.log("menu", elem + " must only have these elements: " + list.join(', '));
+								}
+								if (!this.isString(form.columns[n].id)) {
+									this.log("menu", elem + "[" + n + "].id must be a string");
+								}
+								if (!this.isString(form.columns[n].title)) {
+									this.log("menu", elem + "[" + n + "].title must be a string");
+								}
+							}
+						}
+					}
+
+					// buttons element
+					this.checkFormButtons(forms[i], form.type, form.buttons);
 				}
 			}
 
-			// title element
-			if (!this.isString(form.title)) {
-				this.log("form", forms[i] + ".title must be a string");
-			}
-
-			// buttons element
-			this.checkFormButtons(forms[i], form.type, form.buttons);
-
-			// fields element
+			// fields element ???????????????????????????????????????
 			this.checkFormFields(forms[i], form.fields);
 		}
 
@@ -424,6 +455,17 @@ class Validate {
 			status = status && match;
 		}
 		return status;
+	}
+
+
+	/**
+	 * @method isNumber
+	 * @memberof Validate
+	 * @param {object} data Data to be validated.
+	 * @description Check the data is a number.
+	 */
+	isNumber (data) {
+		return (typeof data === 'number') ? true : false;
 	}
 
 
