@@ -270,7 +270,7 @@ var ui = {
 		div += '<div class="modal-header">';
 		if (_defs[id].buttons && _defs[id].buttons.close) {
 			button = _defs[id].buttons.close;
-			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
+			div += '<button type="button" class="' + button.button.class + '" data-dismiss="modal">' + button.button.image + '</button>';
 		}
 		div += '<h4 class="modal-title">' + title + '</h4>';
 		div += '</div>';
@@ -298,9 +298,9 @@ var ui = {
 			button = _defs[id].buttons.ok;
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-			div += '<button type="button" class="' + button.icon.background + '"';
+			div += '<button type="button" class="' + button.button.background + '"';
 			div += 'onClick="ui.buttonOK(' + "'" + id + "'" + '); return false;">';
-			div += '<span class="' + button.icon.class + '"></span></button>';
+			div += '<span class="' + button.button.class + '"></span></button>';
 			div += '</div></div>';
 		}
 
@@ -338,7 +338,7 @@ var ui = {
 		div += '<div class="modal-header">';
 		if (_defs[id].buttons && _defs[id].buttons.close) {
 			button = _defs[id].buttons.close;
-			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
+			div += '<button type="button" class="' + button.button.class + '" data-dismiss="modal">' + button.button.image + '</button>';
 		}
 		div += '<h4 class="modal-title">' + title + '</h4>';
 		div += '</div>';
@@ -367,9 +367,9 @@ var ui = {
 			div += '<div class="col-md-12">';
 			if (_defs[id].buttons && _defs[id].buttons.ok) {
 				button = _defs[id].buttons.ok;
-				div += '<button type="button" class="' + button.icon.background + '" ';
+				div += '<button type="button" class="' + button.button.background + '" ';
 				div += 'onClick="ui.buttonOK(' + "'" + id + "'" + '); return false;">';
-				div += '<span class="' + button.icon.class + '"></span></button>';
+				div += '<span class="' + button.button.class + '"></span></button>';
 			}
 			div += '</div></div>';
 		}
@@ -433,7 +433,7 @@ var ui = {
 		button = _defs.messageBox.buttons.close;
 		div += '<div class="modal-header">';
 		if (button) {
-			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
+			div += '<button type="button" class="' + button.button.class + '" data-dismiss="modal">' + button.button.image + '</button>';
 		}
 		div += '<h4 class="modal-title" id="messageBoxLabel">' + title + '</h4>';
 		div += '</div>';
@@ -446,9 +446,9 @@ var ui = {
 		// OK button in footer
 		button = _defs.messageBox.buttons.ok;
 		div += '<div class="modal-footer">';
-		div += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
+		div += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
 		div += 'onclick="ui.messageConfirmed(); return false;">';
-		div += '<span class="' + button.icon.class + '"></span></button>';
+		div += '<span class="' + button.button.class + '"></span></button>';
 		
 		div += '</div>';
 		div += '</div>';
@@ -756,7 +756,7 @@ var ui = {
 		}
 		return ok;
 	},
-		
+
 
 
 	// ***************************************************************************************
@@ -989,7 +989,7 @@ var ui = {
 		div += '<div class="modal-header">';
 		if (_defs[id].buttons && _defs[id].buttons.close) {
 			button = _defs[id].buttons.close;
-			div += '<button type="button" class="' + button.icon.class + '" data-dismiss="modal">' + button.icon.image + '</button>';
+			div += '<button type="button" class="' + button.button.class + '" data-dismiss="modal">' + button.button.image + '</button>';
 		}
 		div += '<br/>';
 		div += '<h4>' + _defs[id].title;
@@ -997,8 +997,8 @@ var ui = {
 		// Display an Add button, if specified
 		if (_defs[id].buttons && _defs[id].buttons.add) {
 			button = _defs[id].buttons.add;
-			div += '<button id="table-' + button.form + '" type="button" class="' + button.icon.background + '" data-dismiss="modal">';
-			div += '<span class="' + button.icon.class + '"></span></button>';
+			div += '<button id="table-' + button.form + '" type="button" class="' + button.button.background + '" data-dismiss="modal">';
+			div += '<span class="' + button.button.class + '"></span></button>';
 		}
 		div += '</h4>';
 		div += '</div>';
@@ -1018,13 +1018,13 @@ var ui = {
 
 		// Column headings for optional edit and delete columns added later
 		if (_defs[id].buttons) {
-			if (_defs[id].buttons.edit && _defs[id].buttons.edit.title) {
-				div += (_defs[id].buttons.edit.style) ? '<th style="' + _defs[id].buttons.edit.style + '">' : '<th>'
-				div += _defs[id].buttons.edit.title + '</th>';
+			if (_defs[id].buttons.edit && _defs[id].buttons.edit.column.title) {
+				div += (_defs[id].buttons.edit.column.style) ? '<th style="' + _defs[id].buttons.edit.column.style + '">' : '<th>'
+				div += _defs[id].buttons.edit.column.title + '</th>';
 			}
-			if (_defs[id].buttons.delete && _defs[id].buttons.delete.title) {
-				div += (_defs[id].buttons.delete.style) ? '<th style="' + _defs[id].buttons.delete.style + '">' : '<th>'
-				div += _defs[id].buttons.delete.title + '</th>';
+			if (_defs[id].buttons.delete && _defs[id].buttons.delete.column.title) {
+				div += (_defs[id].buttons.delete.column.style) ? '<th style="' + _defs[id].buttons.delete.column.style + '">' : '<th>'
+				div += _defs[id].buttons.delete.column.title + '</th>';
 			}
 		}
 		div += '</tr>';
@@ -1054,25 +1054,25 @@ var ui = {
 			// Add an optional edit button at the end of the row
 			if (_defs[id].buttons && _defs[id].buttons.edit) {
 				button = _defs[id].buttons.edit;
-				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
-				row += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
+				row += (button.column.style) ? '<td style="' + button.column.style + '">' : '<td>';
+				row += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
 				row += 'onClick="ui.tableEditForm(' + "'" + _defs[id].buttons.edit.form + "', " + i + '); return false;">';
-				row += '<span class="' + button.icon.class + '"></span></button>';
+				row += '<span class="' + button.button.class + '"></span></button>';
 				row += '</td>';
 			}
 			
 			// Add an optional delete button at the end of the row
 			if (_defs[id].buttons && _defs[id].buttons.delete) {
 				button = _defs[id].buttons.delete;
-				row += (button.style) ? '<td style="' + button.style + '">' : '<td>';
-				row += '<button type="button" class="' + button.icon.background + '" data-dismiss="modal" ';
+				row += (button.column.style) ? '<td style="' + button.column.style + '">' : '<td>';
+				row += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
 				if (_defs[id].key && rows[i][_defs[id].key] && rows[i][_defs[id].key].text) {
 					row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i][_defs[id].key].text + "'" + '); return false;">';
 				}
 				else {
 					console.log('Missing definition for Delete button: ' + id + '.' + _defs[id].key);
 				}
-				row += '<span class="' + button.icon.class + '"></span></button>';
+				row += '<span class="' + button.button.class + '"></span></button>';
 				row += '</td>';
 			}
 			

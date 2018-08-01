@@ -96,40 +96,34 @@ class Validate {
 
 		// add button
 		if (def.add) {
-			if (!this.isObject(def.add)) {
-				this.log("form", elem + ".add must be an object");
-			}
-			else {
-				// add.form on a table
-				if (type === 'table') {
+			// only on a table
+			if (type === 'table') {
+				if (!this.isObject(def.add)) {
+					this.log("form", elem + ".add must be an object");
+				}
+				list = ['form','button'];
+				if (!this.isInList(Object.keys(def.add), list)) {
+					this.log("form", elem + ".add must only have these elements: " + list.join(', '));
+				}
+				else {
+					// form string
 					if (!this.isString(def.add.form)) {
 						this.log("form", elem + ".add.form must be a string");
 					}
-					list = ['form','icon'];
-					if (!this.isInList(Object.keys(def.add), list)) {
-						this.log("form", elem + ".add must only have these elements: " + list.join(', '));
+					// button object
+					if (!this.isObject(def.add.button)) {
+						this.log("form", elem + ".add.button must be an object");
+					}
+					else {
+						list = ['background','class'];
+						if (!this.isInList(Object.keys(def.add.button), list)) {
+							this.log("form", elem + ".add.button must only have these elements: " + list.join(', '));
+						}
 					}
 				}
-				// add.action on a form
-				else {
-					if (!this.isString(def.add.action)) {
-						this.log("form", elem + ".add.action must be a string");
-					}
-					list = ['action','icon'];
-					if (!this.isInList(Object.keys(def.add), list)) {
-						this.log("form", elem + ".add must only have these elements: " + list.join(', '));
-					}
-				}
-				// add.icon
-				if (!this.isObject(def.add.icon)) {
-					this.log("form", elem + ".add.icon must be an object");
-				}
-				else {
-					list = ['background','class'];
-					if (!this.isInList(Object.keys(def.add.icon), list)) {
-						this.log("form", elem + ".add.icon must only have these elements: " + list.join(', '));
-					}
-				}
+			}
+			else {
+				this.log("form", elem + ".add button can only be on a table");
 			}
 		}
 
@@ -139,20 +133,139 @@ class Validate {
 				this.log("form", elem + ".close must be an object");
 			}
 			else {
-				list = ['icon'];
+				list = ['button'];
 				if (!this.isInList(Object.keys(def.close), list)) {
 					this.log("form", elem + ".close must only have these elements: " + list.join(', '));
 				}
 				else {
-					// close.icon
-					if (!this.isObject(def.close.icon)) {
-						this.log("form", elem + ".close.icon must be an object");
+					// close.button
+					if (!this.isObject(def.close.button)) {
+						this.log("form", elem + ".close.button must be an object");
 					}
 					list = ['class','image'];
-					if (!this.isInList(Object.keys(def.close.icon), list)) {
-						this.log("form", elem + ".close.icon must only have these elements: " + list.join(', '));
+					if (!this.isInList(Object.keys(def.close.button), list)) {
+						this.log("form", elem + ".close.button must only have these elements: " + list.join(', '));
 					}
 				}
+			}
+		}
+
+		// delete button
+		if (def.delete) {
+			// only on a table
+			if (type === 'table') {
+				if (!this.isObject(def.delete)) {
+					this.log("form", elem + ".delete must be an object");
+				}
+				list = ['action','button','column'];
+				if (!this.isInList(Object.keys(def.delete), list)) {
+					this.log("form", elem + ".delete must only have these elements: " + list.join(', '));
+				}
+				else {
+					// form string
+					if (!this.isString(def.delete.action)) {
+						this.log("form", elem + ".delete.action must be a string");
+					}
+					// button object
+					if (!this.isObject(def.delete.button)) {
+						this.log("form", elem + ".delete.button must be an object");
+					}
+					else {
+						list = ['background','class'];
+						if (!this.isInList(Object.keys(def.delete.button), list)) {
+							this.log("form", elem + ".delete.button must only have these elements: " + list.join(', '));
+						}
+					}
+					// column object
+					if (!this.isObject(def.delete.column)) {
+						this.log("form", elem + ".delete.column must be an object");
+					}
+					else {
+						list = ['style','title'];
+						if (!this.isInList(Object.keys(def.delete.column), list)) {
+							this.log("form", elem + ".delete.column must only have these elements: " + list.join(', '));
+						}
+					}
+				}
+			}
+			else {
+				this.log("form", elem + ".delete button can only be on a table");
+			}
+		}
+
+		// edit button
+		if (def.edit) {
+			// only on a table
+			if (type === 'table') {
+				if (!this.isObject(def.edit)) {
+					this.log("form", elem + ".edit must be an object");
+				}
+				list = ['form','button','column'];
+				if (!this.isInList(Object.keys(def.edit), list)) {
+					this.log("form", elem + ".edit must only have these elements: " + list.join(', '));
+				}
+				else {
+					// form string
+					if (!this.isString(def.edit.form)) {
+						this.log("form", elem + ".edit.form must be a string");
+					}
+					// button object
+					if (!this.isObject(def.edit.button)) {
+						this.log("form", elem + ".edit.button must be an object");
+					}
+					else {
+						list = ['background','class'];
+						if (!this.isInList(Object.keys(def.edit.button), list)) {
+							this.log("form", elem + ".edit.button must only have these elements: " + list.join(', '));
+						}
+					}
+					// column object
+					if (!this.isObject(def.edit.column)) {
+						this.log("form", elem + ".edit.column must be an object");
+					}
+					else {
+						list = ['style','title'];
+						if (!this.isInList(Object.keys(def.edit.column), list)) {
+							this.log("form", elem + ".edit.column must only have these elements: " + list.join(', '));
+						}
+					}
+				}
+			}
+			else {
+				this.log("form", elem + ".edit button can only be on a table");
+			}
+		}
+	
+		// ok button
+		if (def.ok) {
+			// only on a form
+			if (type === 'form') {
+				if (!this.isObject(def.ok)) {
+					this.log("form", elem + ".ok must be an object");
+				}
+				list = ['action','button'];
+				if (!this.isInList(Object.keys(def.ok), list)) {
+					this.log("form", elem + ".ok must only have these elements: " + list.join(', '));
+				}
+				else {
+					// action string
+					if (!this.isString(def.ok.action)) {
+						this.log("form", elem + ".ok.action must be a string");
+					}
+					// button object
+					if (!this.isObject(def.ok.button)) {
+						this.log("form", elem + ".ok.button must be an object");
+					}
+					else {
+						list = ['background','class'];
+						if (!this.isInList(Object.keys(def.ok.button), list)) {
+							this.log("form", elem + ".ok.button must only have these elements: " + list.join(', '));
+						}
+					}
+				}
+			}
+			else {
+				this.log("form", elem + ".ok button can only be on a form");
 			}
 		}
 	}
