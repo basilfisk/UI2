@@ -77,12 +77,16 @@ class Validate {
 						else {
 							for (n=0; n<form.columns.length; n++) {
 								elem = forms[i] + ".columns";
-								list = ['id','title'];
+								list = ['id','style','title'];
 								if (!this.isInList(Object.keys(form.columns[n]), list)) {
 									this.log("menu", elem + " must only have these elements: " + list.join(', '));
 								}
 								if (!this.isString(form.columns[n].id)) {
 									this.log("menu", elem + "[" + n + "].id must be a string");
+								}
+								// optional
+								if (form.columns[n].style && !this.isString(form.columns[n].style)) {
+									this.log("menu", elem + "[" + n + "].style must be a string");
 								}
 								if (!this.isString(form.columns[n].title)) {
 									this.log("menu", elem + "[" + n + "].title must be a string");
@@ -421,22 +425,175 @@ class Validate {
 						def[flds[i]].type !== 'text') {
 						this.log("form", elem + ".type must be one of 'id|integer|list|password|text'");
 					}
-					// list options - mandatory
+					// list options - mandatory object
 					if (def[flds[i]].type === 'list') {
 						if (!this.isObject(def[flds[i]].options)) {
-							this.log("form", elem + ".options must be defined for a list");
+							this.log("form", elem + ".options must be an object for a list");
 						}
 						else {
-							this.log("form", elem + ".options validate list options HERE");
+							// Valid elements
+							list = ['display','list'];
+							if (!this.isInList(Object.keys(def[flds[i]].options), list)) {
+								this.log("form", elem + ".options must only have these elements: " + list.join(', '));
+							}
+							else {
+								// list - mandatory
+								if (!this.isString(def[flds[i]].options.list)) {
+// TODO QUIET									this.log("form", elem + ".options.list must be a string");
+								}
+								// display - mandatory
+								if (!this.isObject(def[flds[i]].options.display)) {
+									this.log("form", elem + ".options.display must be an object");
+								}
+								else {
+									// display.select - mandatory
+									if (!this.isString(def[flds[i]].options.display.select)) {
+										this.log("form", elem + ".options.display.select must be a string");
+									}
+									// display.select - 'single' or 'multiple'
+									if (def[flds[i]].options.display.select !== 'single' && def[flds[i]].options.display.select !== 'multiple') {
+										this.log("form", elem + ".options.display.select must be single|multiple");
+									}
+									// display.height - mandatory if select is 'multiple'
+									if (def[flds[i]].options.display.select === 'multiple' && !this.isNumber(def[flds[i]].options.display.height)) {
+										this.log("form", elem + ".options.display.height must be an integer");
+									}
+								}
+							}
 						}
 					}
 					// integer options - optional object
 					if (def[flds[i]].options && def[flds[i]].type === 'integer') {
 						if (!this.isObject(def[flds[i]].options)) {
-							this.log("form", elem + ".options must be an object");
+							this.log("form", elem + ".options must be an object for an integer");
 						}
 						else {
-							this.log("form", elem + ".options validate integer options HERE");
+							// Valid elements
+							list = ['checks'];
+							if (!this.isInList(Object.keys(def[flds[i]].options), list)) {
+								this.log("form", elem + ".options must only have these elements: " + list.join(', '));
+							}
+							else {
+								// Valid elements for checks
+								list = ['format','mandatory','range'];
+								if (!this.isInList(Object.keys(def[flds[i]].options.checks), list)) {
+									this.log("form", elem + ".options.checks must only have these elements: " + list.join(', '));
+								}
+								else {
+									// checks.format - optional
+									if (def[flds[i]].options.checks.format && !this.isString(def[flds[i]].options.checks.format)) {
+										this.log("form", elem + ".options.checks.format must be a string");
+									}
+									// checks.mandatory - optional
+									if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
+										this.log("form", elem + ".options.checks.mandatory must be true|false");
+									}
+									// checks.range - optional
+									if (def[flds[i]].options.checks.range && !this.isObject(def[flds[i]].options.checks.range)) {
+										this.log("form", elem + ".options.checks.range must be an object");
+									}
+									else {
+										// Valid elements for range
+										list = ['min','max'];
+										if (!this.isInList(Object.keys(def[flds[i]].options.checks.range), list)) {
+											this.log("form", elem + ".options.checks.range must only have these elements: " + list.join(', '));
+										}
+										else {
+											// min - integer optional
+											if (def[flds[i]].options.checks.range.min && !this.isNumber(def[flds[i]].options.checks.range.min)) {
+												this.log("form", elem + ".options.checks.range.min must be an integer");
+											}
+											// max - integer optional
+											if (def[flds[i]].options.checks.range.max && !this.isNumber(def[flds[i]].options.checks.range.max)) {
+												this.log("form", elem + ".options.checks.range.max must be an integer");
+											}
+											// min < max
+											if (def[flds[i]].options.checks.range.min && def[flds[i]].options.checks.range.max) {
+												if (parseInt(def[flds[i]].options.checks.range.min) >= parseInt(def[flds[i]].options.checks.range.max)) {
+													this.log("form", elem + ".options.checks.range min must be less than max");
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					// password options - optional object
+					if (def[flds[i]].options && def[flds[i]].type === 'password') {
+						if (!this.isObject(def[flds[i]].options)) {
+							this.log("form", elem + ".options must be an object for a password");
+						}
+						else {
+							// Valid elements
+							list = ['checks'];
+							if (!this.isInList(Object.keys(def[flds[i]].options), list)) {
+								this.log("form", elem + ".options must only have these elements: " + list.join(', '));
+							}
+							else {
+								// Valid elements for checks
+								list = ['format','mandatory'];
+								if (!this.isInList(Object.keys(def[flds[i]].options.checks), list)) {
+									this.log("form", elem + ".options.checks must only have these elements: " + list.join(', '));
+								}
+								else {
+									// checks.format - optional
+									if (def[flds[i]].options.checks.format && !this.isString(def[flds[i]].options.checks.format)) {
+										this.log("form", elem + ".options.checks.format must be a string");
+									}
+									// checks.mandatory - optional
+									if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
+										this.log("form", elem + ".options.checks.mandatory must be true|false");
+									}
+								}
+							}
+						}
+					}
+					// text options - optional object
+					if (def[flds[i]].options && def[flds[i]].type === 'text') {
+						if (!this.isObject(def[flds[i]].options)) {
+							this.log("form", elem + ".options must be an object for text");
+						}
+						else {
+							// Valid elements
+							list = ['checks','content','display'];
+							if (!this.isInList(Object.keys(def[flds[i]].options), list)) {
+								this.log("form", elem + ".options must only have these elements: " + list.join(', '));
+							}
+							else {
+								if (def[flds[i]].options.checks) {
+									// Valid elements for checks
+									list = ['format','mandatory'];
+									if (!this.isInList(Object.keys(def[flds[i]].options.checks), list)) {
+										this.log("form", elem + ".options.checks must only have these elements: " + list.join(', '));
+									}
+									else {
+										// checks.format - optional
+										if (def[flds[i]].options.checks.format && !this.isString(def[flds[i]].options.checks.format)) {
+											this.log("form", elem + ".options.checks.format must be a string");
+										}
+										// checks.mandatory - optional
+										if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
+											this.log("form", elem + ".options.checks.mandatory must be true|false");
+										}
+									}
+								}
+								if (def[flds[i]].options.content) {
+// TODO content
+								}
+								if (def[flds[i]].options.display) {
+									// display - mandatory
+									if (def[flds[i]].options.display && !this.isObject(def[flds[i]].options.display)) {
+										this.log("form", elem + ".options.display must be an object");
+									}
+									else {
+										// display.height - mandatory
+										if (!this.isNumber(def[flds[i]].options.display.height)) {
+											this.log("form", elem + ".options.display.height must be an integer");
+										}
+									}
+								}
+							}
 						}
 					}
 				}
