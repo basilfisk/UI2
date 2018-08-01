@@ -103,6 +103,7 @@ var ui = {
 
 			// Assign data to element in object
 			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
+			// TODO This is the opposite to _objectRead
 			if (elem.length === 1) {
 				data[elem[0]] = temp[name];
 			}
@@ -621,8 +622,8 @@ var ui = {
 				case 'list':
 					// Initialize a multi select list
 					multi = (defs.options.display.select === 'multiple') ? ' multiple' : '';
-					if (defs.options.display.size && defs.options.display.select === 'multiple') {
-						multi += ' size="' + defs.options.display.size + '"';
+					if (defs.options.display.height && defs.options.display.select === 'multiple') {
+						multi += ' size="' + defs.options.display.height + '"';
 					}
 					// Open list
 					divot += '<div class="form-group" id="' + name + '-all">';
@@ -648,10 +649,10 @@ var ui = {
 						}
 					}
 					// If size defined, use a textarea control
-					if (defs.options && defs.options.display && defs.options.display.size) {
+					if (defs.options && defs.options.display && defs.options.display.height) {
 						divot += '<div class="form-group" id="' + name + '-all">';
 						divot += '<label for="' + name + '">' + title + ':</label>';
-						divot += '<textarea class="form-control" id="' + name + '" placeholder="' + desc + '" rows="' + defs.options.display.size + '"' + readonly + '>' + value + '</textarea>';
+						divot += '<textarea class="form-control" id="' + name + '" placeholder="' + desc + '" rows="' + defs.options.display.height + '"' + readonly + '>' + value + '</textarea>';
 						divot += '</div>';
 					}
 					// Write string to input control

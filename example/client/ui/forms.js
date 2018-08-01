@@ -75,7 +75,7 @@ var formDefinitions = {
 				"edit": false,
 				"options": {
 					"display": {
-						"size": 8
+						"height": 8
 					}
 				}
 			}
@@ -532,7 +532,7 @@ var formDefinitions = {
 				"edit": true,
 				"options": {
 					"display": {
-						"size": 20
+						"height": 20
 					}
 				}
 			}
@@ -589,7 +589,7 @@ var formDefinitions = {
 				"edit": true,
 				"options": {
 					"display": {
-						"size": 20
+						"height": 20
 					}
 				}
 			}
@@ -1289,7 +1289,7 @@ var formDefinitions = {
 				"options": {
 					"display": {
 						"select": "multiple",
-						"size": 5
+						"height": 5
 					}
 				}
 			}
@@ -1402,7 +1402,7 @@ var formDefinitions = {
 				"options": {
 					"display": {
 						"select": "multiple",
-						"size": 5
+						"height": 5
 					}
 				}
 			},
@@ -1414,7 +1414,7 @@ var formDefinitions = {
 				"edit": false,
 				"options": {
 					"display": {
-						"size": 8
+						"height": 8
 					}
 				}
 			}
