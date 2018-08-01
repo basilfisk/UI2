@@ -1,16 +1,16 @@
 /**
- * @file validation.js
+ * @file format.js
  * @author Basil Fisk
  * @copyright Breato Ltd 2018
  */
 
 /**
- * @namespace Validation
+ * @namespace Format
  * @author Basil Fisk
- * @description Defines the format validation tests that can be performed, as regular expressions.
+ * @description Defines the format tests that can be performed, as regular expressions.
  */
 
-var _validation = {
+var _format = {
 	"alphaLower": {
 		"pattern": "[a-z]+$",
 		"description": "Lower case alphabetic string"

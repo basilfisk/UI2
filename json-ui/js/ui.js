@@ -140,8 +140,8 @@ var ui = {
 		}
 		else {
 			// Pick pattern to be used for validation
-			pattern = _validation[format].pattern;
-			error = _validation[format].description;
+			pattern = _format[format].pattern;
+			error = _format[format].description;
 
 			// Error if format not recognized
 			if (pattern == undefined) {
@@ -283,7 +283,7 @@ var ui = {
 		for (i=0; i<names.length; i++) {
 			switch (fields[names[i]].type) {
 				case 'list':
-					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[fields[names[i]].listField], 'text'));
+					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[fields[names[i]].options.list], 'text'));
 					break;
 				default:
 					div += this._showField(names[i], fields[names[i]], '');
@@ -351,7 +351,7 @@ var ui = {
 		for (i=0; i<names.length; i++) {
 			switch (fields[names[i]].type) {
 				case 'list':
-					div += this._showField(names[i], fields[names[i]], data[names[i]].text, this._sortArrayObjects(list[fields[names[i]].listField], 'text'));
+					div += this._showField(names[i], fields[names[i]], data[names[i]].text, this._sortArrayObjects(list[fields[names[i]].options.list], 'text'));
 					break;
 				default:
 					div += this._showField(names[i], fields[names[i]], data[names[i]].text);
