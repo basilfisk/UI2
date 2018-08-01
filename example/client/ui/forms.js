@@ -169,10 +169,10 @@ var formDefinitions = {
 				"title": "Command Name",
 				"description": "Enter name of command",
 				"type": "list",
-				"listField": "bundleCommandList",
 				"visible": true,
 				"edit": true,
 				"options": {
+					"list": "bundleCommandList",
 					"display": {
 						"select": "single"
 					}
@@ -183,10 +183,10 @@ var formDefinitions = {
 				"title": "Connector Name",
 				"description": "Enter name of connector",
 				"type": "list",
-				"listField": "bundleConnectorList",
 				"visible": true,
 				"edit": true,
 				"options": {
+					"list": "bundleConnectorList",
 					"display": {
 						"select": "single"
 					}
@@ -272,10 +272,10 @@ var formDefinitions = {
 				"title": "Command Name",
 				"description": "Enter name of command",
 				"type": "list",
-				"listField": "bundleCommandList",
 				"visible": true,
 				"edit": true,
 				"options": {
+					"list": "bundleCommandList",
 					"display": {
 						"select": "single"
 					}
@@ -286,10 +286,10 @@ var formDefinitions = {
 				"title": "Connector Name",
 				"description": "Enter name of connector",
 				"type": "list",
-				"listField": "bundleConnectorList",
 				"visible": true,
 				"edit": true,
 				"options": {
+					"list": "bundleConnectorList",
 					"display": {
 						"select": "single"
 					}
@@ -1129,6 +1129,15 @@ var formDefinitions = {
 					"background": "btn btn-success",
 					"class": "glyphicon glyphicon-ok"
 				}
+			}
+		},
+		"fields": {
+			"text": {
+				"element": "",
+				"title": "",
+				"type": "text",
+				"visible": true,
+				"edit": false
 			}
 		}
 	},
