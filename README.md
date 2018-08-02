@@ -19,8 +19,9 @@
 
 # Useful Links
 
-- [Example Application](docs/example.md)
-- [WIP and Issues](docs/issues.md)
+- [Example Application](example/docs/example.md)
+- [WIP and Issues](json-ui/docs/issues.md)
+- [Form and Menu Validation](json-ui/docs/validation.md)
 
 # Triggering External Functions
 

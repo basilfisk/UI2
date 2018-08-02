@@ -21,9 +21,8 @@
 ## Form Definitions
 
 - `title` is mandatory and must be a string
-- `width` is optional and must be a number
+- `width` is optional and must be an integer between 10 and 100
 - `type` is mandatory and must be one of *form* or *table*
-- `key` only applies to a *table* and must be an integer between 20 and 100
 - `columns` only applies to a *table* and must be an array of objects
 - `columns[].id` is mandatory and must be a string
 - `columns[].style` is optional and must be a string
@@ -32,7 +31,7 @@
 - `buttons` is mandatory and must be an object
 - `buttons` elements must be one of *add*, *close*, *delete*, *edit* or *ok*
 - `buttons.add` only applies to a *table* and must be an object
-- `buttons.add.form` is mandatory and must be a string
+- `buttons.add.form` is mandatory, must be a string and form must exist
 - `buttons.add.button` is a mandatory object with elements of *background* and *class*
 - `buttons.add.button.background` must be a string
 - `buttons.add.button.class` must be a string
@@ -48,8 +47,9 @@
 - `buttons.delete.column` is a mandatory object with elements of *style* and *title*
 - `buttons.delete.column.style` must be a string
 - `buttons.delete.column.title` must be a string
+>> - `buttons.delete.column.key` only applies to a *table*, must be a string and field must exist
 - `buttons.edit` only applies to a *table* and must be an object
-- `buttons.edit.form` is mandatory and must be a string
+- `buttons.edit.form` is mandatory, must be a string and form must exist
 - `buttons.edit.button` is a mandatory object with elements of *background* and *class*
 - `buttons.edit.button.background` must be a string
 - `buttons.edit.button.class` must be a string
@@ -111,10 +111,18 @@ type is *text*
 
 ## Missing tests
 
-button.add.form: link to {form key}
-button.edit.form: link to {form key}
-columns.id: link to {form key}.fields.{fields key}
-
-width: 20-100 integer
 can id|list have checks:mandatory set?
 are there number|float types and checks?
+
+## What to do about links?
+
+links to {form key}.fields.{fields key}
+- {form}.buttons.delete.key
+- {form}.columns[].id: 
+Edit and Add forms should use the same field names
+{table}.columns should use the same field names
+
+Should ?????
+- {table}.columns hold the master column list with a visible attribute
+- Edit must have field names in {table}.columns
+- Add must have field names in {table}.columns
