@@ -34,7 +34,7 @@ class Validate {
 		for (i=0; i<forms.length; i++) {
 			form = this.form[forms[i]];
 
-			// title element
+			// title - mandatory
 			if (!this.isString(form.title)) {
 				this.log("form", forms[i] + ".title must be a string");
 			}
@@ -49,7 +49,7 @@ class Validate {
 				}
 			}
 
-			// type element is mandatory
+			// type - mandatory
 			if (!form.type) {
 				this.log("form", forms[i] + ".type is mandatory");
 			}
@@ -71,7 +71,7 @@ class Validate {
 						this.log("form", "'" + forms[i] + "' form must only have these elements: " + list.join(', '));
 					}
 
-					// key & column elements - table only
+					// key & column - table only
 					if (form.type === 'table') {
 						if (!this.isArray(form.columns)) {
 							this.log("form", forms[i] + ".columns must be an array");
@@ -406,7 +406,7 @@ class Validate {
 		for (i=0; i<flds.length; i++) {
 			elem = form + ".fields." + flds[i];
 			// Valid fields
-			list = ['description','edit','element','options','title','type','visible'];
+			list = ['description','edit','options','title','type','visible'];
 			if (!this.isInList(Object.keys(def[flds[i]]), list)) {
 				this.log("form", elem + " must only have these elements: " + list.join(', '));
 			}
@@ -428,10 +428,6 @@ class Validate {
 					if (def[flds[i]].visible && !this.isString(def[flds[i]].title)) {
 						this.log("form", elem + ".title must be a string");
 					}
-				}
-				// element - mandatory
-				if (!this.isString(def[flds[i]].element)) {
-					this.log("form", elem + ".element must be a string");
 				}
 				// type - mandatory
 				if (!this.isString(def[flds[i]].type)) {
@@ -821,7 +817,7 @@ class Validate {
 		// Read menu definition file and remove Javascript wrapper
 		this.fs.readFile(this.file.menu, (err, data) => {
 			file = data.toString();
-			file = file.replace('var menuDefinitions = {', '{');
+			file = file.replace('var _jsonuiMenus = {', '{');
 			file = file.replace('};', '}');
 //			try {
 				this.menu = JSON.parse(file);
@@ -829,7 +825,7 @@ class Validate {
 				// Read form definition file and remove Javascript wrapper
 				this.fs.readFile(this.file.form, (err, data) => {
 					file = data.toString();
-					file = file.replace('var formDefinitions = {', '{');
+					file = file.replace('var _jsonuiForms = {', '{');
 					file = file.replace('};', '}');
 //					try {
 						this.form = JSON.parse(file);

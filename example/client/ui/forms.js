@@ -1,4 +1,4 @@
-var formDefinitions = {
+var _jsonuiForms = {
 	"about": {
 		"type": "form",
 		"title": "Information About the Current User",
@@ -12,63 +12,54 @@ var formDefinitions = {
 		},
 		"fields": {
 			"aboutUserName": {
-				"element": "name",
 				"title": "User Name",
 				"type": "text",
 				"visible": true,
 				"edit": false
 			},
 			"aboutLoginName": {
-				"element": "username",
 				"title": "Login Name",
 				"type": "text",
 				"visible": true,
 				"edit": false
 			},
 			"aboutEmail": {
-				"element": "email",
 				"title": "Email",
 				"type": "text",
 				"visible": true,
 				"edit": false
 			},
 			"aboutCompany": {
-				"element": "company",
 				"title": "Company",
 				"type": "text",
 				"visible": true,
 				"edit": false
 			},
 			"aboutGroup": {
-				"element": "group",
 				"title": "Group",
 				"type": "text",
 				"visible": true,
 				"edit": false
 			},
 			"aboutRole": {
-				"element": "role",
 				"title": "Role",
 				"type": "text",
 				"visible": true,
 				"edit": false
 			},
 			"aboutClients": {
-				"element": "clients",
 				"title": "Clients",
 				"type": "text",
 				"visible": true,
 				"edit": false
 			},
 			"aboutBundles": {
-				"element": "bundles",
 				"title": "Bundles",
 				"type": "text",
 				"visible": true,
 				"edit": false
 			},
 			"aboutJWT": {
-				"element": "jwt",
 				"title": "JSON Web Token",
 				"type": "text",
 				"visible": true,
@@ -151,7 +142,6 @@ var formDefinitions = {
 		},
 		"fields": {
 			"bundleName": {
-				"element": "name",
 				"title": "Bundle Name",
 				"description": "Enter name of bundle",
 				"type": "text",
@@ -165,7 +155,6 @@ var formDefinitions = {
 				}
 			},
 			"bundleCommand": {
-				"element": "command",
 				"title": "Command Name",
 				"description": "Enter name of command",
 				"type": "list",
@@ -179,7 +168,6 @@ var formDefinitions = {
 				}
 			},
 			"bundleConnector": {
-				"element": "connector",
 				"title": "Connector Name",
 				"description": "Enter name of connector",
 				"type": "list",
@@ -193,7 +181,6 @@ var formDefinitions = {
 				}
 			},
 			"bundleCommandVer": {
-				"element": "version.cmd",
 				"title": "Command Version",
 				"description": "Enter command version",
 				"type": "integer",
@@ -210,7 +197,6 @@ var formDefinitions = {
 				}
 			},
 			"bundleParameterVer": {
-				"element": "version.prms",
 				"title": "Parameter Version",
 				"description": "Enter parameter version",
 				"type": "integer",
@@ -248,13 +234,11 @@ var formDefinitions = {
 		},
 		"fields": {
 			"bundleId": {
-				"element": "_id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
 			"bundleName": {
-				"element": "name",
 				"title": "Bundle Name",
 				"description": "Enter name of bundle",
 				"type": "text",
@@ -268,7 +252,6 @@ var formDefinitions = {
 				}
 			},
 			"bundleCommand": {
-				"element": "command",
 				"title": "Command Name",
 				"description": "Enter name of command",
 				"type": "list",
@@ -282,7 +265,6 @@ var formDefinitions = {
 				}
 			},
 			"bundleConnector": {
-				"element": "connector",
 				"title": "Connector Name",
 				"description": "Enter name of connector",
 				"type": "list",
@@ -296,7 +278,6 @@ var formDefinitions = {
 				}
 			},
 			"bundleCommandVer": {
-				"element": "version.cmd",
 				"title": "Command Version",
 				"description": "Enter command version",
 				"type": "integer",
@@ -313,7 +294,6 @@ var formDefinitions = {
 				}
 			},
 			"bundleParameterVer": {
-				"element": "version.prms",
 				"title": "Parameter Version",
 				"description": "Enter parameter version",
 				"type": "integer",
@@ -399,7 +379,6 @@ var formDefinitions = {
 		},
 		"fields": {
 			"commandName": {
-				"element": "name",
 				"title": "Command Name",
 				"description": "Enter name of command",
 				"type": "text",
@@ -413,7 +392,6 @@ var formDefinitions = {
 				}
 			},
 			"commandService": {
-				"element": "service",
 				"title": "Service Name",
 				"description": "Enter name of service",
 				"type": "list",
@@ -447,13 +425,11 @@ var formDefinitions = {
 		},
 		"fields": {
 			"commandId": {
-				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
 			"commandName": {
-				"element": "name",
 				"title": "Command Name",
 				"description": "Enter name of command",
 				"type": "text",
@@ -467,7 +443,6 @@ var formDefinitions = {
 				}
 			},
 			"commandService": {
-				"element": "service",
 				"title": "Service Name",
 				"description": "Enter name of service",
 				"type": "list",
@@ -501,13 +476,11 @@ var formDefinitions = {
 		},
 		"fields": {
 			"commandCommandId": {
-				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
 			"commandCommandVersion": {
-				"element": "version",
 				"title": "Version",
 				"description": "Enter version number of command",
 				"type": "integer",
@@ -524,7 +497,6 @@ var formDefinitions = {
 				}
 			},
 			"commandCommandText": {
-				"element": "command",
 				"title": "Command",
 				"description": "Enter command",
 				"type": "text",
@@ -558,13 +530,11 @@ var formDefinitions = {
 		},
 		"fields": {
 			"commandParametersId": {
-				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
 			"commandParametersVersion": {
-				"element": "version",
 				"title": "Version",
 				"description": "Enter version number of parameters",
 				"type": "integer",
@@ -581,7 +551,6 @@ var formDefinitions = {
 				}
 			},
 			"commandParametersText": {
-				"element": "parameters",
 				"title": "Parameters",
 				"description": "Enter parameters",
 				"type": "text",
@@ -662,7 +631,6 @@ var formDefinitions = {
 		},
 		"fields": {
 			"companyName": {
-				"element": "name",
 				"title": "Company Name",
 				"description": "Enter name of company",
 				"type": "text",
@@ -697,13 +665,11 @@ var formDefinitions = {
 		},
 		"fields": {
 			"companyId": {
-				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
 			"companyName": {
-				"element": "name",
 				"title": "Company Name",
 				"description": "Enter name of company",
 				"type": "text",
@@ -738,7 +704,6 @@ var formDefinitions = {
 		},
 		"fields": {
 			"companyGroupName": {
-				"element": "groups.name",
 				"title": "Group",
 				"description": "Enter name of group",
 				"type": "text",
@@ -752,7 +717,6 @@ var formDefinitions = {
 				}
 			},
 			"companyGroupDesc": {
-				"element": "groups.description",
 				"title": "Description",
 				"description": "Enter description of group",
 				"type": "text",
@@ -766,7 +730,6 @@ var formDefinitions = {
 				}
 			},
 			"companyGroupPlan": {
-				"element": "groups.plan",
 				"title": "Plan",
 				"description": "Select plan",
 				"type": "list",
@@ -800,13 +763,11 @@ var formDefinitions = {
 		},
 		"fields": {
 			"companyGroupId": {
-				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
 			"companyGroupName": {
-				"element": "groups.name",
 				"title": "Group Name",
 				"description": "Enter name of group",
 				"type": "text",
@@ -820,7 +781,6 @@ var formDefinitions = {
 				}
 			},
 			"companyGroupDesc": {
-				"element": "groups.description",
 				"title": "Description",
 				"description": "Enter description of group",
 				"type": "text",
@@ -834,7 +794,6 @@ var formDefinitions = {
 				}
 			},
 			"companyGroupPlan": {
-				"element": "groups.plan",
 				"title": "Plan",
 				"description": "Select plan",
 				"type": "list",
@@ -914,7 +873,6 @@ var formDefinitions = {
 		},
 		"fields": {
 			"connectorName": {
-				"element": "name",
 				"title": "Connector Name",
 				"description": "Enter name of connector",
 				"type": "text",
@@ -928,7 +886,6 @@ var formDefinitions = {
 				}
 			},
 			"connectorService": {
-				"element": "service",
 				"title": "Service",
 				"description": "Select type of connector",
 				"type": "list",
@@ -962,13 +919,11 @@ var formDefinitions = {
 		},
 		"fields": {
 			"connectorId": {
-				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
 			"connectorName": {
-				"element": "name",
 				"title": "Connector Name",
 				"type": "text",
 				"visible": true,
@@ -981,7 +936,6 @@ var formDefinitions = {
 				}
 			},
 			"connectorService": {
-				"element": "service",
 				"title": "Connector Service",
 				"type": "text",
 				"visible": true,
@@ -1015,13 +969,11 @@ var formDefinitions = {
 		},
 		"fields": {
 			"connectorMongoId": {
-				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
 			"connectorMongoName": {
-				"element": "name",
 				"title": "Connector Name",
 				"type": "text",
 				"visible": true,
@@ -1034,7 +986,6 @@ var formDefinitions = {
 				}
 			},
 			"connectorMongoHost": {
-				"element": "config.host",
 				"title": "Server Name",
 				"type": "text",
 				"visible": true,
@@ -1047,7 +998,6 @@ var formDefinitions = {
 				}
 			},
 			"connectorMongoPort": {
-				"element": "config.port",
 				"title": "Server Port",
 				"type": "integer",
 				"visible": true,
@@ -1064,7 +1014,6 @@ var formDefinitions = {
 				}
 			},
 			"connectorMongoDatabase": {
-				"element": "config.db",
 				"title": "Database",
 				"type": "text",
 				"visible": true,
@@ -1092,7 +1041,6 @@ var formDefinitions = {
 		},
 		"fields": {
 			"loginName": {
-				"element": "username",
 				"title": "User Name",
 				"type": "text",
 				"visible": true,
@@ -1105,7 +1053,6 @@ var formDefinitions = {
 				}
 			},
 			"loginPassword": {
-				"element": "password",
 				"title": "Password",
 				"type": "password",
 				"visible": true,
@@ -1133,7 +1080,6 @@ var formDefinitions = {
 		},
 		"fields": {
 			"text": {
-				"element": "",
 				"title": "",
 				"type": "text",
 				"visible": true,
@@ -1208,7 +1154,6 @@ var formDefinitions = {
 		},
 		"fields": {
 			"userUsername": {
-				"element": "username",
 				"title": "User Name",
 				"description": "Enter name of user",
 				"type": "text",
@@ -1222,7 +1167,6 @@ var formDefinitions = {
 				}
 			},
 			"userPassword": {
-				"element": "password",
 				"title": "Password",
 				"description": "Enter password",
 				"type": "text",
@@ -1236,7 +1180,6 @@ var formDefinitions = {
 				}
 			},
 			"userGroup": {
-				"element": "group",
 				"title": "Group",
 				"description": "Select group",
 				"type": "list",
@@ -1249,7 +1192,6 @@ var formDefinitions = {
 				}
 			},
 			"userRole": {
-				"element": "role",
 				"title": "Role",
 				"description": "Select role",
 				"type": "list",
@@ -1262,7 +1204,6 @@ var formDefinitions = {
 				}
 			},
 			"userClients": {
-				"element": "clients",
 				"title": "Clients",
 				"description": "Select clients",
 				"type": "text",
@@ -1280,7 +1221,6 @@ var formDefinitions = {
 				}
 			},
 			"userBundles": {
-				"element": "bundles",
 				"title": "Bundles",
 				"description": "Select bundles",
 				"type": "list",
@@ -1315,13 +1255,11 @@ var formDefinitions = {
 		},
 		"fields": {
 			"userId": {
-				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
 			"userUsername": {
-				"element": "username",
 				"title": "User Name",
 				"description": "Enter name of user",
 				"type": "text",
@@ -1335,7 +1273,6 @@ var formDefinitions = {
 				}
 			},
 			"userPassword": {
-				"element": "password",
 				"title": "Password",
 				"description": "Enter password",
 				"type": "text",
@@ -1349,7 +1286,6 @@ var formDefinitions = {
 				}
 			},
 			"userGroup": {
-				"element": "group",
 				"title": "Group",
 				"description": "Select group",
 				"type": "list",
@@ -1362,7 +1298,6 @@ var formDefinitions = {
 				}
 			},
 			"userRole": {
-				"element": "role",
 				"title": "Role",
 				"description": "Select role",
 				"type": "list",
@@ -1375,7 +1310,6 @@ var formDefinitions = {
 				}
 			},
 			"userClients": {
-				"element": "clients",
 				"title": "Clients",
 				"description": "Select clients",
 				"type": "text",
@@ -1393,7 +1327,6 @@ var formDefinitions = {
 				}
 			},
 			"userBundles": {
-				"element": "bundles",
 				"title": "Bundles",
 				"description": "Select bundles",
 				"type": "list",
@@ -1407,7 +1340,6 @@ var formDefinitions = {
 				}
 			},
 			"userJWT": {
-				"element": "jwt",
 				"title": "JSON Web Token",
 				"type": "text",
 				"visible": true,
