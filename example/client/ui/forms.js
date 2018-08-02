@@ -126,8 +126,8 @@ var formDefinitions = {
 			{ "id": "bundleEditName", "title": "Name" },
 			{ "id": "bundleEditCommand", "title": "Command" },
 			{ "id": "bundleEditConnector", "title": "Connector" },
-			{ "id": "bundleEditCommandVer", "title": "Cmd Ver" },
-			{ "id": "bundleEditParameterVer", "title": "Prm Ver" }
+			{ "id": "bundleEditCommandVer", "title": "Cmd Ver", "style": "text-align: center;" },
+			{ "id": "bundleEditParameterVer", "title": "Prm Ver", "style": "text-align: center;" }
 		],
 		"key": "bundleEditId"
 	},

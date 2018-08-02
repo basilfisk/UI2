@@ -1037,12 +1037,12 @@ var ui = {
 		// Add each element of the array as a table row
 		for (i=0; i<rows.length; i++) {
 			row = '<tr>';
-			
+
 			// Add user defined columns in sequence specified in form definition
 			for (n=0; n<_defs[id].columns.length; n++) {
 				cell = _defs[id].columns[n].id;
 				if (rows[i][cell]) {
-					row += (rows[i][cell].style) ? '<td style="' + rows[i][cell].style + '">' : '<td>';
+					row += (_defs[id].columns[n].style) ? '<td style="' + _defs[id].columns[n].style + '">' : '<td>';
 					row += (rows[i][cell].text) ? rows[i][cell].text : '';
 					row += '</td>';
 				}
@@ -1061,7 +1061,7 @@ var ui = {
 				row += '<span class="' + button.button.class + '"></span></button>';
 				row += '</td>';
 			}
-			
+
 			// Add an optional delete button at the end of the row
 			if (_defs[id].buttons && _defs[id].buttons.delete) {
 				button = _defs[id].buttons.delete;
@@ -1076,7 +1076,7 @@ var ui = {
 				row += '<span class="' + button.button.class + '"></span></button>';
 				row += '</td>';
 			}
-			
+
 			// Close row and add to bottom of table
 			row += '</tr>';
 			div += row;
