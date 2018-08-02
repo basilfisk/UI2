@@ -108,7 +108,8 @@ var formDefinitions = {
 				"column": {
 					"style": "text-align: center;",
 					"title": "Delete"
-				}
+				},
+				"key": "bundleId"
 			},
 			"edit": {
 				"form": "bundleEdit",
@@ -123,13 +124,12 @@ var formDefinitions = {
 			}
 		},
 		"columns": [
-			{ "id": "bundleEditName", "title": "Name" },
-			{ "id": "bundleEditCommand", "title": "Command" },
-			{ "id": "bundleEditConnector", "title": "Connector" },
-			{ "id": "bundleEditCommandVer", "title": "Cmd Ver", "style": "text-align: center;" },
-			{ "id": "bundleEditParameterVer", "title": "Prm Ver", "style": "text-align: center;" }
-		],
-		"key": "bundleEditId"
+			{ "id": "bundleName", "title": "Name" },
+			{ "id": "bundleCommand", "title": "Command" },
+			{ "id": "bundleConnector", "title": "Connector" },
+			{ "id": "bundleCommandVer", "title": "Cmd Ver", "style": "text-align: center;" },
+			{ "id": "bundleParameterVer", "title": "Prm Ver", "style": "text-align: center;" }
+		]
 	},
 	"bundleAdd": {
 		"type": "form",
@@ -150,7 +150,7 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"bundleAddName": {
+			"bundleName": {
 				"element": "name",
 				"title": "Bundle Name",
 				"description": "Enter name of bundle",
@@ -164,7 +164,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"bundleAddCommand": {
+			"bundleCommand": {
 				"element": "command",
 				"title": "Command Name",
 				"description": "Enter name of command",
@@ -178,7 +178,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"bundleAddConnector": {
+			"bundleConnector": {
 				"element": "connector",
 				"title": "Connector Name",
 				"description": "Enter name of connector",
@@ -192,7 +192,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"bundleAddCommandVer": {
+			"bundleCommandVer": {
 				"element": "version.cmd",
 				"title": "Command Version",
 				"description": "Enter command version",
@@ -209,7 +209,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"bundleAddParameterVer": {
+			"bundleParameterVer": {
 				"element": "version.prms",
 				"title": "Parameter Version",
 				"description": "Enter parameter version",
@@ -247,13 +247,13 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"bundleEditId": {
+			"bundleId": {
 				"element": "_id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
-			"bundleEditName": {
+			"bundleName": {
 				"element": "name",
 				"title": "Bundle Name",
 				"description": "Enter name of bundle",
@@ -267,7 +267,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"bundleEditCommand": {
+			"bundleCommand": {
 				"element": "command",
 				"title": "Command Name",
 				"description": "Enter name of command",
@@ -281,7 +281,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"bundleEditConnector": {
+			"bundleConnector": {
 				"element": "connector",
 				"title": "Connector Name",
 				"description": "Enter name of connector",
@@ -295,7 +295,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"bundleEditCommandVer": {
+			"bundleCommandVer": {
 				"element": "version.cmd",
 				"title": "Command Version",
 				"description": "Enter command version",
@@ -312,7 +312,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"bundleEditParameterVer": {
+			"bundleParameterVer": {
 				"element": "version.prms",
 				"title": "Parameter Version",
 				"description": "Enter parameter version",
@@ -357,7 +357,8 @@ var formDefinitions = {
 				"column": {
 					"style": "text-align: center;",
 					"title": "Delete"
-				}
+				},
+				"key": "commandId"
 			},
 			"edit": {
 				"form": "commandEdit",
@@ -372,12 +373,11 @@ var formDefinitions = {
 			}
 		},
 		"columns": [
-			{ "id": "commandEditName", "title": "Name" },
-			{ "id": "commandEditService", "title": "Service" },
-			{ "id": "cmd", "title": "Command" },
-			{ "id": "prm", "title": "Parameters" }
-		],
-		"key": "commandEditId"
+			{ "id": "commandName", "title": "Name" },
+			{ "id": "commandService", "title": "Service" },
+			{ "id": "commandLinkCommand", "title": "Command" },
+			{ "id": "commandLinkParameter", "title": "Parameters" }
+		]
 	},
 	"commandAdd": {
 		"type": "form",
@@ -398,7 +398,7 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"commandAddName": {
+			"commandName": {
 				"element": "name",
 				"title": "Command Name",
 				"description": "Enter name of command",
@@ -412,7 +412,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"commandAddService": {
+			"commandService": {
 				"element": "service",
 				"title": "Service Name",
 				"description": "Enter name of service",
@@ -446,13 +446,13 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"commandEditId": {
+			"commandId": {
 				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
-			"commandEditName": {
+			"commandName": {
 				"element": "name",
 				"title": "Command Name",
 				"description": "Enter name of command",
@@ -466,7 +466,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"commandEditService": {
+			"commandService": {
 				"element": "service",
 				"title": "Service Name",
 				"description": "Enter name of service",
@@ -500,13 +500,13 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"commandEditCommandId": {
+			"commandCommandId": {
 				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
-			"commandEditCommandVersion": {
+			"commandCommandVersion": {
 				"element": "version",
 				"title": "Version",
 				"description": "Enter version number of command",
@@ -523,7 +523,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"commandEditCommandText": {
+			"commandCommandText": {
 				"element": "command",
 				"title": "Command",
 				"description": "Enter command",
@@ -557,13 +557,13 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"commandEditParametersId": {
+			"commandParametersId": {
 				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
-			"commandEditParametersVersion": {
+			"commandParametersVersion": {
 				"element": "version",
 				"title": "Version",
 				"description": "Enter version number of parameters",
@@ -580,7 +580,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"commandEditParametersText": {
+			"commandParametersText": {
 				"element": "parameters",
 				"title": "Parameters",
 				"description": "Enter parameters",
@@ -621,7 +621,8 @@ var formDefinitions = {
 				"column": {
 					"style": "text-align: center;",
 					"title": "Delete"
-				}
+				},
+				"key": "companyId"
 			},
 			"edit": {
 				"form": "companyEdit",
@@ -636,11 +637,10 @@ var formDefinitions = {
 			}
 		},
 		"columns": [
-			{ "id": "companyEditName", "title": "Company" },
+			{ "id": "companyName", "title": "Company" },
 			{ "id": "select", "title": "Select", "style": "text-align: center;" },
 			{ "id": "update", "title": "Update", "style": "text-align: center;" }
-		],
-		"key": "companyEditId"
+		]
 	},
 	"companyAdd": {
 		"type": "form",
@@ -661,7 +661,7 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"companyAddName": {
+			"companyName": {
 				"element": "name",
 				"title": "Company Name",
 				"description": "Enter name of company",
@@ -696,13 +696,13 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"companyEditId": {
+			"companyId": {
 				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
-			"companyEditName": {
+			"companyName": {
 				"element": "name",
 				"title": "Company Name",
 				"description": "Enter name of company",
@@ -737,7 +737,7 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"companyGroupAddName": {
+			"companyGroupName": {
 				"element": "groups.name",
 				"title": "Group",
 				"description": "Enter name of group",
@@ -751,7 +751,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"companyGroupAddDesc": {
+			"companyGroupDesc": {
 				"element": "groups.description",
 				"title": "Description",
 				"description": "Enter description of group",
@@ -765,7 +765,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"companyGroupAddPlan": {
+			"companyGroupPlan": {
 				"element": "groups.plan",
 				"title": "Plan",
 				"description": "Select plan",
@@ -799,13 +799,13 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"companyGroupEditId": {
+			"companyGroupId": {
 				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
-			"companyGroupEditName": {
+			"companyGroupName": {
 				"element": "groups.name",
 				"title": "Group Name",
 				"description": "Enter name of group",
@@ -819,7 +819,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"companyGroupEditDesc": {
+			"companyGroupDesc": {
 				"element": "groups.description",
 				"title": "Description",
 				"description": "Enter description of group",
@@ -833,7 +833,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"companyGroupEditPlan": {
+			"companyGroupPlan": {
 				"element": "groups.plan",
 				"title": "Plan",
 				"description": "Select plan",
@@ -874,7 +874,8 @@ var formDefinitions = {
 				"column": {
 					"style": "text-align: center;",
 					"title": "Delete"
-				}
+				},
+				"key": "connectorId"
 			},
 			"edit": {
 				"form": "connectorEdit",
@@ -891,8 +892,7 @@ var formDefinitions = {
 		"columns": [
 			{ "id": "connectorName", "title": "Name" },
 			{ "id": "connectorService", "title": "Service" }
-		],
-		"key": "connectorEditId"
+		]
 	},
 	"connectorAdd": {
 		"type": "form",
@@ -913,7 +913,7 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"connectorAddName": {
+			"connectorName": {
 				"element": "name",
 				"title": "Connector Name",
 				"description": "Enter name of connector",
@@ -927,7 +927,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"connectorAddService": {
+			"connectorService": {
 				"element": "service",
 				"title": "Service",
 				"description": "Select type of connector",
@@ -961,13 +961,13 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"connectorEditId": {
+			"connectorId": {
 				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
-			"connectorEditName": {
+			"connectorName": {
 				"element": "name",
 				"title": "Connector Name",
 				"type": "text",
@@ -1167,7 +1167,8 @@ var formDefinitions = {
 				"column": {
 					"style": "text-align: center;",
 					"title": "Delete"
-				}
+				},
+				"key": "userId"
 			},
 			"edit": {
 				"form": "userEdit",
@@ -1182,11 +1183,10 @@ var formDefinitions = {
 			}
 		},
 		"columns": [
-			{ "id": "userEditUsername", "title": "User" },
-			{ "id": "userEditGroup", "title": "Group" },
-			{ "id": "userEditRole", "title": "Role" }
-		],
-		"key": "userEditId"
+			{ "id": "userUsername", "title": "User" },
+			{ "id": "userGroup", "title": "Group" },
+			{ "id": "userRole", "title": "Role" }
+		]
 	},
 	"userAdd": {
 		"type": "form",
@@ -1207,7 +1207,7 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"userAddUsername": {
+			"userUsername": {
 				"element": "username",
 				"title": "User Name",
 				"description": "Enter name of user",
@@ -1221,7 +1221,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userAddPassword": {
+			"userPassword": {
 				"element": "password",
 				"title": "Password",
 				"description": "Enter password",
@@ -1235,7 +1235,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userAddGroup": {
+			"userGroup": {
 				"element": "group",
 				"title": "Group",
 				"description": "Select group",
@@ -1248,7 +1248,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userAddRole": {
+			"userRole": {
 				"element": "role",
 				"title": "Role",
 				"description": "Select role",
@@ -1261,7 +1261,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userAddClients": {
+			"userClients": {
 				"element": "clients",
 				"title": "Clients",
 				"description": "Select clients",
@@ -1279,7 +1279,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userAddBundles": {
+			"userBundles": {
 				"element": "bundles",
 				"title": "Bundles",
 				"description": "Select bundles",
@@ -1314,13 +1314,13 @@ var formDefinitions = {
 			}
 		},
 		"fields": {
-			"userEditId": {
+			"userId": {
 				"element": "id",
 				"type": "id",
 				"visible": false,
 				"edit": false
 			},
-			"userEditUsername": {
+			"userUsername": {
 				"element": "username",
 				"title": "User Name",
 				"description": "Enter name of user",
@@ -1334,7 +1334,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userEditPassword": {
+			"userPassword": {
 				"element": "password",
 				"title": "Password",
 				"description": "Enter password",
@@ -1348,7 +1348,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userEditGroup": {
+			"userGroup": {
 				"element": "group",
 				"title": "Group",
 				"description": "Select group",
@@ -1361,7 +1361,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userEditRole": {
+			"userRole": {
 				"element": "role",
 				"title": "Role",
 				"description": "Select role",
@@ -1374,7 +1374,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userEditClients": {
+			"userClients": {
 				"element": "clients",
 				"title": "Clients",
 				"description": "Select clients",
@@ -1392,7 +1392,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userEditBundles": {
+			"userBundles": {
 				"element": "bundles",
 				"title": "Bundles",
 				"description": "Select bundles",
@@ -1406,7 +1406,7 @@ var formDefinitions = {
 					}
 				}
 			},
-			"userEditJWT": {
+			"userJWT": {
 				"element": "jwt",
 				"title": "JSON Web Token",
 				"type": "text",
