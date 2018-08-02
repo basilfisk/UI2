@@ -65,7 +65,6 @@
 - `fields` is mandatory for the *form* type and must be an object holding objects for each field
 - `fields.description` is optional if the field is visible but must be a string
 - `fields.edit` is mandatory and must be true|false
-- `fields.element` is mandatory and must be a string
 - `fields.title` is mandatory if the field is visible and must be a string
 - `fields.type` is mandatory and must be one of *id|integer|list|password|text*
 - `fields.visible` is mandatory and must be *true|false*
