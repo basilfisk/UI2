@@ -1079,7 +1079,7 @@ var _jsonuiForms = {
 			}
 		},
 		"fields": {
-			"text": {
+			"messageText": {
 				"title": "",
 				"type": "text",
 				"visible": true,

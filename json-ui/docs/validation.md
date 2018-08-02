@@ -112,16 +112,3 @@ type is *text*
 
 can id|list have checks:mandatory set?
 are there number|float types and checks?
-
-## What to do about links?
-
-links to {form key}.fields.{fields key}
-- {form}.buttons.delete.key
-- {form}.columns[].id: 
-Edit and Add forms should use the same field names
-{table}.columns should use the same field names
-
-Should ?????
-- {table}.columns hold the master column list with a visible attribute
-- Edit must have field names in {table}.columns
-- Add must have field names in {table}.columns

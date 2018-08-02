@@ -30,9 +30,9 @@ class Validate {
 		var forms, i, form, list, n,
 			elem = form + ".";
 
-		forms = Object.keys(this.form);
+		forms = Object.keys(this.forms);
 		for (i=0; i<forms.length; i++) {
-			form = this.form[forms[i]];
+			form = this.forms[forms[i]];
 
 			// title - mandatory
 			if (!this.isString(form.title)) {
@@ -85,6 +85,11 @@ class Validate {
 								}
 								if (!this.isString(form.columns[n].id)) {
 									this.log("menu", elem + "[" + n + "].id must be a string");
+								}
+								else {
+									if (!this.map[form.columns[n].id]) {
+										this.log("form", elem + ".columns.id '" + form.columns[n].id + "' is not in the map");
+									}
 								}
 								// optional
 								if (form.columns[n].style && !this.isString(form.columns[n].style)) {
@@ -151,7 +156,7 @@ class Validate {
 						this.log("form", elem + ".add.form must be a string");
 					}
 					else {
-						if (!this.form[def.add.form]) {
+						if (!this.forms[def.add.form]) {
 							this.log("form", elem + ".add.form '" + def.add.form + "' is not a form");
 						}
 					}
@@ -267,11 +272,11 @@ class Validate {
 					if (!this.isString(def.delete.key)) {
 						this.log("form", elem + ".delete.key must be a string");
 					}
-//					else {
-//						if (!this.form[form].fields[def.delete.key]) {
-//							this.log("form", elem + ".delete.key '" + def.delete.key + "' is not a field");
-//						}
-//					}
+					else {
+						if (!this.map[def.delete.key]) {
+							this.log("form", elem + ".delete.key '" + def.delete.key + "' is not in the map");
+						}
+					}
 				}
 			}
 			else {
@@ -296,7 +301,7 @@ class Validate {
 						this.log("form", elem + ".edit.form must be a string");
 					}
 					else {
-						if (!this.form[def.edit.form]) {
+						if (!this.forms[def.edit.form]) {
 							this.log("form", elem + ".edit.form '" + def.edit.form + "' is not a form");
 						}
 					}
@@ -405,6 +410,10 @@ class Validate {
 		flds = Object.keys(def);
 		for (i=0; i<flds.length; i++) {
 			elem = form + ".fields." + flds[i];
+			// is the field in the map
+			if (!this.map[flds[i]]) {
+				this.log("form", elem + " is not in the map");
+			}
 			// Valid fields
 			list = ['description','edit','options','title','type','visible'];
 			if (!this.isInList(Object.keys(def[flds[i]]), list)) {
@@ -804,42 +813,43 @@ class Validate {
 	/**
 	 * @method init
 	 * @memberof Validate
-	 * @description Read the files to be validated.
+	 * @description Start loading the files to be validated.
 	 */
 	init () {
-		var file;
 		this.root = '/../../example/client/ui';
-		this.file = {
-			form: __dirname + this.root + '/forms.js',
-			menu: __dirname + this.root + '/menu.js'
-		}
+		this.file = {};
+		this.status = {};
 
-		// Read menu definition file and remove Javascript wrapper
-		this.fs.readFile(this.file.menu, (err, data) => {
+		this.load('forms', '_jsonuiForms');
+		this.load('menu', '_jsonuiMenus');
+		this.load('map', '_jsonuiMap');
+	}
+
+
+	/**
+	 * @method load
+	 * @memberof Validate
+	 * @param {string} type Type of data to be loaded.
+	 * @param {string} header Variable name in the file header to be removed.
+	 * @description Read a file to be validated.
+	 */
+	load (type, header) {
+		this.file[type] = __dirname + this.root + '/' + type + '.js';
+		this.status[type] = false;
+
+		// Read file and remove Javascript header and footer
+		this.fs.readFile(this.file[type], (err, data) => {
+			var file;
 			file = data.toString();
-			file = file.replace('var _jsonuiMenus = {', '{');
+			file = file.replace('var ' + header + ' = {', '{');
 			file = file.replace('};', '}');
-//			try {
-				this.menu = JSON.parse(file);
-
-				// Read form definition file and remove Javascript wrapper
-				this.fs.readFile(this.file.form, (err, data) => {
-					file = data.toString();
-					file = file.replace('var _jsonuiForms = {', '{');
-					file = file.replace('};', '}');
-//					try {
-						this.form = JSON.parse(file);
-						this.checkMenus();
-						this.checkForms();
-//					}
-//					catch (err) {
-//						this.log("form", "Invalid JSON in forms.js: " + err.message);
-//					}
-				});
-//			}
-//			catch (err) {
-//				this.log("menu", "Invalid JSON in menu.js: " + err.message);
-//			}
+			try {
+				this[type] = JSON.parse(file);
+				this.start(type);
+			}
+			catch (err) {
+				this.log("form", "Invalid JSON in " + type + ".js: " + err.message);
+			}
 		});
 	}
 
@@ -851,6 +861,27 @@ class Validate {
 	 */
 	log (type, msg) {
 		this.msgs.push("[" + type + "] " + msg);
+	}
+
+
+	/**
+	 * @method start
+	 * @memberof Validate
+	 * @param {string} type Type of data to be loaded.
+	 * @description Start validating when all files have been loaded.
+	 */
+	start (type) {
+		var keys, i, status = true;
+
+		this.status[type] = true;
+		keys = Object.keys(this.status);
+		for (i=0; i<keys.length; i++) {
+			status = status && this.status[keys[i]];
+		}
+		if (status) {
+			this.checkMenus();
+			this.checkForms();
+		}
 	}
 }
 

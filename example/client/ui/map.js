@@ -34,6 +34,7 @@ var _jsonuiMap = {
 	"connectorService": "service",
 	"loginName": "username",
 	"loginPassword": "password",
+	"messageText": " ",
 	"userBundles": "bundles",
 	"userClients": "clients",
 	"userGroup": "group",
