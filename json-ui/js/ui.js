@@ -282,12 +282,11 @@ var ui = {
 
 		// Add fields
 		for (i=0; i<names.length; i++) {
-			switch (fields[names[i]].type) {
-				case 'list':
-					div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[fields[names[i]].options.list], 'text'));
-					break;
-				default:
-					div += this._showField(names[i], fields[names[i]], '');
+			if (fields[names[i]].type === 'list' && fields[names[i]].options.list && list[fields[names[i]].options.list]) {
+				div += this._showField(names[i], fields[names[i]], '', this._sortArrayObjects(list[fields[names[i]].options.list], 'text'));
+			}
+			else {
+				div += this._showField(names[i], fields[names[i]], '');
 			}
 		}
 
@@ -350,12 +349,11 @@ var ui = {
 
 		// Add fields
 		for (i=0; i<names.length; i++) {
-			switch (fields[names[i]].type) {
-				case 'list':
-					div += this._showField(names[i], fields[names[i]], data[names[i]].text, this._sortArrayObjects(list[fields[names[i]].options.list], 'text'));
-					break;
-				default:
-					div += this._showField(names[i], fields[names[i]], data[names[i]].text);
+			if (fields[names[i]].type === 'list' && fields[names[i]].options.list && list[fields[names[i]].options.list]) {
+				div += this._showField(names[i], fields[names[i]], data[names[i]].text, this._sortArrayObjects(list[fields[names[i]].options.list], 'text'));
+			}
+			else {
+				div += this._showField(names[i], fields[names[i]], data[names[i]].text);
 			}
 		}
 
@@ -1048,7 +1046,7 @@ var ui = {
 				}
 				else {
 					row += '<td>Undefined</td>';
-					console.log('Missing definition for cell: ' + id + '.' + cell);
+					console.log("Field '" + cell + "' not found in data object for form '" + id + "'");
 				}
 			}
 
@@ -1067,11 +1065,11 @@ var ui = {
 				button = _defs[id].buttons.delete;
 				row += (button.column.style) ? '<td style="' + button.column.style + '">' : '<td>';
 				row += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
-				if (_defs[id].key && rows[i][_defs[id].key] && rows[i][_defs[id].key].text) {
-					row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i][_defs[id].key].text + "'" + '); return false;">';
+				if (button.key && rows[i][button.key] && rows[i][button.key].text) {
+					row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i][button.key].text + "'" + '); return false;">';
 				}
 				else {
-					console.log('Missing definition for Delete button: ' + id + '.' + _defs[id].key);
+					console.log("Delete button for '" + id + "' has no key '" + button.key + "' in data object");
 				}
 				row += '<span class="' + button.button.class + '"></span></button>';
 				row += '</td>';
