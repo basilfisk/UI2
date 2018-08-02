@@ -22,7 +22,7 @@ var command = {
 		for (i=0; i<admin.connectors.length; i++) {
 			options.push({"value":admin.connectors[i].service, "text":admin.connectors[i].service});
 		}
-		lists['commandAddService'] = common.sortArrayObjects(options, 'text');
+		lists['commandService'] = common.sortArrayObjects(options, 'text');
 
 		ui.formAdd('commandAdd', lists);
 	},
@@ -65,12 +65,12 @@ var command = {
 
 		// Read the document ID and the version
 		if (type === 'command') {
-			id = data['commandEditCommandId'];
-			ver = data['commandEditCommandVersion'];
+			id = data['commandCommandId'];
+			ver = data['commandCommandVersion'];
 		}
 		else {
-			id = data['commandEditParametersId'];
-			ver = data['commandEditParametersVersion'];
+			id = data['commandParametersId'];
+			ver = data['commandParametersVersion'];
 		}
 
 		// Load the parameters and run the update to delete the element
@@ -107,7 +107,7 @@ console.log(id);
 		for (i=0; i<admin.connectors.length; i++) {
 			options.push({"value":admin.connectors[i].service, "text":admin.connectors[i].service});
 		}
-		lists['commandEditService'] = common.sortArrayObjects(options, 'text');
+		lists['commandService'] = common.sortArrayObjects(options, 'text');
 
 		// Display form for editing data
 		ui.formEdit('commandEdit', data, lists);
@@ -332,7 +332,7 @@ console.log(data);
 	 * @description Display the command data in a table.
 	 */
 	table: function (action, result) {
-		var i, rows = [], cols, obj = {}, keys, n, ver, cmd, prm, str;
+		var i, rows = [], obj = {}, keys, n, ver, command, parameter, str;
 
 		// Extract data from result set and load into global 'admin.commands' variable
 		admin.commands = [];
@@ -342,46 +342,46 @@ console.log(data);
 
 		// Add each element of the array as a table row
 		for (i=0; i<admin.commands.length; i++) {
-			cols = {};
-
-			// Add name and service columns
-			cols.name = {
-				"text": admin.commands[i].name
-			};
-			cols.svc = {
-				"text": admin.commands[i].service
-			};
-
 			// Add links to versions of the command
-			str = '';
+			command = '';
 			obj = admin.commands[i].command;
 			keys = Object.keys(obj);
 			for (n=0; n<keys.length; n++) {
 				ver = keys[n];
-				cmd = JSON.stringify(obj[ver]);
-				cmd = cmd.replace(/\"/g, '');
-				str += '<a onClick="command.editCommand(\'' + admin.commands[i]._id + '\',\'' + ver + '\',\'' + cmd + '\');" href="#" data-toggle="modal">v' + ver + '</a>';
+				str = JSON.stringify(obj[ver]);
+				str = str.replace(/\"/g, '');
+				command += '<a onClick="command.editCommand(\'' + admin.commands[i]._id + '\',\'' + ver + '\',\'' + str + '\');" href="#" data-toggle="modal">v' + ver + '</a>';
 			}
-			cols.cmd = {
-				"text": str
-			};
 
 			// Add links to versions of the parameters
-			str = '';
+			parameter = '';
 			obj = admin.commands[i].parameters;
 			keys = Object.keys(obj);
 			for (n=0; n<keys.length; n++) {
 				ver = keys[n];
-				prm = JSON.stringify(obj[ver]);
-				prm = prm.replace(/\"/g, '');
-				str += '<a onClick="command.editParameter(\'' + admin.commands[i]._id + '\',' + ver + ',\'' + prm + '\');" href="#" data-toggle="modal">v' + ver + '</a> ';
+				str = JSON.stringify(obj[ver]);
+				str = str.replace(/\"/g, '');
+				parameter += '<a onClick="command.editParameter(\'' + admin.commands[i]._id + '\',' + ver + ',\'' + str + '\');" href="#" data-toggle="modal">v' + ver + '</a> ';
 			}
-			cols.prm = {
-				"text": str
-			};
-
+			
 			// Save row
-			rows.push(cols);
+			rows.push({
+				commandId: {
+					text: admin.commands[i]._id
+				},
+				commandName: {
+					text: admin.commands[i].name
+				},
+				commandService: {
+					text: admin.commands[i].service
+				},
+				commandLinkCommand: {
+					text: command
+				},
+				commandLinkParameter: {
+					text: parameter
+				}
+			});
 		}
 
 		// Display the table

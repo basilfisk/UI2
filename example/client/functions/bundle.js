@@ -41,6 +41,7 @@ var bundle = {
 	 */
 	edit: function () {
 		this.company = admin.company.code;
+console.log(this);
 		common.apiCall('bundleUpdate', this, bundle.load);
 	},
 
@@ -63,7 +64,7 @@ var bundle = {
 	 * @description Display the bundle data in a table.
 	 */
 	table: function (action, result) {
-		var i, rows = [], cols, ver, options = [], lists = {};
+		var i, rows = [], options = [], lists = {};
 
 		// Extract data from result set and load into global 'admin.bundles' variable
 		admin.bundles = [];
@@ -76,29 +77,28 @@ var bundle = {
 		for (i=0; i<admin.bundles.length; i++) {
 			ver = 'Cmd v' + admin.bundles[i].version.cmd + ' / ';
 			ver += 'Prm v' + admin.bundles[i].version.prms;
-			cols = {
-				bundleEditId: {
-					text: admin.bundles[i]._id
-				},
-				bundleEditName: {
-					text: admin.bundles[i].name
-				},
-				bundleEditCommand: {
-					text: admin.bundles[i].command
-				},
-				bundleEditConnector: {
-					text: admin.bundles[i].connector
-				},
-				bundleEditCommandVer: {
-					text: admin.bundles[i].version.cmd
-				},
-				bundleEditParameterVer: {
-					text: admin.bundles[i].version.prms
-				}
-			};
 
 			// Save row
-			rows.push(cols);
+			rows.push({
+				bundleId: {
+					text: admin.bundles[i]._id
+				},
+				bundleName: {
+					text: admin.bundles[i].name
+				},
+				bundleCommand: {
+					text: admin.bundles[i].command
+				},
+				bundleConnector: {
+					text: admin.bundles[i].connector
+				},
+				bundleCommandVer: {
+					text: admin.bundles[i].version.cmd
+				},
+				bundleParameterVer: {
+					text: admin.bundles[i].version.prms
+				}
+			});
 		}
 
 		// Load list of commands
