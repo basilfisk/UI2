@@ -52,5 +52,36 @@ var common = {
 			return (a[key] < b[key]) ? -1 : (a[key] > b[key]) ? 1 : 0;
 		});
 		return sorted;
-	}
+	},
+
+
+	// Read values from object
+	// ????????????????????????????????????? Is this obsolete
+	// ????????????????????????????????????? Here in case it is useful
+/*	_objectRead: function (data, field) {
+		var elem, value;
+
+		// Split dot separated element name into array of element names
+		elem = field.element.split('.');
+		if (elem.length === 1) {
+			value = data[elem[0]];
+		}
+		else if (elem.length === 2) {
+			if (data[elem[0]] === undefined) {
+				value = '';
+			}
+			else {
+				value = data[elem[0]][elem[1]];
+			}
+		}
+		else if (elem.length === 3) {
+			if (data[elem[0]] === undefined || data[elem[0]][elem[1]] === undefined) {
+				value = '';
+			}
+			else {
+				value = data[elem[0]][elem[1]][elem[2]];
+			}
+		}
+		value = (value) ? value : '';
+	}*/
 };
