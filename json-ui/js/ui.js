@@ -20,110 +20,6 @@ var ui = {
 	},
 
 	/**
-	 * @method _buttonValidate
-	 * @author Basil Fisk
-	 * @param {string} id ID of UI form.
-	 * @description Validate and save data modified on a form.
-	 */
-	_buttonValidate: function (id) {
-		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
-
-		// Read fields and their names
-		fields = _defs[id].fields;
-		names = Object.keys(fields);
-
-		// Read and validate each field
-		for (i=0; i<names.length; i++) {
-			name = names[i];
-
-			// Read the value(s) based on the stated data type of the field
-			switch (fields[name].type) {
-				// True or false, assign direct to data object
-				case 'checkbox':
-					temp[name] = (document.getElementById(name).checked) ? true : false;
-					break;
-				// ID field
-				case 'id':
-					temp[name] = document.getElementById(name).value;
-					break;
-				// Single value or an array of values, assign direct to data object
-				case 'list':
-					if (fields[name].options.display.select === 'multiple') {
-						temp[name] = [];
-						elem = document.getElementById(name);
-						for (e=0; e<elem.length; e++) {
-							if (elem[e].selected) {
-								temp[name].push(elem[e].value);
-							}
-						}
-					}
-					else {
-						temp[name] = document.getElementById(name).value;
-					}
-					break;
-				// All other field types (text, float, integer)
-				default:
-					// Read data as a text string
-					text = document.getElementById(name).value;
-
-					// Validate using 'options.checks' section
-					if (fields[name].options && fields[name].options.checks) {
-						// Field holds an array of values
-						if (fields[name].options.content && fields[name].options.content.type === 'array') {
-							// Validate each element of the field
-							temp[name] = [];
-							elem = text.split(fields[name].options.content.separator);
-							for (e=0; e<elem.length; e++) {
-								// Run the check
-								if (!this._runChecks(fields[name].options.checks, fields[name].title, elem[e])) {
-									return;
-								}
-								// Convert value to the correct type
-								temp[name].push(this._convertData(fields[name].type, elem[e]));
-							}
-						}
-						// Field holds a single value (default)
-						else {
-							// Run the check
-							if (!this._runChecks(fields[name].options.checks, fields[name].title, text)) {
-								return;
-							}
-							// Convert value to the correct type
-							temp[name] = this._convertData(fields[name].type, text);
-						}
-					}
-					// Nothing in the 'options.checks' section, so treat value as text
-					else {
-						temp[name] = text;
-					}
-			}
-
-			// Split dot separated element name into array of element names
-			elem = fields[name].element.split('.');
-
-			// Assign data to element in object
-			// TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
-			// TODO This is the opposite to _objectRead
-			if (elem.length === 1) {
-				data[elem[0]] = temp[name];
-			}
-			else if (elem.length === 2) {
-				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
-				data[elem[0]][elem[1]] = temp[name];
-			}
-			else if (elem.length === 3) {
-				if (data[elem[0]] === undefined) { data[elem[0]] = {}; }
-				if (data[elem[0]][elem[1]] === undefined) { data[elem[0]][elem[1]] = {}; }
-				data[elem[0]][elem[1]][elem[2]] = temp[name];
-			}
-		}
-		
-		// Success, so return data
-		return data;
-	},
-
-
-	/**
 	 * @method _checkFormat
 	 * @author Basil Fisk
 	 * @param {object} format Object with min and max values.
@@ -461,36 +357,6 @@ var ui = {
 	},
 
 
-	// Read values from object
-	// TODO Is this obsolete ?????????????????????????????????????
-	_objectRead: function (data, field) {
-		var elem, value;
-
-		// Split dot separated element name into array of element names
-		elem = field.element.split('.');
-		if (elem.length === 1) {
-			value = data[elem[0]];
-		}
-		else if (elem.length === 2) {
-			if (data[elem[0]] === undefined) {
-				value = '';
-			}
-			else {
-				value = data[elem[0]][elem[1]];
-			}
-		}
-		else if (elem.length === 3) {
-			if (data[elem[0]] === undefined || data[elem[0]][elem[1]] === undefined) {
-				value = '';
-			}
-			else {
-				value = data[elem[0]][elem[1]][elem[2]];
-			}
-		}
-		value = (value) ? value : '';
-	},
-
-
 	/**
 	 * @method _pageTitle
 	 * @author Basil Fisk
@@ -539,6 +405,45 @@ var ui = {
 		else {
 			this._messageBox('UI007', [id, action, fn]);
 		}
+	},
+
+
+	/**
+	 * @method _restructure
+	 * @author Basil Fisk
+	 * @param {object} data Data object being built up.
+	 * @param {string} field Name of the field being added to the data object.
+	 * @param {string} id Value to be added.
+	 * @description Add a value to a data object.
+	 * TODO !!!!!!!!!!!!! NAFF, HARD-CODED FOR 3 LEVELS !!!!!!!!!!!!!!!!!!!!!!!!!
+	 */
+	_restructure: function (data, field, value) {
+		var key;
+
+		// Split dot separated element name into array of element names
+		key = _jsonuiMap[field].split('.');
+
+		// Assign data to element in object
+		if (key.length === 1) {
+			data[key[0]] = value;
+		}
+		else if (key.length === 2) {
+			if (data[key[0]] === undefined) {
+				data[key[0]] = {};
+			}
+			data[key[0]][key[1]] = value;
+		}
+		else if (key.length === 3) {
+			if (data[key[0]] === undefined) {
+				data[key[0]] = {};
+			}
+			if (data[key[0]][key[1]] === undefined) {
+				data[key[0]][key[1]] = {};
+			}
+			data[key[0]][key[1]][key[2]] = value;
+		}
+
+		return data;
 	},
 
 
@@ -757,29 +662,100 @@ var ui = {
 	},
 
 
+	/**
+	 * @method _validate
+	 * @author Basil Fisk
+	 * @param {string} id ID of UI form.
+	 * @description Validate data entered on a form.
+	 */
+	_validate: function (id) {
+		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
+
+		// Read fields and their names
+		fields = _defs[id].fields;
+		names = Object.keys(fields);
+
+		// Read and validate each field
+		for (i=0; i<names.length; i++) {
+			name = names[i];
+
+			// Read the value(s) based on the stated data type of the field
+			switch (fields[name].type) {
+				// True or false, assign direct to data object
+				case 'checkbox':
+					temp[name] = (document.getElementById(name).checked) ? true : false;
+					break;
+				// ID field
+				case 'id':
+					temp[name] = document.getElementById(name).value;
+					break;
+				// Single value or an array of values, assign direct to data object
+				case 'list':
+					if (fields[name].options.display.select === 'multiple') {
+						temp[name] = [];
+						elem = document.getElementById(name);
+						for (e=0; e<elem.length; e++) {
+							if (elem[e].selected) {
+								temp[name].push(elem[e].value);
+							}
+						}
+					}
+					else {
+						temp[name] = document.getElementById(name).value;
+					}
+					break;
+				// All other field types (text, float, integer)
+				default:
+					// Read data as a text string
+					text = document.getElementById(name).value;
+
+					// Validate using 'options.checks' section
+					if (fields[name].options && fields[name].options.checks) {
+						// Field holds an array of values
+						if (fields[name].options.content && fields[name].options.content.type === 'array') {
+							// Validate each element of the field
+							temp[name] = [];
+							elem = text.split(fields[name].options.content.separator);
+							for (e=0; e<elem.length; e++) {
+								// Run the check
+								if (!this._runChecks(fields[name].options.checks, fields[name].title, elem[e])) {
+									return;
+								}
+								// Convert value to the correct type
+								temp[name].push(this._convertData(fields[name].type, elem[e]));
+							}
+						}
+						// Field holds a single value (default)
+						else {
+							// Run the check
+							if (!this._runChecks(fields[name].options.checks, fields[name].title, text)) {
+								return;
+							}
+							// Convert value to the correct type
+							temp[name] = this._convertData(fields[name].type, text);
+						}
+					}
+					// Nothing in the 'options.checks' section, so treat value as text
+					else {
+						temp[name] = text;
+					}
+			}
+
+			// Assign field data to element in object
+			data = this._restructure(data, name, temp[name]);
+		}
+		
+		// Success, so return data
+		return data;
+	},
+
+
 
 	// ***************************************************************************************
 	//
 	//		EXTERNAL FUNCTIONS
 	//
 	// ***************************************************************************************
-
-	/**
-	 * @method buttonAdd
-	 * @author Basil Fisk
-	 * @param {string} id ID of UI form.
-	 * @description Validate and save new data entered on a form.
-	 */
-/*	buttonAdd: function (id) {
-		var data = this._buttonValidate(id);
-
-		// Hide the form and trigger the post-processing function
-		if (data) {
-			$('#' + id).modal('hide');
-			this._postProcess('add', id, data);
-		}
-	},*/
-
 
 	/**
 	 * @method buttonDelete
@@ -799,7 +775,7 @@ var ui = {
 	 * @description Validate and save data modified on a form.
 	 */
 	buttonOK: function (id) {
-		var data = this._buttonValidate(id);
+		var data = this._validate(id);
 
 		// Hide the form and trigger the post-processing function
 		if (data) {
@@ -837,25 +813,32 @@ var ui = {
 	/**
 	 * @method init
 	 * @author Basil Fisk
-	 * @param {object} forms Application's form definitions.
 	 * @param {object} messages Application's message definitions.
 	 * @description Load the application's UI data structures for building forms and reports.
 	 */
-	init: function (forms, messages) {
-		_defs = forms;
+	init: function (messages) {
+		_defs = _jsonuiForms;
 		_msgs = messages;
+
+		// Warn if the required variables haven't been set up
+		// TODO pass in as arguments and set up internally
+		// TODO Don't display anything is they don't exist
+		if (typeof _jsonuiForms === 'undefined' || 
+			typeof _jsonuiMap === 'undefined' || 
+			typeof _jsonuiMenus === 'undefined') {
+			console.log("These variables must be set up: _jsonuiForms, _jsonuiMap, _jsonuiMenus");
+		}
 	},
 
 
 	/**
 	 * @method menus
 	 * @author Basil Fisk
-	 * @param {object} menu User's menu definition.
 	 * @param {string} role User's access level.
 	 * @param {string} language User's preferred language.
 	 * @description Build the menus and options based on the user's access level.
 	 */
-	menus: function (menu, role, language) {
+	menus: function (role, language) {
 		var i, n, option, div = '', opt;
 
 		// Save the language for messages
@@ -866,21 +849,21 @@ var ui = {
 		div += '<ul class="nav navbar-nav">';
 
 		// Build the menu
-		if (menu.menubar.length > 0) {
+		if (_jsonuiMenus.menubar.length > 0) {
 			div += '<ul class="nav navbar-nav">';
-			for (i=0; i<menu.menubar.length; i++) {
+			for (i=0; i<_jsonuiMenus.menubar.length; i++) {
 				// Build list of options
 				opt = '';
-				for (n=0; n<menu.menubar[i].options.length; n++) {
+				for (n=0; n<_jsonuiMenus.menubar[i].options.length; n++) {
 					// Skip if user doesn't have access to option
-					if (this._userAccess(role, menu.menubar[i].options[n].access)) {
-						option = menu.menubar[i].options[n];
+					if (this._userAccess(role, _jsonuiMenus.menubar[i].options[n].access)) {
+						option = _jsonuiMenus.menubar[i].options[n];
 						opt += '<li id="' + option.id + '-option" class="option"><a href="#' + option.id + '" onClick="' + option.action + '(); return false;">' + option.title + '</a></li>';
 					}
 				}
 				// Dont add top level menu if no options in menu
 				if (opt !== '') {
-					div += '<li id="' + menu.menubar[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + menu.menubar[i].name + '" href="#">' + menu.menubar[i].title + '<span class="caret"></span></a>';
+					div += '<li id="' + _jsonuiMenus.menubar[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + _jsonuiMenus.menubar[i].name + '" href="#">' + _jsonuiMenus.menubar[i].title + '<span class="caret"></span></a>';
 					div += '<ul class="dropdown-menu">';
 					div += opt;
 					div += '</ul>';
@@ -892,7 +875,7 @@ var ui = {
 
 		// Create page title and add to body
 		div += '</ul>';
-		div += this._pageTitle(menu.title.class, menu.title.text);
+		div += this._pageTitle(_jsonuiMenus.title.class, _jsonuiMenus.title.text);
 		div += '</div>';
 		$('body').append(div);
 	},
