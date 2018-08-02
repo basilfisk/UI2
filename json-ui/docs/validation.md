@@ -101,15 +101,32 @@ type is *text*
 - `fields.options.display` is optional and must be an object
 - `fields.options.display.height` is mandatory and must be an integer
 
+## Support for arrays
+
+`options.content` references in `ui.js`:
+- _showField (x4)
+- _validate (x3)
+
+`options.content` in `forms.js`
+- userAdd.fields.userClients
+- userEdit.fields.userClients
+
+Convert this:
 	"type": "text",
 	"options": {
-		"content": {				MOVE THIS TO AN ARRAY TYPE
+		"content": {
 			"type": "array",
 			"separator": ","
 		}
 	}
+To this:
+	"type": "array",
+	"options": {
+		"separator": ","
+	}
 
 ## Missing tests
 
-can id|list have checks:mandatory set?
-are there number|float types and checks?
+can fields.type:id have checks:mandatory set?
+can fields.type:list have checks:mandatory set?
+can fields.type:integer be xtended to support number|float|etc and checks?
