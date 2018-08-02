@@ -26,18 +26,14 @@ var login = {
 	 * @description Start up function called by 'body onload'.
 	 */ 
 	init: function () {
-		// Initialize UI manager with form definitions and messages
-		ui.init(formDefinitions, messages);
+		// Initialize UI manager and load application messages
+		ui.init(messages);
 
 		// Display the login form for the Admin Console
 		var data = {
-			loginName: {
-				text: 'admin'
-			},	
-			loginPassword: {
-				text: 'password'
-			}	
-		};	
+			loginName: { text: 'admin' },
+			loginPassword: { text: 'password' }
+		};
 		ui.formEdit('login', data);
 	},
 
@@ -228,8 +224,8 @@ var login = {
 			// TODO Add user language
 			me.language = 'eng';
 
-			// Initialize UI manager with menu and form definitions, and messages
-			ui.menus(menuDefinitions, me.role, me.language);
+			// Build the menus
+			ui.menus(me.role, me.language);
 
 			// The super user can view all companies, others can only see their company's data
 			filter = (me.role === 'superuser') ? 'all' : me.company;
@@ -245,7 +241,11 @@ var login = {
 		// Show error, then display login form again
 		else {
 			ui.messageBox('LOG006', [], () => {
-				ui.formEdit('login', {"username":'', "password":''});
+				var data = {
+					loginName: { text: '' },	
+					loginPassword: { text: '' }	
+				};	
+				ui.formEdit('login', data);
 			});
 		}
 	},
