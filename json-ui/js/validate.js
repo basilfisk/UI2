@@ -39,9 +39,14 @@ class Validate {
 				this.log("form", forms[i] + ".title must be a string");
 			}
 
-			// width element
+			// width - number 10-100
 			if (form.width && !this.isNumber(form.width)) {
 				this.log("form", forms[i] + ".width must be a number");
+			}
+			else {
+				if (parseInt(form.width) < 10 || parseInt(form.width) > 100) {
+					this.log("form", forms[i] + ".width must be between 10 and 100");
+				}
 			}
 
 			// type element is mandatory
@@ -60,7 +65,7 @@ class Validate {
 						list = ['buttons','fields','title','type','width'];
 					}
 					else {
-						list = ['buttons','columns','fields','key','title','type','width'];
+						list = ['buttons','columns','fields','title','type','width'];
 					}
 					if (!this.isInList(Object.keys(form), list)) {
 						this.log("form", "'" + forms[i] + "' form must only have these elements: " + list.join(', '));
@@ -68,9 +73,6 @@ class Validate {
 
 					// key & column elements - table only
 					if (form.type === 'table') {
-						if (!this.isString(form.key)) {
-							this.log("form", forms[i] + ".key must be a string");
-						}
 						if (!this.isArray(form.columns)) {
 							this.log("form", forms[i] + ".columns must be an array");
 						}
@@ -148,6 +150,11 @@ class Validate {
 					if (!this.isString(def.add.form)) {
 						this.log("form", elem + ".add.form must be a string");
 					}
+					else {
+						if (!this.form[def.add.form]) {
+							this.log("form", elem + ".add.form '" + def.add.form + "' is not a form");
+						}
+					}
 					// button object
 					if (!this.isObject(def.add.button)) {
 						this.log("form", elem + ".add.button must be an object");
@@ -211,7 +218,7 @@ class Validate {
 				if (!this.isObject(def.delete)) {
 					this.log("form", elem + ".delete must be an object");
 				}
-				list = ['action','button','column'];
+				list = ['action','button','column','key'];
 				if (!this.isInList(Object.keys(def.delete), list)) {
 					this.log("form", elem + ".delete must only have these elements: " + list.join(', '));
 				}
@@ -256,6 +263,15 @@ class Validate {
 							}
 						}
 					}
+					// key - string and linked to field
+					if (!this.isString(def.delete.key)) {
+						this.log("form", elem + ".delete.key must be a string");
+					}
+//					else {
+//						if (!this.form[form].fields[def.delete.key]) {
+//							this.log("form", elem + ".delete.key '" + def.delete.key + "' is not a field");
+//						}
+//					}
 				}
 			}
 			else {
@@ -278,6 +294,11 @@ class Validate {
 					// form string
 					if (!this.isString(def.edit.form)) {
 						this.log("form", elem + ".edit.form must be a string");
+					}
+					else {
+						if (!this.form[def.edit.form]) {
+							this.log("form", elem + ".edit.form '" + def.edit.form + "' is not a form");
+						}
 					}
 					// button object
 					if (!this.isObject(def.edit.button)) {
@@ -439,7 +460,7 @@ class Validate {
 							else {
 								// list - mandatory
 								if (!this.isString(def[flds[i]].options.list)) {
-// TODO QUIET									this.log("form", elem + ".options.list must be a string");
+									this.log("form", elem + ".options.list must be a string");
 								}
 								// display - mandatory
 								if (!this.isObject(def[flds[i]].options.display)) {
