@@ -24,7 +24,7 @@
 - `width` is optional and must be an integer between 10 and 100
 - `type` is mandatory and must be one of *form* or *table*
 - `columns` only applies to a *table* and must be an array of objects
-- `columns[].id` is mandatory and must be a string
+- `columns[].id` is mandatory, must be a string and field must be in the map
 - `columns[].style` is optional and must be a string
 - `columns[].title` is mandatory and must be a string
 
@@ -47,7 +47,7 @@
 - `buttons.delete.column` is a mandatory object with elements of *style* and *title*
 - `buttons.delete.column.style` must be a string
 - `buttons.delete.column.title` must be a string
->> - `buttons.delete.column.key` only applies to a *table*, must be a string and field must exist
+- `buttons.delete.key` only applies to a *table*, must be a string and field must be in the map
 - `buttons.edit` only applies to a *table* and must be an object
 - `buttons.edit.form` is mandatory, must be a string and form must exist
 - `buttons.edit.button` is a mandatory object with elements of *background* and *class*
@@ -63,6 +63,7 @@
 - `buttons.ok.button.class` must be a string
 
 - `fields` is mandatory for the *form* type and must be an object holding objects for each field
+- `fields` must be in the map
 - `fields.description` is optional if the field is visible but must be a string
 - `fields.edit` is mandatory and must be true|false
 - `fields.title` is mandatory if the field is visible and must be a string
