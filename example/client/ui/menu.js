@@ -1,4 +1,4 @@
-var _jsonuiMenus = {
+var appMenu = {
 	"title": {
 		"text": "Administration Console",
 		"class": "navbar-brand pull-right"

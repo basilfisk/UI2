@@ -1,4 +1,4 @@
-var _jsonuiMap = {
+var appMap = {
 	"aboutBundles": "bundles",
 	"aboutClients": "clients",
 	"aboutCompany": "company",

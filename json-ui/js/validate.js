@@ -8,15 +8,33 @@
 /**
  * @namespace Validate
  * @author Basil Fisk
+ * @param {array} args File name for forms, menu and map.
  * @description Functions to validate the menu and form definition.
  */
 class Validate {
-	constructor () {
+	constructor (args) {
 		this.fs = require('fs');
 		this.msgs = [];
-		this.status = {
-			form: false,
-			menu: false
+		this.status = {};
+		this.file = {
+			form: __dirname + '/' + args[0],
+			menu: __dirname + '/' + args[1],
+			map: __dirname + '/' + args[2]
+		};
+
+		// Validate the arguments
+		if (args[0] === undefined || args[1] === undefined || args[2] === undefined) {
+			console.log("Arguments:");
+			console.log("  [1] Name of the file holding the form definitions");
+			console.log("  [2] Name of the file holding the menu definitions");
+			console.log("  [3] Name of the file holding the map definitions");
+			console.log("All file names are relative to the directory holding 'validate.js'");
+		}
+		// Start loading the files to be validated
+		else {
+			this.load('form');
+			this.load('menu');
+			this.load('map');
 		}
 	}
 
@@ -811,37 +829,19 @@ class Validate {
 
 
 	/**
-	 * @method init
-	 * @memberof Validate
-	 * @description Start loading the files to be validated.
-	 */
-	init () {
-		this.root = '/../../example/client/ui';
-		this.file = {};
-		this.status = {};
-
-		this.load('forms', '_jsonuiForms');
-		this.load('menu', '_jsonuiMenus');
-		this.load('map', '_jsonuiMap');
-	}
-
-
-	/**
 	 * @method load
 	 * @memberof Validate
 	 * @param {string} type Type of data to be loaded.
-	 * @param {string} header Variable name in the file header to be removed.
 	 * @description Read a file to be validated.
 	 */
-	load (type, header) {
-		this.file[type] = __dirname + this.root + '/' + type + '.js';
+	load (type) {
 		this.status[type] = false;
 
-		// Read file and remove Javascript header and footer
+		// Read file and replace Javascript header and footer lives with { and }
 		this.fs.readFile(this.file[type], (err, data) => {
 			var file;
 			file = data.toString();
-			file = file.replace('var ' + header + ' = {', '{');
+			file = file.replace(/^.+\n/, '{\n');
 			file = file.replace('};', '}');
 			try {
 				this[type] = JSON.parse(file);
@@ -885,5 +885,4 @@ class Validate {
 	}
 }
 
-var validate = new Validate();
-validate.init();
+new Validate(process.argv.slice(2));

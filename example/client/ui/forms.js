@@ -1,4 +1,4 @@
-var _jsonuiForms = {
+var appForms = {
 	"about": {
 		"type": "form",
 		"title": "Information About the Current User",
