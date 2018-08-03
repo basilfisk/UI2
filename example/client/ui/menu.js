@@ -1,4 +1,4 @@
-var appMenu = {
+var appMenus = {
 	"title": {
 		"text": "Administration Console",
 		"class": "navbar-brand pull-right"

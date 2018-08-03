@@ -154,19 +154,19 @@ var ui = {
 		var title, fields, names, width, i, div = '', button;
 
 		// Read fields and their names
-		title = _defs[id].title;
-		fields = _defs[id].fields;
+		title = _forms[id].title;
+		fields = _forms[id].fields;
 		names = Object.keys(fields);
 
 		// Build form container
-		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
+		width = (_forms[id].width) ? parseInt(_forms[id].width) : 50;
 		div += '<div class="modal-dialog" role="document" style="width:' + width + '%;">';
 		div += '<div class="modal-content">';
 
 		// Add form header and title
 		div += '<div class="modal-header">';
-		if (_defs[id].buttons && _defs[id].buttons.close) {
-			button = _defs[id].buttons.close;
+		if (_forms[id].buttons && _forms[id].buttons.close) {
+			button = _forms[id].buttons.close;
 			div += '<button type="button" class="' + button.button.class + '" data-dismiss="modal">' + button.button.image + '</button>';
 		}
 		div += '<h4 class="modal-title">' + title + '</h4>';
@@ -190,8 +190,8 @@ var ui = {
 		div += '</form></div>';
 
 		// Add button in form footer
-		if (_defs[id].buttons && _defs[id].buttons.ok) {
-			button = _defs[id].buttons.ok;
+		if (_forms[id].buttons && _forms[id].buttons.ok) {
+			button = _forms[id].buttons.ok;
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
 			div += '<button type="button" class="' + button.button.background + '"';
@@ -221,19 +221,19 @@ var ui = {
 	var title, fields, names, width, i, elem, div = '', button;
 
 		// Read fields and their names
-		title = _defs[id].title;
-		fields = _defs[id].fields;
+		title = _forms[id].title;
+		fields = _forms[id].fields;
 		names = Object.keys(fields);
 
 		// Build form container
-		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
+		width = (_forms[id].width) ? parseInt(_forms[id].width) : 50;
 		div += '<div class="modal-dialog" role="document" style="width:' + width + '%;">';
 		div += '<div class="modal-content">';
 
 		// Add form header and title
 		div += '<div class="modal-header">';
-		if (_defs[id].buttons && _defs[id].buttons.close) {
-			button = _defs[id].buttons.close;
+		if (_forms[id].buttons && _forms[id].buttons.close) {
+			button = _forms[id].buttons.close;
 			div += '<button type="button" class="' + button.button.class + '" data-dismiss="modal">' + button.button.image + '</button>';
 		}
 		div += '<h4 class="modal-title">' + title + '</h4>';
@@ -257,11 +257,11 @@ var ui = {
 		div += '</form></div>';
 
 		// Optional save button in form footer
-		if (_defs[id].buttons) {
+		if (_forms[id].buttons) {
 			div += '<div class="modal-footer">';
 			div += '<div class="col-md-12">';
-			if (_defs[id].buttons && _defs[id].buttons.ok) {
-				button = _defs[id].buttons.ok;
+			if (_forms[id].buttons && _forms[id].buttons.ok) {
+				button = _forms[id].buttons.ok;
 				div += '<button type="button" class="' + button.button.background + '" ';
 				div += 'onClick="ui.buttonOK(' + "'" + id + "'" + '); return false;">';
 				div += '<span class="' + button.button.class + '"></span></button>';
@@ -325,7 +325,7 @@ var ui = {
 		div += '<div class="modal-content">';
 
 		// Form title and optional close button in header
-		button = _defs.messageBox.buttons.close;
+		button = _forms.messageBox.buttons.close;
 		div += '<div class="modal-header">';
 		if (button) {
 			div += '<button type="button" class="' + button.button.class + '" data-dismiss="modal">' + button.button.image + '</button>';
@@ -339,7 +339,7 @@ var ui = {
 		div += '</div>';
 
 		// OK button in footer
-		button = _defs.messageBox.buttons.ok;
+		button = _forms.messageBox.buttons.ok;
 		div += '<div class="modal-footer">';
 		div += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
 		div += 'onclick="ui.messageConfirmed(); return false;">';
@@ -387,7 +387,7 @@ var ui = {
 	_postProcess: function (action, id, data) {
 		var fn, parts;
 
-		fn = _defs[id].buttons[action].action;
+		fn = _forms[id].buttons[action].action;
 		if (fn) {
 			parts = fn.split('.');
 			if (parts.length === 2) {
@@ -421,7 +421,7 @@ var ui = {
 		var key;
 
 		// Split dot separated element name into array of element names
-		key = _jsonuiMap[field].split('.');
+		key = _fields[field].split('.');
 
 		// Assign data to element in object
 		if (key.length === 1) {
@@ -672,7 +672,7 @@ var ui = {
 		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
 
 		// Read fields and their names
-		fields = _defs[id].fields;
+		fields = _forms[id].fields;
 		names = Object.keys(fields);
 
 		// Read and validate each field
@@ -813,20 +813,25 @@ var ui = {
 	/**
 	 * @method init
 	 * @author Basil Fisk
-	 * @param {object} messages Application's message definitions.
+	 * @param {object} forms The application's form definitions.
+	 * @param {object} menus The application's menu definitions.
+	 * @param {object} fields The application's field definitions.
+	 * @param {object} msgs The application's messages.
 	 * @description Load the application's UI data structures for building forms and reports.
 	 */
-	init: function (messages) {
-		_defs = _jsonuiForms;
-		_msgs = messages;
+	init: function (forms, menus, fields, msgs) {
+		_forms = forms;
+		_menus = menus;
+		_fields = fields;
+		_msgs = msgs;
 
 		// Warn if the required variables haven't been set up
 		// TODO pass in as arguments and set up internally
 		// TODO Don't display anything is they don't exist
-		if (typeof _jsonuiForms === 'undefined' || 
-			typeof _jsonuiMap === 'undefined' || 
-			typeof _jsonuiMenus === 'undefined') {
-			console.log("These variables must be set up: _jsonuiForms, _jsonuiMap, _jsonuiMenus");
+		if (typeof _forms === 'undefined' || 
+			typeof _menus === 'undefined' || 
+			typeof _fields === 'undefined') {
+			console.log("These variables must be set up: _forms, _menus, _fields");
 		}
 	},
 
@@ -849,21 +854,21 @@ var ui = {
 		div += '<ul class="nav navbar-nav">';
 
 		// Build the menu
-		if (_jsonuiMenus.menubar.length > 0) {
+		if (_menus.menubar.length > 0) {
 			div += '<ul class="nav navbar-nav">';
-			for (i=0; i<_jsonuiMenus.menubar.length; i++) {
+			for (i=0; i<_menus.menubar.length; i++) {
 				// Build list of options
 				opt = '';
-				for (n=0; n<_jsonuiMenus.menubar[i].options.length; n++) {
+				for (n=0; n<_menus.menubar[i].options.length; n++) {
 					// Skip if user doesn't have access to option
-					if (this._userAccess(role, _jsonuiMenus.menubar[i].options[n].access)) {
-						option = _jsonuiMenus.menubar[i].options[n];
+					if (this._userAccess(role, _menus.menubar[i].options[n].access)) {
+						option = _menus.menubar[i].options[n];
 						opt += '<li id="' + option.id + '-option" class="option"><a href="#' + option.id + '" onClick="' + option.action + '(); return false;">' + option.title + '</a></li>';
 					}
 				}
 				// Dont add top level menu if no options in menu
 				if (opt !== '') {
-					div += '<li id="' + _jsonuiMenus.menubar[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + _jsonuiMenus.menubar[i].name + '" href="#">' + _jsonuiMenus.menubar[i].title + '<span class="caret"></span></a>';
+					div += '<li id="' + _menus.menubar[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + _menus.menubar[i].name + '" href="#">' + _menus.menubar[i].title + '<span class="caret"></span></a>';
 					div += '<ul class="dropdown-menu">';
 					div += opt;
 					div += '</ul>';
@@ -875,7 +880,7 @@ var ui = {
 
 		// Create page title and add to body
 		div += '</ul>';
-		div += this._pageTitle(_jsonuiMenus.title.class, _jsonuiMenus.title.text);
+		div += this._pageTitle(_menus.title.class, _menus.title.text);
 		div += '</div>';
 		$('body').append(div);
 	},
@@ -963,22 +968,22 @@ var ui = {
 		var width, div = '', i, key, row, n, cell, button, data = [], ids;
 
 		// Build the container
-		width = (_defs[id].width) ? parseInt(_defs[id].width) : 50;
+		width = (_forms[id].width) ? parseInt(_forms[id].width) : 50;
 		div += '<div class="modal-dialog" role="document" style="width:' + width + '%">';
 		div += '<div class="modal-content">';
 
 		// Build the form header
 		div += '<div class="modal-header">';
-		if (_defs[id].buttons && _defs[id].buttons.close) {
-			button = _defs[id].buttons.close;
+		if (_forms[id].buttons && _forms[id].buttons.close) {
+			button = _forms[id].buttons.close;
 			div += '<button type="button" class="' + button.button.class + '" data-dismiss="modal">' + button.button.image + '</button>';
 		}
 		div += '<br/>';
-		div += '<h4>' + _defs[id].title;
+		div += '<h4>' + _forms[id].title;
 
 		// Display an Add button, if specified
-		if (_defs[id].buttons && _defs[id].buttons.add) {
-			button = _defs[id].buttons.add;
+		if (_forms[id].buttons && _forms[id].buttons.add) {
+			button = _forms[id].buttons.add;
 			div += '<button id="table-' + button.form + '" type="button" class="' + button.button.background + '" data-dismiss="modal">';
 			div += '<span class="' + button.button.class + '"></span></button>';
 		}
@@ -993,20 +998,20 @@ var ui = {
 		// Build the table header
 		div += '<thead>';
 		div += '<tr>';
-		for (i=0; i<_defs[id].columns.length; i++) {
-			div += (_defs[id].columns[i].style) ? '<th style="' + _defs[id].columns[i].style + '">' : '<th>';
-			div += _defs[id].columns[i].title + '</th>';
+		for (i=0; i<_forms[id].columns.length; i++) {
+			div += (_forms[id].columns[i].style) ? '<th style="' + _forms[id].columns[i].style + '">' : '<th>';
+			div += _forms[id].columns[i].title + '</th>';
 		}
 
 		// Column headings for optional edit and delete columns added later
-		if (_defs[id].buttons) {
-			if (_defs[id].buttons.edit && _defs[id].buttons.edit.column.title) {
-				div += (_defs[id].buttons.edit.column.style) ? '<th style="' + _defs[id].buttons.edit.column.style + '">' : '<th>'
-				div += _defs[id].buttons.edit.column.title + '</th>';
+		if (_forms[id].buttons) {
+			if (_forms[id].buttons.edit && _forms[id].buttons.edit.column.title) {
+				div += (_forms[id].buttons.edit.column.style) ? '<th style="' + _forms[id].buttons.edit.column.style + '">' : '<th>'
+				div += _forms[id].buttons.edit.column.title + '</th>';
 			}
-			if (_defs[id].buttons.delete && _defs[id].buttons.delete.column.title) {
-				div += (_defs[id].buttons.delete.column.style) ? '<th style="' + _defs[id].buttons.delete.column.style + '">' : '<th>'
-				div += _defs[id].buttons.delete.column.title + '</th>';
+			if (_forms[id].buttons.delete && _forms[id].buttons.delete.column.title) {
+				div += (_forms[id].buttons.delete.column.style) ? '<th style="' + _forms[id].buttons.delete.column.style + '">' : '<th>'
+				div += _forms[id].buttons.delete.column.title + '</th>';
 			}
 		}
 		div += '</tr>';
@@ -1020,10 +1025,10 @@ var ui = {
 			row = '<tr>';
 
 			// Add user defined columns in sequence specified in form definition
-			for (n=0; n<_defs[id].columns.length; n++) {
-				cell = _defs[id].columns[n].id;
+			for (n=0; n<_forms[id].columns.length; n++) {
+				cell = _forms[id].columns[n].id;
 				if (rows[i][cell]) {
-					row += (_defs[id].columns[n].style) ? '<td style="' + _defs[id].columns[n].style + '">' : '<td>';
+					row += (_forms[id].columns[n].style) ? '<td style="' + _forms[id].columns[n].style + '">' : '<td>';
 					row += (rows[i][cell].text) ? rows[i][cell].text : '';
 					row += '</td>';
 				}
@@ -1034,18 +1039,18 @@ var ui = {
 			}
 
 			// Add an optional edit button at the end of the row
-			if (_defs[id].buttons && _defs[id].buttons.edit) {
-				button = _defs[id].buttons.edit;
+			if (_forms[id].buttons && _forms[id].buttons.edit) {
+				button = _forms[id].buttons.edit;
 				row += (button.column.style) ? '<td style="' + button.column.style + '">' : '<td>';
 				row += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
-				row += 'onClick="ui.tableEditForm(' + "'" + _defs[id].buttons.edit.form + "', " + i + '); return false;">';
+				row += 'onClick="ui.tableEditForm(' + "'" + _forms[id].buttons.edit.form + "', " + i + '); return false;">';
 				row += '<span class="' + button.button.class + '"></span></button>';
 				row += '</td>';
 			}
 
 			// Add an optional delete button at the end of the row
-			if (_defs[id].buttons && _defs[id].buttons.delete) {
-				button = _defs[id].buttons.delete;
+			if (_forms[id].buttons && _forms[id].buttons.delete) {
+				button = _forms[id].buttons.delete;
 				row += (button.column.style) ? '<td style="' + button.column.style + '">' : '<td>';
 				row += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
 				if (button.key && rows[i][button.key] && rows[i][button.key].text) {
@@ -1072,7 +1077,7 @@ var ui = {
 		// Add the table and form IDs
 		ids = {
 			table: id,
-			add: _defs[id].buttons.add.form
+			add: _forms[id].buttons.add.form
 		};
 
 		// Save the table data for the edit form

@@ -26,8 +26,8 @@ var login = {
 	 * @description Start up function called by 'body onload'.
 	 */ 
 	init: function () {
-		// Initialize UI manager and load application messages
-		ui.init(messages);
+		// Initialize UI manager and load application definitions
+		ui.init(appForms, appMenus, appFields, appMessages);
 
 		// Display the login form for the Admin Console
 		var data = {

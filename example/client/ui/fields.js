@@ -1,4 +1,4 @@
-var appMap = {
+var appFields = {
 	"aboutBundles": "bundles",
 	"aboutClients": "clients",
 	"aboutCompany": "company",

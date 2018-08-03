@@ -1,4 +1,4 @@
-var messages = {
+var appMessages = {
 	"CMD001": {
 		"type": "error",
 		"module": "command",
