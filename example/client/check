@@ -3,4 +3,4 @@
 JSONUI=./json-ui/js
 ROOT=../../example/client/ui
 
-node $JSONUI/validate.js $ROOT/forms.js $ROOT/menu.js $ROOT/map.js
+node $JSONUI/validate.js $ROOT/forms.js $ROOT/menus.js $ROOT/fields.js
