@@ -1,5 +1,11 @@
 # Validation of the Structure Files
 
+## Running the checks
+
+~~~bash
+example/client/check 
+~~~
+
 **json-ui** uses 2 files to define the structure of the application. The structure of the menu is defined by `menu.js` and the structure of the forms called from the menu options is defined by`forms.js`.
 
 ## Menu Definitions
