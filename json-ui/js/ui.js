@@ -516,6 +516,12 @@ var ui = {
 		// Visible field
 		if (defs.visible) {
 			switch (defs.type) {
+				case 'array':
+					// Convert array to separated string
+					if (value) {
+						value = value.join(defs.options.separator);
+					}
+					break;
 				case 'checkbox':
 					divot += '<div class="form-group" id="' + name + '-all">';
 					divot += '<input type="checkbox" data-mini="true" id="' + name + '" placeholder="' + desc + '"' + checked + disabled + '>';
@@ -545,12 +551,12 @@ var ui = {
 					divot += '</div>';
 					break;
 				default:
-					// Convert array to separated string
-					if (defs.options && defs.options.content && defs.options.content.type && defs.options.content.type === 'array') {
-						if (value) {
-							value = value.join(defs.options.content.separator);
-						}
-					}
+//					// Convert array to separated string
+//					if (defs.options && defs.options.content && defs.options.content.type && defs.options.content.type === 'array') {
+//						if (value) {
+//							value = value.join(defs.options.content.separator);
+//						}
+//					}
 					// If size defined, use a textarea control
 					if (defs.options && defs.options.display && defs.options.display.height) {
 						divot += '<div class="form-group" id="' + name + '-all">';
@@ -681,6 +687,20 @@ var ui = {
 
 			// Read the value(s) based on the stated data type of the field
 			switch (fields[name].type) {
+				// Field holds an array of values
+				case 'array':
+					// Validate each element of the field
+					temp[name] = [];
+					elem = text.split(fields[name].options.separator);
+					for (e=0; e<elem.length; e++) {
+						// Run the check
+						if (!this._runChecks(fields[name].options.checks, fields[name].title, elem[e])) {
+							return;
+						}
+						// Convert value to the correct type
+						temp[name].push(this._convertData(fields[name].type, elem[e]));
+					}
+					break;
 				// True or false, assign direct to data object
 				case 'checkbox':
 					temp[name] = (document.getElementById(name).checked) ? true : false;
@@ -711,7 +731,7 @@ var ui = {
 
 					// Validate using 'options.checks' section
 					if (fields[name].options && fields[name].options.checks) {
-						// Field holds an array of values
+/*						// Field holds an array of values
 						if (fields[name].options.content && fields[name].options.content.type === 'array') {
 							// Validate each element of the field
 							temp[name] = [];
@@ -724,16 +744,16 @@ var ui = {
 								// Convert value to the correct type
 								temp[name].push(this._convertData(fields[name].type, elem[e]));
 							}
-						}
+						}*/
 						// Field holds a single value (default)
-						else {
+//						else {
 							// Run the check
 							if (!this._runChecks(fields[name].options.checks, fields[name].title, text)) {
 								return;
 							}
 							// Convert value to the correct type
 							temp[name] = this._convertData(fields[name].type, text);
-						}
+//						}
 					}
 					// Nothing in the 'options.checks' section, so treat value as text
 					else {

@@ -109,30 +109,15 @@ type is *text*
 
 ## Support for arrays
 
+>> made changes to `ui.js` but haven't tested them yet
+
 `options.content` references in `ui.js`:
 - _showField (x4)
 - _validate (x3)
 
-`options.content` in `forms.js`
-- userAdd.fields.userClients
-- userEdit.fields.userClients
-
-Convert this:
-	"type": "text",
-	"options": {
-		"content": {
-			"type": "array",
-			"separator": ","
-		}
-	}
-To this:
-	"type": "array",
-	"options": {
-		"separator": ","
-	}
-
 ## Missing tests
 
-can fields.type:id have checks:mandatory set?
+can fields.type:id no validation yet. have checks:mandatory set?
 can fields.type:list have checks:mandatory set?
 can fields.type:integer be xtended to support number|float|etc and checks?
+checkbox is supported in `_validate`

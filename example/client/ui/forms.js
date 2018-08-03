@@ -1206,7 +1206,7 @@ var appForms = {
 			"userClients": {
 				"title": "Clients",
 				"description": "Select clients",
-				"type": "text",
+				"type": "array",
 				"visible": true,
 				"edit": true,
 				"options": {
@@ -1214,10 +1214,7 @@ var appForms = {
 						"mandatory": false,
 						"format": "ipv4"
 					},
-					"content": {
-						"type": "array",
-						"separator": ","
-					}
+					"separator": ","
 				}
 			},
 			"userBundles": {
@@ -1312,7 +1309,7 @@ var appForms = {
 			"userClients": {
 				"title": "Clients",
 				"description": "Select clients",
-				"type": "text",
+				"type": "array",
 				"visible": true,
 				"edit": true,
 				"options": {
@@ -1320,10 +1317,7 @@ var appForms = {
 						"mandatory": false,
 						"format": "ipv4"
 					},
-					"content": {
-						"type": "array",
-						"separator": ","
-					}
+					"separator": ","
 				}
 			},
 			"userBundles": {
