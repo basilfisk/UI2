@@ -41,7 +41,6 @@ var bundle = {
 	 */
 	edit: function () {
 		this.company = admin.company.code;
-console.log(this);
 		common.apiCall('bundleUpdate', this, bundle.load);
 	},
 
@@ -75,10 +74,6 @@ console.log(this);
 		// Add each element of the array as a table row
 		// Include _id so the record can be deleted
 		for (i=0; i<admin.bundles.length; i++) {
-			ver = 'Cmd v' + admin.bundles[i].version.cmd + ' / ';
-			ver += 'Prm v' + admin.bundles[i].version.prms;
-
-			// Save row
 			rows.push({
 				bundleId: {
 					text: admin.bundles[i]._id
