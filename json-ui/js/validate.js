@@ -84,10 +84,7 @@ class Validate {
 
 					// key & column - table only
 					if (form.type === 'table') {
-						if (!this.isArray(form.columns)) {
-							this.log("form", forms[i] + ".columns must be an array");
-						}
-						else {
+						if (this.isArray("form", form.columns, forms[i] + ".columns", true)) {
 							for (n=0; n<form.columns.length; n++) {
 								elem = forms[i] + ".columns";
 								list = ['id','style','title'];
@@ -349,15 +346,10 @@ class Validate {
 				this.log("form", elem + " must only have these elements: " + list.join(', '));
 			}
 			else {
-				// edit - mandatory
-				if (!this.isTrueFalse(def[flds[i]].edit)) {
-					this.log("form", elem + ".edit must be true|false");
-				}
+				// edit - optional
+				this.isTrueFalse("form", def[flds[i]].edit, form + ".fields." + flds[i] + ".edit", false);
 				// visible - mandatory
-				if (!this.isTrueFalse(def[flds[i]].visible)) {
-					this.log("form", elem + ".visible must be true|false");
-				}
-				else {
+				if (this.isTrueFalse("form", def[flds[i]].visible, form + ".fields." + flds[i] + ".visible", true)) {
 					// description - optional if visible
 					if (def[flds[i]].visible) {
 						this.isString("form", def[flds[i]].description, form + ".fields." + flds[i] + ".description", false);
@@ -397,9 +389,7 @@ class Validate {
 										// checks.format - optional
 										this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 										// checks.mandatory - optional
-										if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
-											this.log("form", elem + ".options.checks.mandatory must be true|false");
-										}
+										this.isTrueFalse("form", def[flds[i]].options.checks.mandatory, form + ".fields." + flds[i] + ".options.checks.mandatory", true);
 									}
 								}
 							}
@@ -454,9 +444,7 @@ class Validate {
 									// checks.format - optional
 									this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 									// checks.mandatory - optional
-									if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
-										this.log("form", elem + ".options.checks.mandatory must be true|false");
-									}
+									this.isTrueFalse("form", def[flds[i]].options.checks.mandatory, form + ".fields." + flds[i] + ".options.checks.mandatory", true);
 									// checks.range - optional
 									if (this.isObject("form", def[flds[i]].options.checks.range, form + ".fields." + flds[i] + ".options.checks.range")) {
 //		DOUBLE!!					if (def[flds[i]].options.checks.range && !this.isObject(def[flds[i]].options.checks.range)) {
@@ -503,9 +491,7 @@ class Validate {
 									// checks.format - optional
 									this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 									// checks.mandatory - optional
-									if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
-										this.log("form", elem + ".options.checks.mandatory must be true|false");
-									}
+									this.isTrueFalse("form", def[flds[i]].options.checks.mandatory, form + ".fields." + flds[i] + ".options.checks.mandatory", true);
 								}
 							}
 						}
@@ -529,9 +515,7 @@ class Validate {
 										// checks.format - optional
 										this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 										// checks.mandatory - optional
-										if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
-											this.log("form", elem + ".options.checks.mandatory must be true|false");
-										}
+										this.isTrueFalse("form", def[flds[i]].options.checks.mandatory, form + ".fields." + flds[i] + ".options.checks.mandatory", true);
 									}
 								}
 								if (def[flds[i]].options.display) {
@@ -579,44 +563,38 @@ class Validate {
 			this.log("menu", "Top level element 'menubar' is mandatory");
 		}
 		else {
-			if (!this.isArray(this.menu.menubar)) {
-				this.log("menu", "'menubar' element must be an array");
-			}
-			// menubar array objects
-			for (i=0; i<this.menu.menubar.length; i++) {
-				elem = "menubar[" + i + "]";
-				keys = Object.keys(this.menu.menubar[i]);
-				list = ['id','menu','options','title'];
-				if (!this.isInList(Object.keys(this.menu.menubar[i]), list)) {
-					this.log("menu", elem + " must only have these elements: " + list.join(', '));
-				}
-				for (n=0; n<keys.length; n++) {
-					// menubar array, nested options array
-					if (keys[n] === 'options') {
-						elem = "menubar[" + i + "].options";
-						if (!this.isArray(this.menu.menubar[i].options)) {
-							this.log("menu", elem + " must be an array");
-						}
-						else {
-							for (p=0; p<this.menu.menubar[i].options.length; p++) {
-								elem = "menubar[" + i + "].options[" + p + "]";
-								list = ['access','action','id','title'];
-								if (!this.isInList(Object.keys(this.menu.menubar[i].options[p]), list)) {
-									this.log("menu", elem + " must only have these elements: " + list.join(', '));
+			if (this.isArray("menu", this.menu.menubar, "menubar", true)) {
+				// menubar array objects
+				for (i=0; i<this.menu.menubar.length; i++) {
+					elem = "menubar[" + i + "]";
+					keys = Object.keys(this.menu.menubar[i]);
+					list = ['id','menu','options','title'];
+					if (!this.isInList(Object.keys(this.menu.menubar[i]), list)) {
+						this.log("menu", elem + " must only have these elements: " + list.join(', '));
+					}
+					for (n=0; n<keys.length; n++) {
+						// menubar array, nested options array
+						if (keys[n] === 'options') {
+							elem = "menubar[" + i + "].options";
+							if (this.isArray("menu", this.menu.menubar[i].options, "menubar[" + i + "].options", true)) {
+								for (p=0; p<this.menu.menubar[i].options.length; p++) {
+									elem = "menubar[" + i + "].options[" + p + "]";
+									list = ['access','action','id','title'];
+									if (!this.isInList(Object.keys(this.menu.menubar[i].options[p]), list)) {
+										this.log("menu", elem + " must only have these elements: " + list.join(', '));
+									}
+									// elements within nested options array
+									this.isArray("menu", this.menu.menubar[i].options[p].access, "menubar[" + i + "].options[" + p + "].access", true);
+									this.isString("menu", this.menu.menubar[i].options[p].action, "menubar[" + i + "].action", true);
+									this.isString("menu", this.menu.menubar[i].options[p].id, "menubar[" + i + "].id", true);
+									this.isString("menu", this.menu.menubar[i].options[p].title, "menubar[" + i + "].title", true);
 								}
-								// elements within nested options array
-								if (!this.isArray(this.menu.menubar[i].options[p].access)) {
-									this.log("menu", elem + ".access must be an array");
-								}
-								this.isString("menu", this.menu.menubar[i].options[p].action, "menubar[" + i + "].action", true);
-								this.isString("menu", this.menu.menubar[i].options[p].id, "menubar[" + i + "].id", true);
-								this.isString("menu", this.menu.menubar[i].options[p].title, "menubar[" + i + "].title", true);
 							}
 						}
-					}
-					// menubar array, nested non-options array
-					else {
-						this.isString("menu", this.menu.menubar[i][keys[n]], "menubar[" + i + "]." + keys[n], true);
+						// menubar array, nested non-options array
+						else {
+							this.isString("menu", this.menu.menubar[i][keys[n]], "menubar[" + i + "]." + keys[n], true);
+						}
 					}
 				}
 			}
@@ -651,11 +629,32 @@ class Validate {
 	/**
 	 * @method isArray
 	 * @memberof Validate
-	 * @param {array} data Data to be validated.
+	 * @param {string} type Type of data to be validated.
+	 * @param {object} data Data to be validated.
+	 * @param {string} name Name of data being validated.
+	 * @param {boolean} mand Is data element mandatory.
 	 * @description Check the data is an array.
 	 */
-	isArray (data) {
-		return (typeof data === 'object' && data.length !== undefined) ? true : false;
+	isArray (type, data, name, mand) {
+		if (data || mand) {
+			if (data) {
+				if (typeof data === 'object') {
+					return true;
+				}
+				else {
+					this.log(type, name + " must be an array");
+					return false;
+				}
+			}
+			else {
+				this.log(type, name + " is not defined");
+				return false;
+			}
+		}
+		else {
+			return true;
+		}
+//		return (typeof data === 'object' && data.length !== undefined) ? true : false;
 	}
 
 
@@ -762,18 +761,38 @@ class Validate {
 		else {
 			return true;
 		}
-//		return (typeof data === 'string') ? true : false;
 	}
 
 
 	/**
 	 * @method isTrueFalse
 	 * @memberof Validate
-	 * @param {string} data Data to be validated.
+	 * @param {string} type Type of data to be validated.
+	 * @param {object} data Data to be validated.
+	 * @param {string} name Name of data being validated.
+	 * @param {boolean} mand Is data element mandatory.
 	 * @description Check the data is either 'true' or 'false'.
 	 */
-	isTrueFalse (data) {
-		return (typeof data === 'boolean') ? true : false;
+	isTrueFalse (type, data, name, mand) {
+		if (data || mand) {
+			if (data) {
+				if (typeof data === 'boolean') {
+					return true;
+				}
+				else {
+					this.log(type, name + " must be true|false");
+					return false;
+				}
+			}
+			else {
+				this.log(type, name + " is not defined");
+				return false;
+			}
+		}
+		else {
+			return true;
+		}
+//		return (typeof data === 'boolean') ? true : false;
 	}
 
 
