@@ -765,18 +765,17 @@ class Validate {
 	/**
 	 * @method done
 	 * @memberof Validate
-	 * @param {array} data Type of data tht has been validated.
+	 * @param {array} type Type of data tht has been validated.
 	 * @description Display the messages that have been raised.
 	 */
 	done (type) {
 		this.status[type] = true;
 		if (this.status.form && this.status.menu) {
-			var files = "\n\t" + this.file.form + "\n\t" + this.file.menu;
 			if (this.msgs.length === 0) {
-				console.log("Successfully validated" + files);
+				console.log("Successfully validated");
 			}
 			else {
-				console.log("Errors found during validation" + files);
+				console.log("Errors found during validation");
 				for (var i=0; i<this.msgs.length; i++) {
 					console.log(this.msgs[i]);
 				}
@@ -870,20 +869,26 @@ class Validate {
 	 */
 	load (type) {
 		this.status[type] = false;
+		console.log("Checking: " + this.file[type]);
 
 		// Read file and replace Javascript header and footer lives with { and }
 		this.fs.readFile(this.file[type], (err, data) => {
 			var file;
-			file = data.toString();
-			file = file.replace(/^.+\n/, '{\n');
-			file = file.replace('};', '}');
-//			try {
-				this[type] = JSON.parse(file);
-				this.start(type);
-//			}
-//			catch (err) {
-//				this.log("form", "Invalid JSON in " + type + ".js: " + err.message);
-//			}
+			if (err) {
+				console.log("Error reading file: " + err.message);
+			}
+			else {
+				file = data.toString();
+				file = file.replace(/^.+\n/, '{\n');
+				file = file.replace('};', '}');
+//				try {
+					this[type] = JSON.parse(file);
+					this.start(type);
+//				}
+//				catch (err) {
+//					this.log("form", "Invalid JSON in " + type + ".js: " + err.message);
+//				}
+			}
 		});
 	}
 
@@ -905,14 +910,18 @@ class Validate {
 	 * @description Start validating when all files have been loaded.
 	 */
 	start (type) {
-		var keys, i, status = true;
+		var keys, i, ready = true;
 
 		this.status[type] = true;
 		keys = Object.keys(this.status);
 		for (i=0; i<keys.length; i++) {
-			status = status && this.status[keys[i]];
+			ready = ready && this.status[keys[i]];
 		}
-		if (status) {
+		if (ready) {
+			this.status = {
+				form: false,
+				menu: false
+			};
 			this.checkMenus();
 			this.checkForms();
 		}
