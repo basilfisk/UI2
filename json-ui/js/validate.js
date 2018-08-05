@@ -45,8 +45,7 @@ class Validate {
 	 * @description Check the form definitions.
 	 */
 	checkForms () {
-		var forms, i, form, list, n,
-			elem = form + ".";
+		var forms, i, form, list, n;
 
 		forms = Object.keys(this.form);
 		for (i=0; i<forms.length; i++) {
@@ -67,10 +66,7 @@ class Validate {
 			else {
 				// Valid types
 				list = ['form','table'];
-				if (!this.isInList([form.type], list)) {
-					this.log("form", forms[i] + ".type must only have these values: " + list.join(', '));
-				}
-				else {
+				if (this.isInList("form", [form.type], forms[i] + ".type", list, true)) {
 					// elements in form or table
 					if (form.type === 'form') {
 						list = ['buttons','fields','title','type','width'];
@@ -78,27 +74,22 @@ class Validate {
 					else {
 						list = ['buttons','columns','fields','title','type','width'];
 					}
-					if (!this.isInList(Object.keys(form), list)) {
-						this.log("form", "'" + forms[i] + "' form must only have these elements: " + list.join(', '));
-					}
+					this.isInList("form", Object.keys(form), forms[i], list, true);
 
 					// key & column - table only
 					if (form.type === 'table') {
 						if (this.isArray("form", form.columns, forms[i] + ".columns", true)) {
 							for (n=0; n<form.columns.length; n++) {
-								elem = forms[i] + ".columns";
 								list = ['id','style','title'];
-								if (!this.isInList(Object.keys(form.columns[n]), list)) {
-									this.log("menu", elem + " must only have these elements: " + list.join(', '));
-								}
-								if (this.isString("menu", form.columns[n].id, forms[i] + elem + "[" + n + "].id", true)) {
+								this.isInList("menu", Object.keys(form.columns[n]), forms[i] + ".columns", list, true);
+								if (this.isString("menu", form.columns[n].id, forms[i] + ".columns[" + n + "].id", true)) {
 									if (!this.field.fields[form.columns[n].id]) {
-										this.log("form", elem + ".columns.id '" + form.columns[n].id + "' is not a registered field");
+										this.log("form", forms[i] + ".columns.id '" + form.columns[n].id + "' is not a registered field");
 									}
 								}
 								// optional
-								this.isString("menu", form.columns[n].style, forms[i] + elem + "[" + n + "].style", false);
-								this.isString("menu", form.columns[n].title, forms[i] + elem + "[" + n + "].title", false);
+								this.isString("menu", form.columns[n].style, forms[i] + forms[i] + ".columns[" + n + "].style", false);
+								this.isString("menu", form.columns[n].title, forms[i] + forms[i] + ".columns[" + n + "].title", false);
 							}
 						}
 					}
@@ -127,16 +118,13 @@ class Validate {
 	 * @description Check the definition of the buttons element on a single form.
 	 */
 	checkFormButtons (form, type, def) {
-		var keys, i, n, p, list,
-			elem = form + ".buttons";
+		var keys, i, n, p, list;
 
 		// 'buttons' must exist
 		if (this.isObject("form", def, form + ".buttons")) {
 			// Valid fields
 			list = ['add','close','delete','edit','ok'];
-			if (!this.isInList(Object.keys(def), list)) {
-				this.log("form", elem + " must only have these elements: " + list.join(', '));
-			}
+			this.isInList("form", Object.keys(def), form + ".buttons", list, true);
 
 			// add button
 			if (def.add) {
@@ -144,23 +132,17 @@ class Validate {
 				if (type === 'table') {
 					this.isObject("form", def.add, form + ".buttons.add");
 					list = ['form','button'];
-					if (!this.isInList(Object.keys(def.add), list)) {
-						this.log("form", elem + ".add must only have these elements: " + list.join(', '));
-					}
-					else {
+					if (this.isInList("form", Object.keys(def.add), form + ".buttons.add", list, true)) {
 						// form string
 						if (this.isString("form", def.add.form, form + ".buttons.add.form", true)) {
 							if (!this.form[def.add.form]) {
-								this.log("form", elem + ".add.form '" + def.add.form + "' is not a form");
+								this.log("form", form + ".buttons.add.form '" + def.add.form + "' is not a form");
 							}
 						}
 						// button object
 						if(this.isObject("form", def.add.button, form + ".buttons.add.button")) {
 							list = ['background','class'];
-							if (!this.isInList(Object.keys(def.add.button), list)) {
-								this.log("form", elem + ".add.button must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def.add.button), form + ".buttons.add.button", list, true)) {
 								this.isString("form", def.add.button.background, form + ".buttons.add.button.background", true);
 								this.isString("form", def.add.button.class, form + ".buttons.add.button.class", true);
 							}
@@ -168,7 +150,7 @@ class Validate {
 					}
 				}
 				else {
-					this.log("form", elem + ".add button can only be on a table");
+					this.log("form", form + ".buttons.add button can only be on a table");
 				}
 			}
 
@@ -176,17 +158,11 @@ class Validate {
 			if (def.close) {
 				if (this.isObject("form", def.close, form + ".buttons.close")) {
 					list = ['button'];
-					if (!this.isInList(Object.keys(def.close), list)) {
-						this.log("form", elem + ".close must only have these elements: " + list.join(', '));
-					}
-					else {
+					if (this.isInList("form", Object.keys(def.close), form + ".buttons.close", list, true)) {
 						// close.button
 						this.isObject("form", def.close.button, form + ".buttons.close.button");
 						list = ['class','image'];
-						if (!this.isInList(Object.keys(def.close.button), list)) {
-							this.log("form", elem + ".close.button must only have these elements: " + list.join(', '));
-						}
-						else {
+						if (this.isInList("form", Object.keys(def.close.button), form + ".buttons.close.button", list, true)) {
 							this.isString("form", def.close.button.class, form + ".buttons.close.button.class", true);
 							this.isString("form", def.close.button.image, form + ".buttons.close.button.image", true);
 						}
@@ -200,19 +176,13 @@ class Validate {
 				if (type === 'table') {
 					this.isObject("form", def.delete, form + ".buttons.delete");
 					list = ['action','button','column','key'];
-					if (!this.isInList(Object.keys(def.delete), list)) {
-						this.log("form", elem + ".delete must only have these elements: " + list.join(', '));
-					}
-					else {
+					if (this.isInList("form", Object.keys(def.delete), form + ".buttons.delete", list, true)) {
 						// form string
 						this.isString("form", def.delete.action, form + ".buttons.delete.action", true);
 						// button object
 						if (this.isObject("form", def.delete.button, form + ".buttons.delete.button")) {
 							list = ['background','class'];
-							if (!this.isInList(Object.keys(def.delete.button), list)) {
-								this.log("form", elem + ".delete.button must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def.delete.button), form + ".buttons.delete.button", list, true)) {
 								this.isString("form", def.delete.button.background, form + ".buttons.delete.button.background", true);
 								this.isString("form", def.delete.button.class, form + ".buttons.delete.button.class", true);
 							}
@@ -220,10 +190,7 @@ class Validate {
 						// column object
 						if (this.isObject("form", def.delete.column, form + ".buttons.delete.column")) {
 							list = ['style','title'];
-							if (!this.isInList(Object.keys(def.delete.column), list)) {
-								this.log("form", elem + ".delete.column must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def.delete.column), form + ".buttons.delete.column", list, true)) {
 								this.isString("form", def.delete.column.style, form + ".buttons.delete.column.style", true);
 								this.isString("form", def.delete.column.title, form + ".buttons.delete.column.title", true);
 							}
@@ -231,13 +198,13 @@ class Validate {
 						// key - string and linked to field
 						if (this.isString("form", def.delete.key, form + ".buttons.delete.key", true)) {
 							if (!this.field.fields[def.delete.key]) {
-								this.log("form", elem + ".delete.key '" + def.delete.key + "' is not a registered field");
+								this.log("form", form + ".buttons.delete.key '" + def.delete.key + "' is not a registered field");
 							}
 						}
 					}
 				}
 				else {
-					this.log("form", elem + ".delete button can only be on a table");
+					this.log("form", form + ".buttons.delete button can only be on a table");
 				}
 			}
 
@@ -247,23 +214,17 @@ class Validate {
 				if (type === 'table') {
 					this.isObject("form", def.edit, form + ".buttons.edit");
 					list = ['form','button','column'];
-					if (!this.isInList(Object.keys(def.edit), list)) {
-						this.log("form", elem + ".edit must only have these elements: " + list.join(', '));
-					}
-					else {
+					if (this.isInList("form", Object.keys(def.edit), form + ".buttons.edit", list, true)) {
 						// form string
 						if (this.isString("form", def.edit.form, form + ".buttons.edit.form", true)) {
 							if (!this.form[def.edit.form]) {
-								this.log("form", elem + ".edit.form '" + def.edit.form + "' is not a form");
+								this.log("form", form + ".buttons.edit.form '" + def.edit.form + "' is not a form");
 							}
 						}
 						// button object
 						if (this.isObject("form", def.edit.button, form + ".buttons.edit.button")) {
 							list = ['background','class'];
-							if (!this.isInList(Object.keys(def.edit.button), list)) {
-								this.log("form", elem + ".edit.button must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def.edit.button), form + ".buttons.edit.button", list, true)) {
 								this.isString("form", def.edit.button.background, form + ".buttons.edit.button.background", true);
 								this.isString("form", def.edit.button.class, form + ".buttons.edit.button.class", true);
 							}
@@ -271,10 +232,7 @@ class Validate {
 						// column object
 						if (this.isObject("form", def.edit.column, form + ".buttons.edit.column")) {
 							list = ['style','title'];
-							if (!this.isInList(Object.keys(def.edit.column), list)) {
-								this.log("form", elem + ".edit.column must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def.edit.column), form + ".buttons.edit.column", list, true)) {
 								this.isString("form", def.edit.column.style, form + ".buttons.edit.column.style", true);
 								this.isString("form", def.edit.column.title, form + ".buttons.edit.column.title", true);
 							}
@@ -282,7 +240,7 @@ class Validate {
 					}
 				}
 				else {
-					this.log("form", elem + ".edit button can only be on a table");
+					this.log("form", form + ".buttons.edit button can only be on a table");
 				}
 			}
 		
@@ -292,19 +250,13 @@ class Validate {
 				if (type === 'form') {
 					this.isObject("form", def.ok, form + ".buttons.ok");
 					list = ['action','button'];
-					if (!this.isInList(Object.keys(def.ok), list)) {
-						this.log("form", elem + ".ok must only have these elements: " + list.join(', '));
-					}
-					else {
+					if (this.isInList("form", Object.keys(def.ok), form + ".buttons.ok", list, true)) {
 						// action string
 						this.isString("form", def.ok.action, form + ".buttons.ok.action", true);
 						// button object
 						if (this.isObject("form", def.ok.button, form + ".buttons.ok.button")) {
 							list = ['background','class'];
-							if (!this.isInList(Object.keys(def.ok.button), list)) {
-								this.log("form", elem + ".ok.button must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def.ok.button), form + ".buttons.ok.button", list, true)) {
 								this.isString("form", def.ok.button.background, form + ".buttons.ok.button.background", true);
 								this.isString("form", def.ok.button.class, form + ".buttons.ok.button.class", true);
 							}
@@ -312,7 +264,7 @@ class Validate {
 					}
 				}
 				else {
-					this.log("form", elem + ".ok button can only be on a form");
+					this.log("form", form + ".buttons.ok button can only be on a form");
 				}
 			}
 		}
@@ -327,25 +279,20 @@ class Validate {
 	 * @description Check the definition of the fields element on a single form.
 	 */
 	checkFormFields (form, def) {
-		var flds, keys, i, n, p, list,
-			elem = form + ".fields";
+		var flds, keys, i, n, p, list;
 
 		this.isObject("form", def, form + ".fields");
 
 		// loop through fields
 		flds = Object.keys(def);
 		for (i=0; i<flds.length; i++) {
-			elem = form + ".fields." + flds[i];
 			// is the field valid
 			if (!this.field.fields[flds[i]]) {
-				this.log("form", elem + " is not a registered field");
+				this.log("form", form + ".fields is not a registered field");
 			}
 			// Valid fields
 			list = ['description','edit','options','title','type','visible'];
-			if (!this.isInList(Object.keys(def[flds[i]]), list)) {
-				this.log("form", elem + " must only have these elements: " + list.join(', '));
-			}
-			else {
+			if (this.isInList("form", Object.keys(def[flds[i]]), form + ".fields." + flds[i], list, true)) {
 				// edit - optional
 				this.isTrueFalse("form", def[flds[i]].edit, form + ".fields." + flds[i] + ".edit", false);
 				// visible - mandatory
@@ -366,26 +313,20 @@ class Validate {
 						def[flds[i]].type !== 'list' && 
 						def[flds[i]].type !== 'password' &&
 						def[flds[i]].type !== 'text') {
-						this.log("form", elem + ".type must be one of 'id|integer|list|password|text'");
+						this.log("form", form + ".fields.type must be one of 'id|integer|list|password|text'");
 					}
 					// array options - mandatory object
 					if (def[flds[i]].type === 'array') {
 						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options")) {
 							// Valid elements
 							list = ['checks','separator'];
-							if (!this.isInList(Object.keys(def[flds[i]].options), list)) {
-								this.log("form", elem + ".options must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def[flds[i]].options), form + ".fields." + flds[i] + ".options", list, true)) {
 								// separator - mandatory
 								this.isString("form", def[flds[i]].options.separator, form + ".fields." + flds[i] + ".options.separator", true);
 								if (def[flds[i]].options.checks) {
 									// Valid elements for checks
 									list = ['format','mandatory'];
-									if (!this.isInList(Object.keys(def[flds[i]].options.checks), list)) {
-										this.log("form", elem + ".options.checks must only have these elements: " + list.join(', '));
-									}
-									else {
+									if (this.isInList("form", Object.keys(def[flds[i]].options.checks), form + ".fields." + flds[i] + ".options.checks", list, true)) {
 										// checks.format - optional
 										this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 										// checks.mandatory - optional
@@ -400,15 +341,12 @@ class Validate {
 						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options")) {
 							// Valid elements
 							list = ['display','list'];
-							if (!this.isInList(Object.keys(def[flds[i]].options), list)) {
-								this.log("form", elem + ".options must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def[flds[i]].options), form + ".fields." + flds[i] + ".options", list, true)) {
 								// list - mandatory
 								this.isString("form", def[flds[i]].options.list, form + ".fields." + flds[i] + ".options.list", true);
 								// list - must be registered
 								if (!this.field.lists[def[flds[i]].options.list]) {
-									this.log("form", elem + ".options.list is not a registered list");
+									this.log("form", form + ".fields.options.list is not a registered list");
 								}
 								// display - mandatory
 								if (this.isObject("form", def[flds[i]].options.display, form + ".fields." + flds[i] + ".options.display")) {
@@ -416,11 +354,11 @@ class Validate {
 									this.isString("form", def[flds[i]].options.display.select, form + ".fields." + flds[i] + ".options.display.select", true);
 									// display.select - 'single' or 'multiple'
 									if (def[flds[i]].options.display.select !== 'single' && def[flds[i]].options.display.select !== 'multiple') {
-										this.log("form", elem + ".options.display.select must be single|multiple");
+										this.log("form", form + ".fields.options.display.select must be single|multiple");
 									}
 									// display.height - mandatory if select is 'multiple'
 									if (def[flds[i]].options.display.select === 'multiple') {
-										this.isNumber("form", def[flds[i]].options.display.height, elem + ".options.display.height", true);
+										this.isNumber("form", def[flds[i]].options.display.height, form + ".fields.options.display.height", true);
 									}
 								}
 							}
@@ -431,16 +369,10 @@ class Validate {
 						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options")) {
 							// Valid elements
 							list = ['checks'];
-							if (!this.isInList(Object.keys(def[flds[i]].options), list)) {
-								this.log("form", elem + ".options must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def[flds[i]].options), form + ".fields." + flds[i] + ".options", list, true)) {
 								// Valid elements for checks
 								list = ['format','mandatory','range'];
-								if (!this.isInList(Object.keys(def[flds[i]].options.checks), list)) {
-									this.log("form", elem + ".options.checks must only have these elements: " + list.join(', '));
-								}
-								else {
+								if (this.isInList("form", Object.keys(def[flds[i]].options.checks), form + ".fields." + flds[i] + ".options.checks", list, true)) {
 									// checks.format - optional
 									this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 									// checks.mandatory - optional
@@ -448,15 +380,12 @@ class Validate {
 									// checks.range - optional
 									if (this.isObject("form", def[flds[i]].options.checks.range, form + ".fields." + flds[i] + ".options.checks.range")) {
 //		DOUBLE!!					if (def[flds[i]].options.checks.range && !this.isObject(def[flds[i]].options.checks.range)) {
-//										this.log("form", elem + ".options.checks.range must be an object");
+//										this.log("form", form + ".fields.options.checks.range must be an object");
 //									}
 //									else {
 										// Valid elements for range
 										list = ['min','max'];
-										if (!this.isInList(Object.keys(def[flds[i]].options.checks.range), list)) {
-											this.log("form", elem + ".options.checks.range must only have these elements: " + list.join(', '));
-										}
-										else {
+										if (this.isInList("form", Object.keys(def[flds[i]].options.checks.range), form + ".fields." + flds[i] + ".options.checks.range", list, true)) {
 											// min - integer optional
 											this.isNumber("form", def[flds[i]].options.checks.range.min, form + ".fields." + flds[i] + ".options.checks.range.min", false);
 											// max - integer optional
@@ -464,7 +393,7 @@ class Validate {
 											// min < max
 											if (def[flds[i]].options.checks.range.min && def[flds[i]].options.checks.range.max) {
 												if (parseInt(def[flds[i]].options.checks.range.min) >= parseInt(def[flds[i]].options.checks.range.max)) {
-													this.log("form", elem + ".options.checks.range min must be less than max");
+													this.log("form", form + ".fields.options.checks.range min must be less than max");
 												}
 											}
 										}
@@ -478,16 +407,10 @@ class Validate {
 						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options")) {
 							// Valid elements
 							list = ['checks'];
-							if (!this.isInList(Object.keys(def[flds[i]].options), list)) {
-								this.log("form", elem + ".options must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def[flds[i]].options), form + ".fields." + flds[i] + ".options", list, true)) {
 								// Valid elements for checks
 								list = ['format','mandatory'];
-								if (!this.isInList(Object.keys(def[flds[i]].options.checks), list)) {
-									this.log("form", elem + ".options.checks must only have these elements: " + list.join(', '));
-								}
-								else {
+								if (this.isInList("form", Object.keys(def[flds[i]].options.checks), form + ".fields." + flds[i] + ".options.checks", list, true)) {
 									// checks.format - optional
 									this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 									// checks.mandatory - optional
@@ -501,17 +424,11 @@ class Validate {
 						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options")) {
 							// Valid elements
 							list = ['checks','display'];
-							if (!this.isInList(Object.keys(def[flds[i]].options), list)) {
-								this.log("form", elem + ".options must only have these elements: " + list.join(', '));
-							}
-							else {
+							if (this.isInList("form", Object.keys(def[flds[i]].options), form + ".fields." + flds[i] + ".options", list, true)) {
 								if (def[flds[i]].options.checks) {
 									// Valid elements for checks
 									list = ['format','mandatory'];
-									if (!this.isInList(Object.keys(def[flds[i]].options.checks), list)) {
-										this.log("form", elem + ".options.checks must only have these elements: " + list.join(', '));
-									}
-									else {
+									if (this.isInList("form", Object.keys(def[flds[i]].options.checks), form + ".fields." + flds[i] + ".options.checks", list, true)) {
 										// checks.format - optional
 										this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 										// checks.mandatory - optional
@@ -522,7 +439,7 @@ class Validate {
 									// display - mandatory
 									if (this.isObject("form", def[flds[i]].options.display, form + ".fields." + flds[i] + ".options.display")) {
 //		DOUBLE!!					if (def[flds[i]].options.display && !this.isObject(def[flds[i]].options.display)) {
-//										this.log("form", elem + ".options.display must be an object");
+//										this.log("form", form + ".fields.options.display must be an object");
 //									}
 //									else {
 										// display.height - mandatory
@@ -544,7 +461,7 @@ class Validate {
 	 * @description Check the menu definitions.
 	 */
 	checkMenus () {
-		var list, keys, i, elem, n, p;
+		var list, keys, i, n, p;
 
 		// title element
 		if (!this.menu.title) {
@@ -553,9 +470,7 @@ class Validate {
 		else {
 			this.isObject("menu", this.menu.title, "title");
 			list = ['text','class'];
-			if (!this.isInList(Object.keys(this.menu.title), list)) {
-				this.log("menu", "'title' must only have these elements: " + list.join(', '));
-			}
+			this.isInList("menu", Object.keys(this.menu.title), "title", list, true);
 		}
 		
 		// menubar element
@@ -566,23 +481,16 @@ class Validate {
 			if (this.isArray("menu", this.menu.menubar, "menubar", true)) {
 				// menubar array objects
 				for (i=0; i<this.menu.menubar.length; i++) {
-					elem = "menubar[" + i + "]";
 					keys = Object.keys(this.menu.menubar[i]);
 					list = ['id','menu','options','title'];
-					if (!this.isInList(Object.keys(this.menu.menubar[i]), list)) {
-						this.log("menu", elem + " must only have these elements: " + list.join(', '));
-					}
+					this.isInList("menu", Object.keys(this.menu.menubar[i]), "menubar[" + i + "]", list, true);
 					for (n=0; n<keys.length; n++) {
 						// menubar array, nested options array
 						if (keys[n] === 'options') {
-							elem = "menubar[" + i + "].options";
 							if (this.isArray("menu", this.menu.menubar[i].options, "menubar[" + i + "].options", true)) {
 								for (p=0; p<this.menu.menubar[i].options.length; p++) {
-									elem = "menubar[" + i + "].options[" + p + "]";
 									list = ['access','action','id','title'];
-									if (!this.isInList(Object.keys(this.menu.menubar[i].options[p]), list)) {
-										this.log("menu", elem + " must only have these elements: " + list.join(', '));
-									}
+									this.isInList("menu", Object.keys(this.menu.menubar[i].options[p]), "menubar[" + i + "].options[" + p + "]", list, true);
 									// elements within nested options array
 									this.isArray("menu", this.menu.menubar[i].options[p].access, "menubar[" + i + "].options[" + p + "].access", true);
 									this.isString("menu", this.menu.menubar[i].options[p].action, "menubar[" + i + "].action", true);
@@ -661,22 +569,36 @@ class Validate {
 	/**
 	 * @method isInList
 	 * @memberof Validate
+	 * @param {string} type Type of data to be validated.
 	 * @param {array} data Data to be validated.
+	 * @param {string} name Name of data being validated.
 	 * @param {array} list List of valid values.
+	 * @param {boolean} mand Is data element mandatory.
 	 * @description Check that each element of data matches a value in the list.
 	 */
-	isInList (data, list) {
+	isInList (type, data, name, list, mand) {
 		var i, n, status = true, match;
-		for (i=0; i<data.length; i++) {
-			match = false;
-			for (n=0; n<list.length; n++) {
-				if (data[i] === list[n]) {
-					match = true;
+		if (data || mand) {
+			for (i=0; i<data.length; i++) {
+				match = false;
+				for (n=0; n<list.length; n++) {
+					if (data[i] === list[n]) {
+						match = true;
+					}
 				}
+				status = status && match;
 			}
-			status = status && match;
+			if (status) {
+				return true;
+			}
+			else {
+				this.log(type, name + " must be one of: " + list.join(', '));
+				return false;
+			}
 		}
-		return status;
+		else {
+			return true;
+		}
 	}
 
 
@@ -792,7 +714,6 @@ class Validate {
 		else {
 			return true;
 		}
-//		return (typeof data === 'boolean') ? true : false;
 	}
 
 
