@@ -55,15 +55,10 @@ class Validate {
 			this.isString("form", form.title, forms[i] + ".title", true);
 			// width - number 10-100
 			if (this.isNumber("form", form.width, forms[i] + ".width", false)) {
-				if (parseInt(form.width) < 10 || parseInt(form.width) > 100) {
-					this.log("form", forms[i] + ".width must be between 10 and 100");
-				}
+				this.isInRange("form", form.width, forms[i] + ".width", 10, 100);
 			}
 			// type - mandatory
-			if (!form.type) {
-				this.log("form", forms[i] + ".type is mandatory");
-			}
-			else {
+			if (this.isString("form", form.type, forms[i] + ".type", true)) {
 				// Valid types
 				list = ['form','table'];
 				if (this.isInList("form", [form.type], forms[i] + ".type", list, true)) {
@@ -81,15 +76,14 @@ class Validate {
 						if (this.isArray("form", form.columns, forms[i] + ".columns", true)) {
 							for (n=0; n<form.columns.length; n++) {
 								list = ['id','style','title'];
-								this.isInList("menu", Object.keys(form.columns[n]), forms[i] + ".columns", list, true);
-								if (this.isString("menu", form.columns[n].id, forms[i] + ".columns[" + n + "].id", true)) {
-									if (!this.field.fields[form.columns[n].id]) {
-										this.log("form", forms[i] + ".columns.id '" + form.columns[n].id + "' is not a registered field");
+								if (this.isInList("form", Object.keys(form.columns[n]), forms[i] + ".columns", list, true)) {
+									if (this.isString("form", form.columns[n].id, forms[i] + ".columns[" + n + "].id", true)) {
+										this.isLinked("form", form.columns[n].id, forms[i] + ".columns[" + n + "].id '" + form.columns[n].id, "field");
 									}
+									// optional
+									this.isString("form", form.columns[n].style, forms[i] + forms[i] + ".columns[" + n + "].style", false);
+									this.isString("form", form.columns[n].title, forms[i] + forms[i] + ".columns[" + n + "].title", false);
 								}
-								// optional
-								this.isString("menu", form.columns[n].style, forms[i] + forms[i] + ".columns[" + n + "].style", false);
-								this.isString("menu", form.columns[n].title, forms[i] + forms[i] + ".columns[" + n + "].title", false);
 							}
 						}
 					}
@@ -135,9 +129,7 @@ class Validate {
 					if (this.isInList("form", Object.keys(def.add), form + ".buttons.add", list, true)) {
 						// form string
 						if (this.isString("form", def.add.form, form + ".buttons.add.form", true)) {
-							if (!this.form[def.add.form]) {
-								this.log("form", form + ".buttons.add.form '" + def.add.form + "' is not a form");
-							}
+							this.isLinked("form", def.add.form, form + ".buttons.add.form", "form");
 						}
 						// button object
 						if(this.isObject("form", def.add.button, form + ".buttons.add.button")) {
@@ -197,9 +189,7 @@ class Validate {
 						}
 						// key - string and linked to field
 						if (this.isString("form", def.delete.key, form + ".buttons.delete.key", true)) {
-							if (!this.field.fields[def.delete.key]) {
-								this.log("form", form + ".buttons.delete.key '" + def.delete.key + "' is not a registered field");
-							}
+							this.isLinked("form", def.delete.key, form + ".buttons.delete.key", "field");
 						}
 					}
 				}
@@ -217,9 +207,7 @@ class Validate {
 					if (this.isInList("form", Object.keys(def.edit), form + ".buttons.edit", list, true)) {
 						// form string
 						if (this.isString("form", def.edit.form, form + ".buttons.edit.form", true)) {
-							if (!this.form[def.edit.form]) {
-								this.log("form", form + ".buttons.edit.form '" + def.edit.form + "' is not a form");
-							}
+							this.isLinked("form", def.edit.form, form + ".buttons.edit.form", "form");
 						}
 						// button object
 						if (this.isObject("form", def.edit.button, form + ".buttons.edit.button")) {
@@ -287,9 +275,7 @@ class Validate {
 		flds = Object.keys(def);
 		for (i=0; i<flds.length; i++) {
 			// is the field valid
-			if (!this.field.fields[flds[i]]) {
-				this.log("form", form + ".fields is not a registered field");
-			}
+			this.isLinked("form", flds[i], form + ".fields." + flds[i], "field");
 			// Valid fields
 			list = ['description','edit','options','title','type','visible'];
 			if (this.isInList("form", Object.keys(def[flds[i]]), form + ".fields." + flds[i], list, true)) {
@@ -345,9 +331,7 @@ class Validate {
 								// list - mandatory
 								this.isString("form", def[flds[i]].options.list, form + ".fields." + flds[i] + ".options.list", true);
 								// list - must be registered
-								if (!this.field.lists[def[flds[i]].options.list]) {
-									this.log("form", form + ".fields.options.list is not a registered list");
-								}
+								this.isLinked("form", def[flds[i]].options.list, form + ".fields." + flds[i] + ".options.list '" + def[flds[i]].options.list + "'", "list");
 								// display - mandatory
 								if (this.isObject("form", def[flds[i]].options.display, form + ".fields." + flds[i] + ".options.display")) {
 									// display.select - mandatory
@@ -550,7 +534,7 @@ class Validate {
 					return true;
 				}
 				else {
-					this.log(type, name + " must be an array");
+					this.log(type, name + " '" + data + "' must be an array");
 					return false;
 				}
 			}
@@ -562,7 +546,6 @@ class Validate {
 		else {
 			return true;
 		}
-//		return (typeof data === 'object' && data.length !== undefined) ? true : false;
 	}
 
 
@@ -603,6 +586,35 @@ class Validate {
 
 
 	/**
+	 * @method isLinked
+	 * @memberof Validate
+	 * @param {string} type Type of data to be validated.
+	 * @param {object} data Data to be validated.
+	 * @param {string} name Name of data being validated.
+	 * @param {string} elem Type of element (field|form|list).
+	 * @description Check the data is linked to another element.
+	 */
+	isLinked (type, data, name, elem) {
+		var obj;
+
+		if (elem === 'form') {
+			obj = this.form;
+		}
+		else {
+			obj = (elem === 'field') ? this.field.fields : this.field.lists;
+		}
+
+		if (obj[data]) {
+			return true;
+		}
+		else {
+			this.log(type, name + " is not a registered " + elem);
+			return false;
+		}
+	}
+
+
+	/**
 	 * @method isNumber
 	 * @memberof Validate
 	 * @param {string} type Type of data to be validated.
@@ -618,7 +630,7 @@ class Validate {
 					return true;
 				}
 				else {
-					this.log(type, name + " must be a number");
+					this.log(type, name + " '" + data + "' must be a number");
 					return false;
 				}
 			}
@@ -650,9 +662,32 @@ class Validate {
 			return false;
 		}
 	}
-//	isObjectOrig (data) {
-//		return (typeof data === 'object' && data.length === undefined) ? true : false;
-//	}
+
+
+	/**
+	 * @method isInRange
+	 * @memberof Validate
+	 * @param {string} type Type of data to be validated.
+	 * @param {number} data Data to be validated.
+	 * @param {string} name Name of data being validated.
+	 * @param {number} min Minimum value.
+	 * @param {number} max Maximum value.
+	 * @description Check the data is in a range.
+	 */
+	isInRange (type, data, name, min, max) {
+		if (data) {
+			if (data >= min && data <= max) {
+				return true;
+			}
+			else {
+				this.log(type, name + " must be between " + min + " and " + max);
+				return false;
+			}
+		}
+		else {
+			return true;
+		}
+	}
 
 
 	/**
@@ -671,7 +706,7 @@ class Validate {
 					return true;
 				}
 				else {
-					this.log(type, name + " must be a string");
+					this.log(type, name + " '" + data + "' must be a string");
 					return false;
 				}
 			}
@@ -702,7 +737,7 @@ class Validate {
 					return true;
 				}
 				else {
-					this.log(type, name + " must be true|false");
+					this.log(type, name + " '" + data + "' must be true|false");
 					return false;
 				}
 			}
