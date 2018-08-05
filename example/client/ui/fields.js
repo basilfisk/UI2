@@ -37,9 +37,12 @@ var appFields = {
 	"messageText": " ",
 	"userBundles": "bundles",
 	"userClients": "clients",
+	"userCode": "code",
+	"userEmail": "email",
 	"userGroup": "group",
 	"userId": "id",
 	"userJWT": "jwt",
+	"userName": "name",
 	"userPassword": "password",
 	"userRole": "role",
 	"userUsername": "username"

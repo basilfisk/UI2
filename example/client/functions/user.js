@@ -13,105 +13,35 @@ var user = {
 	/**
 	 * @method add
 	 * @author Basil Fisk
+	 * @param {object} this Object holding the data entered on the form.
 	 * @description Add a new user.
 	 */
 	add: function () {
-		var keys, i, arr = [], options = [], lists = {};
-
-		// Load list of groups
-		keys = Object.keys(admin.company.groups);
-		for (i=0; i<keys.length; i++) {
-			options.push({"value":keys[i], "text":keys[i]});
-		}
-		lists['userAddGroup'] = common.sortArrayObjects(options, 'text');
-
-		// Load role list - only role to list if role is same or lower than current user
-		options = [];
-		for (i=0; i<admin.roles.length; i++) {
-			if (admin.roles[i].level >= me.level) {
-				options.push({"value":admin.roles[i].code, "text":admin.roles[i].name});
-			}
-		}
-		lists['userAddRole'] = common.sortArrayObjects(options, 'text');
-
-		// Load unique list of bundles
-		arr = [];
-		options = [];
-		for (i=0; i<admin.bundles.length; i++) {
-			if (arr.indexOf(admin.bundles[i].name) === -1) {
-				arr.push(admin.bundles[i].name);
-				options.push({"value":admin.bundles[i].name, "text":admin.bundles[i].name});
-			}
-		}
-		lists['userAddBundles'] = common.sortArrayObjects(options, 'text');
-
-		ui.formAdd('userAdd', lists);
+		this.company = admin.company.code;
+		common.apiCall('userAdd', this, user.load);
 	},
 
 
 	/**
 	 * @method delete
 	 * @author Basil Fisk
-	 * @param {string} data ID of user document.
+	 * @param {object} this Object holding the data entered on the form.
 	 * @description Delete the selected user.
 	 */
-	delete: function (id) {
-		common.apiCall('userDelete', {'_id': id}, user.load);
+	delete: function () {
+		common.apiCall('userDelete', this, user.load);
 	},
 
 
 	/**
 	 * @method edit
 	 * @author Basil Fisk
-	 * @param {string} data ID of user document.
+	 * @param {object} this Object holding the edited data from the form.
 	 * @description Open the selected user document for editing.
 	 */
-	edit: function (id) {
-console.log(this);
-		var i, index = -1, data = {}, keys, arr = [], options = [], lists = [];
-
-		// Find the selected document
-		for (i=0; i<admin.users.length; i++) {
-			index = (admin.users[i]._id === id) ? i : index;
-		}
-
-		// Load user data into temporary object
-		data.id = admin.users[index]._id;
-		data.username = admin.users[index].username;
-		data.password = admin.users[index].password;
-		data.role = admin.users[index].role;
-		data.group = admin.users[index].group;
-		data.jwt = admin.users[index].jwt;
-		data.clients = admin.users[index].clients;
-		data.bundles = admin.users[index].bundles;
-
-		// Load list of groups
-		keys = Object.keys(admin.company.groups);
-		for (i=0; i<keys.length; i++) {
-			options.push({"value":keys[i], "text":keys[i]});
-		}
-		lists['userEditGroup'] = common.sortArrayObjects(options, 'text');
-
-		// Load role list
-		options = [];
-		for (i=0; i<admin.roles.length; i++) {
-			options.push({"value":admin.roles[i].code, "text":admin.roles[i].name});
-		}
-		lists['userEditRole'] = common.sortArrayObjects(options, 'text');
-
-		// Load unique list of bundles
-		arr = [];
-		options = [];
-		for (i=0; i<admin.bundles.length; i++) {
-			if (arr.indexOf(admin.bundles[i].name) === -1) {
-				arr.push(admin.bundles[i].name);
-				options.push({"value":admin.bundles[i].name, "text":admin.bundles[i].name});
-			}
-		}
-		lists['userEditBundles'] = common.sortArrayObjects(options, 'text');
-
-		// Display form for editing data
-		ui.formEdit('userEdit', data, lists);
+	edit: function () {
+		this.company = admin.company.code;
+		common.apiCall('userUpdate', this, user.load);
 	},
 
 
@@ -134,7 +64,7 @@ console.log(this);
 	 * @description Display the user data in a table.
 	 */
 	table: function (action, result) {
-		var i, data, n, rows = [], cols;
+		var i, data, n, rows = [], keys, options = [], lists = {};
 
 		// Extract data from result set and load into global 'admin.users' variable
 		admin.users = [];
@@ -157,24 +87,70 @@ console.log(this);
 		for (i=0; i<admin.users.length; i++) {
 			// Only add to table if role is same or lower than current user
 			if (admin.users[i].level >= me.level) {
-				cols = {
-					user: {
-						text: admin.users[i].username
+				rows.push({
+					userId: {
+						text: admin.users[i]._id
 					},
-					group: {
+					userBundles: {
+						text: admin.users[i].bundles
+					},
+					userClients: {
+						text: admin.users[i].clients
+					},
+					userCode: {
+						text: admin.users[i].code
+					},
+					userEmail: {
+						text: admin.users[i].email
+					},
+					userGroup: {
 						text: admin.users[i].group
 					},
-					role: {
+					userJWT: {
+						text: admin.users[i].jwt
+					},
+					userName: {
+						text: admin.users[i].name
+					},
+					userPassword: {
+						text: admin.users[i].password
+					},
+					userRole: {
 						text: admin.users[i].role
+					},
+					userUsername: {
+						text: admin.users[i].username
 					}
-				};
-
-				// Save row
-				rows.push(cols);
+				});
 			}
 		}
 
+		// Load list of groups
+		keys = Object.keys(admin.company.groups);
+		for (i=0; i<keys.length; i++) {
+			options.push({"value":keys[i], "text":keys[i]});
+		}
+		lists['userGroupList'] = common.sortArrayObjects(options, 'text');
+
+		// Load role list
+		options = [];
+		for (i=0; i<admin.roles.length; i++) {
+			options.push({"value":admin.roles[i].code, "text":admin.roles[i].name});
+		}
+		lists['userRoleList'] = common.sortArrayObjects(options, 'text');
+
+		// Load unique list of bundles
+		arr = [];
+		options = [];
+		for (i=0; i<admin.bundles.length; i++) {
+			if (arr.indexOf(admin.bundles[i].name) === -1) {
+				arr.push(admin.bundles[i].name);
+				options.push({"value":admin.bundles[i].name, "text":admin.bundles[i].name});
+			}
+		}
+		lists['userBundlesList'] = common.sortArrayObjects(options, 'text');
+
 		// Display the table
-		ui.tableShow('userTable', rows);
+		ui.tableShow('userTable', rows, lists);
 	}
 };

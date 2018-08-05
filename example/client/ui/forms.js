@@ -1153,9 +1153,48 @@ var appForms = {
 			}
 		},
 		"fields": {
-			"userUsername": {
+			"userName": {
 				"title": "User Name",
 				"description": "Enter name of user",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumericSpecial"
+					}
+				}
+			},
+			"userCode": {
+				"title": "User code",
+				"description": "Enter code of user",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			},
+			"userEmail": {
+				"title": "Email Address",
+				"description": "Enter email address of user",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "email"
+					}
+				}
+			},
+			"userUsername": {
+				"title": "User's Login Name",
+				"description": "Enter login name of user",
 				"type": "text",
 				"visible": true,
 				"edit": true,
@@ -1167,8 +1206,8 @@ var appForms = {
 				}
 			},
 			"userPassword": {
-				"title": "Password",
-				"description": "Enter password",
+				"title": "User's Login Password",
+				"description": "Enter login password",
 				"type": "text",
 				"visible": true,
 				"edit": true,
@@ -1186,6 +1225,7 @@ var appForms = {
 				"visible": true,
 				"edit": true,
 				"options": {
+					"list": "userGroupList",
 					"display": {
 						"select": "single"
 					}
@@ -1198,6 +1238,7 @@ var appForms = {
 				"visible": true,
 				"edit": true,
 				"options": {
+					"list": "userRoleList",
 					"display": {
 						"select": "single"
 					}
@@ -1211,7 +1252,7 @@ var appForms = {
 				"edit": true,
 				"options": {
 					"checks": {
-						"mandatory": false,
+						"mandatory": true,
 						"format": "ipv4"
 					},
 					"separator": ","
@@ -1224,6 +1265,7 @@ var appForms = {
 				"visible": true,
 				"edit": true,
 				"options": {
+					"list": "userBundlesList",
 					"display": {
 						"select": "multiple",
 						"height": 5
@@ -1256,9 +1298,48 @@ var appForms = {
 				"visible": false,
 				"edit": false
 			},
-			"userUsername": {
+			"userName": {
 				"title": "User Name",
 				"description": "Enter name of user",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumericSpecial"
+					}
+				}
+			},
+			"userCode": {
+				"title": "User code",
+				"description": "Enter code of user",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "alphaNumeric"
+					}
+				}
+			},
+			"userEmail": {
+				"title": "Email Address",
+				"description": "Enter email address of user",
+				"type": "text",
+				"visible": true,
+				"edit": true,
+				"options": {
+					"checks": {
+						"mandatory": true,
+						"format": "email"
+					}
+				}
+			},
+			"userUsername": {
+				"title": "User's Login Name",
+				"description": "Enter login name of user",
 				"type": "text",
 				"visible": true,
 				"edit": true,
@@ -1270,8 +1351,8 @@ var appForms = {
 				}
 			},
 			"userPassword": {
-				"title": "Password",
-				"description": "Enter password",
+				"title": "User's Login Password",
+				"description": "Enter login password",
 				"type": "text",
 				"visible": true,
 				"edit": true,
@@ -1289,6 +1370,7 @@ var appForms = {
 				"visible": true,
 				"edit": true,
 				"options": {
+					"list": "userGroupList",
 					"display": {
 						"select": "single"
 					}
@@ -1301,6 +1383,7 @@ var appForms = {
 				"visible": true,
 				"edit": true,
 				"options": {
+					"list": "userRoleList",
 					"display": {
 						"select": "single"
 					}
@@ -1314,7 +1397,7 @@ var appForms = {
 				"edit": true,
 				"options": {
 					"checks": {
-						"mandatory": false,
+						"mandatory": true,
 						"format": "ipv4"
 					},
 					"separator": ","
@@ -1327,6 +1410,7 @@ var appForms = {
 				"visible": true,
 				"edit": true,
 				"options": {
+					"list": "userBundlesList",
 					"display": {
 						"select": "multiple",
 						"height": 5
