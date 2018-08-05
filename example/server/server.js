@@ -264,24 +264,24 @@ class Server {
 			case 'bundleUpdate':
 				calls = new this.BundleCalls();
 				break;
+			case 'commandAdd':
 			case 'commandDelete':
 			case 'commandDeleteVersion':
-			case 'commandNew':
 			case 'commandRead':
 			case 'commandUpdate':
 				calls = new this.CommandCalls();
 				break;
+			case 'companyAdd':
 			case 'companyDelete':
 			case 'companyGroupDelete':
 			case 'companyGroupUpsert':
-			case 'companyNew':
 			case 'companyRead':
 			case 'companyReadId':
 			case 'companyUpdate':
 				calls = new this.CompanyCalls();
 				break;
+			case 'connectorAdd':
 			case 'connectorDelete':
-			case 'connectorNew':
 			case 'connectorRead':
 			case 'connectorUpdate':
 			case 'connectorUpdateName':
@@ -295,9 +295,9 @@ class Server {
 			case 'reportEventSummary':
 				calls = new this.ReportCalls();
 				break;
+			case 'userAdd':
 			case 'userDelete':
 			case 'userLogin':
-			case 'userNew':
 			case 'userRead':
 			case 'userUpdate':
 				calls = new this.UserCalls();
