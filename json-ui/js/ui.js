@@ -29,7 +29,7 @@ var ui = {
 	 * @description Check the format of the supplied string against a pattern using a regular expression.
 	 */
 	_checkFormat: function (format, title, value) {
-		var pattern, error, regex;
+		var pattern, regex;
 
 		// No validation required
 		if (format === 'none') {
@@ -38,11 +38,9 @@ var ui = {
 		else {
 			// Pick pattern to be used for validation
 			pattern = _format[format].pattern;
-			error = _format[format].description;
 
 			// Error if format not recognized
-			if (pattern == undefined) {
-				console.error('Unrecognized validation format [' + format + ']');
+			if (pattern === undefined) {
 				this._messageBox('UI002', [format]);
 				return false;
 			}
@@ -54,7 +52,7 @@ var ui = {
 				}
 				// Show an error message
 				else {
-					this._messageBox('UI003', [title, error]);
+					this._messageBox('UI003', [title, _format[format].description]);
 					return false;
 				}
 			}
@@ -218,7 +216,7 @@ var ui = {
 	 * @description Display a form for editing data.
 	 */
 	_formEdit: function (id, data, list) {
-	var title, fields, names, width, i, elem, div = '', button;
+		var title, fields, names, width, i, elem, div = '', button;
 
 		// Read fields and their names
 		title = _forms[id].title;
@@ -245,6 +243,7 @@ var ui = {
 
 		// Add fields
 		for (i=0; i<names.length; i++) {
+console.log(names[i], fields[names[i]], data);
 			if (fields[names[i]].type === 'list' && fields[names[i]].options.list && list[fields[names[i]].options.list]) {
 				div += this._showField(names[i], fields[names[i]], data[names[i]].text, this._sortArrayObjects(list[fields[names[i]].options.list], 'text'));
 			}
@@ -521,6 +520,10 @@ var ui = {
 					if (value) {
 						value = value.join(defs.options.separator);
 					}
+					divot += '<div class="form-group" id="' + name + '-all">';
+					divot += '<label for="' + name + '">' + title + ':</label>';
+					divot += '<input type="' + defs.type + '" class="form-control" id="' + name + '" placeholder="' + desc + '" value="' + value + '"' + readonly + '>';
+					divot += '</div>';
 					break;
 				case 'checkbox':
 					divot += '<div class="form-group" id="' + name + '-all">';
@@ -551,12 +554,6 @@ var ui = {
 					divot += '</div>';
 					break;
 				default:
-//					// Convert array to separated string
-//					if (defs.options && defs.options.content && defs.options.content.type && defs.options.content.type === 'array') {
-//						if (value) {
-//							value = value.join(defs.options.content.separator);
-//						}
-//					}
 					// If size defined, use a textarea control
 					if (defs.options && defs.options.display && defs.options.display.height) {
 						divot += '<div class="form-group" id="' + name + '-all">';
@@ -675,7 +672,7 @@ var ui = {
 	 * @description Validate data entered on a form.
 	 */
 	_validate: function (id) {
-		var fields, names, i, name, temp = {}, elem = [], e, text, data = {};
+		var fields, names, i, name, temp = {}, elem = [], n, text, data = {};
 
 		// Read fields and their names
 		fields = _forms[id].fields;
@@ -689,16 +686,17 @@ var ui = {
 			switch (fields[name].type) {
 				// Field holds an array of values
 				case 'array':
-					// Validate each element of the field
+					// Read data as a text string, then validate each element in field
+					text = document.getElementById(name).value;
 					temp[name] = [];
 					elem = text.split(fields[name].options.separator);
-					for (e=0; e<elem.length; e++) {
+					for (n=0; n<elem.length; n++) {
 						// Run the check
-						if (!this._runChecks(fields[name].options.checks, fields[name].title, elem[e])) {
+						if (!this._runChecks(fields[name].options.checks, fields[name].title, elem[n])) {
 							return;
 						}
 						// Convert value to the correct type
-						temp[name].push(this._convertData(fields[name].type, elem[e]));
+						temp[name].push(this._convertData(fields[name].type, elem[n]));
 					}
 					break;
 				// True or false, assign direct to data object
@@ -714,9 +712,9 @@ var ui = {
 					if (fields[name].options.display.select === 'multiple') {
 						temp[name] = [];
 						elem = document.getElementById(name);
-						for (e=0; e<elem.length; e++) {
-							if (elem[e].selected) {
-								temp[name].push(elem[e].value);
+						for (n=0; n<elem.length; n++) {
+							if (elem[n].selected) {
+								temp[name].push(elem[n].value);
 							}
 						}
 					}
@@ -731,29 +729,12 @@ var ui = {
 
 					// Validate using 'options.checks' section
 					if (fields[name].options && fields[name].options.checks) {
-/*						// Field holds an array of values
-						if (fields[name].options.content && fields[name].options.content.type === 'array') {
-							// Validate each element of the field
-							temp[name] = [];
-							elem = text.split(fields[name].options.content.separator);
-							for (e=0; e<elem.length; e++) {
-								// Run the check
-								if (!this._runChecks(fields[name].options.checks, fields[name].title, elem[e])) {
-									return;
-								}
-								// Convert value to the correct type
-								temp[name].push(this._convertData(fields[name].type, elem[e]));
-							}
-						}*/
-						// Field holds a single value (default)
-//						else {
-							// Run the check
-							if (!this._runChecks(fields[name].options.checks, fields[name].title, text)) {
-								return;
-							}
-							// Convert value to the correct type
-							temp[name] = this._convertData(fields[name].type, text);
-//						}
+						// Run the check
+						if (!this._runChecks(fields[name].options.checks, fields[name].title, text)) {
+							return;
+						}
+						// Convert value to the correct type
+						temp[name] = this._convertData(fields[name].type, text);
 					}
 					// Nothing in the 'options.checks' section, so treat value as text
 					else {
@@ -846,12 +827,10 @@ var ui = {
 		_msgs = msgs;
 
 		// Warn if the required variables haven't been set up
-		// TODO pass in as arguments and set up internally
-		// TODO Don't display anything is they don't exist
 		if (typeof _forms === 'undefined' || 
 			typeof _menus === 'undefined' || 
 			typeof _fields === 'undefined') {
-			console.log("These variables must be set up: _forms, _menus, _fields");
+			console.log("The definition objects must be set up: forms, menus & fields");
 		}
 	},
 
