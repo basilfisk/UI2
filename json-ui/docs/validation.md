@@ -107,17 +107,9 @@ type is *text*
 - `fields.options.display` is optional and must be an object
 - `fields.options.display.height` is mandatory and must be an integer
 
-## Support for arrays
-
->> made changes to `ui.js` but haven't tested them yet
-
-`options.content` references in `ui.js`:
-- _showField (x4)
-- _validate (x3)
-
 ## Missing tests
 
 can fields.type:id no validation yet. have checks:mandatory set?
 can fields.type:list have checks:mandatory set?
-can fields.type:integer be xtended to support number|float|etc and checks?
+can fields.type:integer be extended to support number|float|etc and checks?
 checkbox is supported in `_validate`
