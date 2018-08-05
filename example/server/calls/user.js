@@ -83,9 +83,63 @@ class UserCalls {
 						user.jwt = that.jwt.sign(access, that.admin.jwtSecret, { "noTimestamp":true });
 	
 						// Run the callback function
-						callback(session, user);
+						callback(that, session, user);
 					}
 				});
+			}
+		});
+	}
+
+
+	/**
+	 * @method userAdd
+	 * @memberof UserCalls
+	 * @param {object} that Current scope.
+	 * @param {object} session Session object.
+	 * @description Add a user document.
+	 */
+	userAdd (that, session) {
+		var	data = {};
+
+		// Extract data to be added
+		data.bundles = session.params.bundles;
+		data.clients = session.params.clients;
+		data.code = session.params.code;
+		data.company = session.params.company;
+		data.email = session.params.email;
+		data.group = session.params.group;
+		data.name = session.params.name;
+		data.password = session.params.password;
+		data.role = session.params.role;
+		data.username = session.params.username;
+
+		// Generate JSON web token
+		this.jwtCreate(that, session, data, this.userAddJWT);
+	}
+
+
+	/**
+	 * @method userAddJWT
+	 * @memberof UserCalls
+	 * @param {object} that Current scope.
+	 * @param {object} session Session object.
+	 * @param {object} data Data for building the JWT.
+	 * @description Update the user document with the new JWT.
+	 */
+	userAddJWT (that, session, data) {
+		// Insert document
+		that.mongoDB.db(that.admin.mongo.db).collection('va_user').insertOne(data, (err, result) => {
+			var msg = {};
+
+			// Error trying to insert data
+			if (err) {
+				msg = that.log('SVR009', ['user', err.message]);
+				that.sendResponse(session, msg);
+			}
+			// Return result
+			else {
+				msg = that.log('SVR010', ['user']);
+				that.sendResponse(session, msg);
 			}
 		});
 	}
@@ -174,54 +228,6 @@ class UserCalls {
 
 
 	/**
-	 * @method userNew
-	 * @memberof UserCalls
-	 * @param {object} that Current scope.
-	 * @param {object} session Session object.
-	 * @description Add a user document.
-	 */
-	userNew (that, session) {
-		var	data = {};
-
-		// Extract data to be added
-		data.clients = session.params.clients;
-		data.bundles = session.params.bundles;
-		data.company = session.params.company;
-		data.group = session.params.group;
-		data.password = session.params.password;
-		data.role = session.params.role;
-		data.username = session.params.username;
-
-		// Generate JSON web token
-		this.jwtCreate(that, session, data, this.userNewJWT);
-	}
-
-
-	/**
-	 * @method userNewJWT
-	 * @memberof UserCalls
-	 * @description Update the user document with the new JWT.
-	 */
-	userNewJWT () {
-		// Insert document
-		that.mongoDB.db(that.admin.mongo.db).collection('va_user').insertOne(data, (err, result) => {
-			var msg = {};
-
-			// Error trying to insert data
-			if (err) {
-				msg = that.log('SVR009', ['user', err.message]);
-				that.sendResponse(session, msg);
-			}
-			// Return result
-			else {
-				msg = that.log('SVR010', ['user']);
-				that.sendResponse(session, msg);
-			}
-		});
-	}
-
-
-	/**
 	 * @method userRead
 	 * @memberof UserCalls
 	 * @param {object} that Current scope.
@@ -259,15 +265,18 @@ class UserCalls {
 	 * @param {object} session Session object.
 	 * @description Update a user document.
 	 */
-	userUpdate (session) {
+	userUpdate (that, session) {
 		var	data = {};
 
 		// Extract data to be updated
-		data.clients = session.params.clients;
 		data.bundles = session.params.bundles;
+		data.clients = session.params.clients;
+		data.code = session.params.code;
 		data.company = session.params.company;
+		data.email = session.params.email;
 		data.group = session.params.group;
 		data.id = session.params.id;
+		data.name = session.params.name;
 		data.password = session.params.password;
 		data.role = session.params.role;
 		data.username = session.params.username;
@@ -280,9 +289,12 @@ class UserCalls {
 	/**
 	 * @method userUpdateJWT
 	 * @memberof UserCalls
+	 * @param {object} that Current scope.
+	 * @param {object} session Session object.
+	 * @param {object} data Data for building the JWT.
 	 * @description Update the user document with the new JWT.
 	 */
-	userUpdateJWT () {
+	userUpdateJWT (that, session, data) {
 		var	docid;
 
 		// Extract then remove Mongo document ID from object
