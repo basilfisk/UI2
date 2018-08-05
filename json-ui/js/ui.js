@@ -420,7 +420,7 @@ console.log(names[i], fields[names[i]], data);
 		var key;
 
 		// Split dot separated element name into array of element names
-		key = _fields[field].split('.');
+		key = _fields.fields[field].split('.');
 
 		// Assign data to element in object
 		if (key.length === 1) {
