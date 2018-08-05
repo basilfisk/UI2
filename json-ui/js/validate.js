@@ -53,20 +53,13 @@ class Validate {
 			form = this.form[forms[i]];
 
 			// title - mandatory
-			if (!this.isString(form.title)) {
-				this.log("form", forms[i] + ".title must be a string");
-			}
-
+			this.isString("form", form.title, forms[i] + ".title", true);
 			// width - number 10-100
-			if (form.width && !this.isNumber(form.width)) {
-				this.log("form", forms[i] + ".width must be a number");
-			}
-			else {
+			if (this.isNumber("form", form.width, forms[i] + ".width", false)) {
 				if (parseInt(form.width) < 10 || parseInt(form.width) > 100) {
 					this.log("form", forms[i] + ".width must be between 10 and 100");
 				}
 			}
-
 			// type - mandatory
 			if (!form.type) {
 				this.log("form", forms[i] + ".type is mandatory");
@@ -101,21 +94,14 @@ class Validate {
 								if (!this.isInList(Object.keys(form.columns[n]), list)) {
 									this.log("menu", elem + " must only have these elements: " + list.join(', '));
 								}
-								if (!this.isString(form.columns[n].id)) {
-									this.log("menu", elem + "[" + n + "].id must be a string");
-								}
-								else {
+								if (this.isString("menu", form.columns[n].id, forms[i] + elem + "[" + n + "].id", true)) {
 									if (!this.field.fields[form.columns[n].id]) {
 										this.log("form", elem + ".columns.id '" + form.columns[n].id + "' is not a registered field");
 									}
 								}
 								// optional
-								if (form.columns[n].style && !this.isString(form.columns[n].style)) {
-									this.log("menu", elem + "[" + n + "].style must be a string");
-								}
-								if (!this.isString(form.columns[n].title)) {
-									this.log("menu", elem + "[" + n + "].title must be a string");
-								}
+								this.isString("menu", form.columns[n].style, forms[i] + elem + "[" + n + "].style", false);
+								this.isString("menu", form.columns[n].title, forms[i] + elem + "[" + n + "].title", false);
 							}
 						}
 					}
@@ -166,10 +152,7 @@ class Validate {
 					}
 					else {
 						// form string
-						if (!this.isString(def.add.form)) {
-							this.log("form", elem + ".add.form must be a string");
-						}
-						else {
+						if (this.isString("form", def.add.form, form + ".buttons.add.form", true)) {
 							if (!this.form[def.add.form]) {
 								this.log("form", elem + ".add.form '" + def.add.form + "' is not a form");
 							}
@@ -181,12 +164,8 @@ class Validate {
 								this.log("form", elem + ".add.button must only have these elements: " + list.join(', '));
 							}
 							else {
-								if (!this.isString(def.add.button.background)) {
-									this.log("form", elem + ".add.button.background must be a string");
-								}
-								if (!this.isString(def.add.button.class)) {
-									this.log("form", elem + ".add.button.class must be a string");
-								}
+								this.isString("form", def.add.button.background, form + ".buttons.add.button.background", true);
+								this.isString("form", def.add.button.class, form + ".buttons.add.button.class", true);
 							}
 						}
 					}
@@ -211,12 +190,8 @@ class Validate {
 							this.log("form", elem + ".close.button must only have these elements: " + list.join(', '));
 						}
 						else {
-							if (!this.isString(def.close.button.class)) {
-								this.log("form", elem + ".close.button.class must be a string");
-							}
-							if (!this.isString(def.close.button.image)) {
-								this.log("form", elem + ".close.button.image must be a string");
-							}
+							this.isString("form", def.close.button.class, form + ".buttons.close.button.class", true);
+							this.isString("form", def.close.button.image, form + ".buttons.close.button.image", true);
 						}
 					}
 				}
@@ -233,9 +208,7 @@ class Validate {
 					}
 					else {
 						// form string
-						if (!this.isString(def.delete.action)) {
-							this.log("form", elem + ".delete.action must be a string");
-						}
+						this.isString("form", def.delete.action, form + ".buttons.delete.action", true);
 						// button object
 						if (this.isObject("form", def.delete.button, form + ".buttons.delete.button")) {
 							list = ['background','class'];
@@ -243,12 +216,8 @@ class Validate {
 								this.log("form", elem + ".delete.button must only have these elements: " + list.join(', '));
 							}
 							else {
-								if (!this.isString(def.delete.button.background)) {
-									this.log("form", elem + ".delete.button.background must be a string");
-								}
-								if (!this.isString(def.delete.button.class)) {
-									this.log("form", elem + ".delete.button.class must be a string");
-								}
+								this.isString("form", def.delete.button.background, form + ".buttons.delete.button.background", true);
+								this.isString("form", def.delete.button.class, form + ".buttons.delete.button.class", true);
 							}
 						}
 						// column object
@@ -258,19 +227,12 @@ class Validate {
 								this.log("form", elem + ".delete.column must only have these elements: " + list.join(', '));
 							}
 							else {
-								if (!this.isString(def.delete.column.style)) {
-									this.log("form", elem + ".delete.column.style must be a string");
-								}
-								if (!this.isString(def.delete.column.title)) {
-									this.log("form", elem + ".delete.column.title must be a string");
-								}
+								this.isString("form", def.delete.column.style, form + ".buttons.delete.column.style", true);
+								this.isString("form", def.delete.column.title, form + ".buttons.delete.column.title", true);
 							}
 						}
 						// key - string and linked to field
-						if (!this.isString(def.delete.key)) {
-							this.log("form", elem + ".delete.key must be a string");
-						}
-						else {
+						if (this.isString("form", def.delete.key, form + ".buttons.delete.key", true)) {
 							if (!this.field.fields[def.delete.key]) {
 								this.log("form", elem + ".delete.key '" + def.delete.key + "' is not a registered field");
 							}
@@ -293,10 +255,7 @@ class Validate {
 					}
 					else {
 						// form string
-						if (!this.isString(def.edit.form)) {
-							this.log("form", elem + ".edit.form must be a string");
-						}
-						else {
+						if (this.isString("form", def.edit.form, form + ".buttons.edit.form", true)) {
 							if (!this.form[def.edit.form]) {
 								this.log("form", elem + ".edit.form '" + def.edit.form + "' is not a form");
 							}
@@ -308,12 +267,8 @@ class Validate {
 								this.log("form", elem + ".edit.button must only have these elements: " + list.join(', '));
 							}
 							else {
-								if (!this.isString(def.edit.button.background)) {
-									this.log("form", elem + ".edit.button.background must be a string");
-								}
-								if (!this.isString(def.edit.button.class)) {
-									this.log("form", elem + ".edit.button.class must be a string");
-								}
+								this.isString("form", def.edit.button.background, form + ".buttons.edit.button.background", true);
+								this.isString("form", def.edit.button.class, form + ".buttons.edit.button.class", true);
 							}
 						}
 						// column object
@@ -323,12 +278,8 @@ class Validate {
 								this.log("form", elem + ".edit.column must only have these elements: " + list.join(', '));
 							}
 							else {
-								if (!this.isString(def.edit.column.style)) {
-									this.log("form", elem + ".edit.column.style must be a string");
-								}
-								if (!this.isString(def.edit.column.title)) {
-									this.log("form", elem + ".edit.column.title must be a string");
-								}
+								this.isString("form", def.edit.column.style, form + ".buttons.edit.column.style", true);
+								this.isString("form", def.edit.column.title, form + ".buttons.edit.column.title", true);
 							}
 						}
 					}
@@ -349,9 +300,7 @@ class Validate {
 					}
 					else {
 						// action string
-						if (!this.isString(def.ok.action)) {
-							this.log("form", elem + ".ok.action must be a string");
-						}
+						this.isString("form", def.ok.action, form + ".buttons.ok.action", true);
 						// button object
 						if (this.isObject("form", def.ok.button, form + ".buttons.ok.button")) {
 							list = ['background','class'];
@@ -359,12 +308,8 @@ class Validate {
 								this.log("form", elem + ".ok.button must only have these elements: " + list.join(', '));
 							}
 							else {
-								if (!this.isString(def.ok.button.background)) {
-									this.log("form", elem + ".ok.button.background must be a string");
-								}
-								if (!this.isString(def.ok.button.class)) {
-									this.log("form", elem + ".ok.button.class must be a string");
-								}
+								this.isString("form", def.ok.button.background, form + ".buttons.ok.button.background", true);
+								this.isString("form", def.ok.button.class, form + ".buttons.ok.button.class", true);
 							}
 						}
 					}
@@ -414,19 +359,14 @@ class Validate {
 				}
 				else {
 					// description - optional if visible
-					if (def[flds[i]].visible && def[flds[i]].description && !this.isString(def[flds[i]].description)) {
-						this.log("form", elem + ".description must be a string");
-					}
-					// title - mandatory if visible
-					if (def[flds[i]].visible && !this.isString(def[flds[i]].title)) {
-						this.log("form", elem + ".title must be a string");
+					if (def[flds[i]].visible) {
+						this.isString("form", def[flds[i]].description, form + ".fields." + flds[i] + ".description", false);
+						// title - mandatory if visible
+						this.isString("form", def[flds[i]].title, form + ".fields." + flds[i] + ".title", true);
 					}
 				}
 				// type - mandatory
-				if (!this.isString(def[flds[i]].type)) {
-					this.log("form", elem + ".type must be a string");
-				}
-				else {
+				if (this.isString("form", def[flds[i]].type, form + ".fields." + flds[i] + ".type", true)) {
 					// type - must be a permitted value
 					if (def[flds[i]].type !== 'array' && 
 						def[flds[i]].type !== 'id' && 
@@ -446,9 +386,7 @@ class Validate {
 							}
 							else {
 								// separator - mandatory
-								if (!this.isString(def[flds[i]].options.separator)) {
-									this.log("form", elem + ".options.separator must be a string");
-								}
+								this.isString("form", def[flds[i]].options.separator, form + ".fields." + flds[i] + ".options.separator", true);
 								if (def[flds[i]].options.checks) {
 									// Valid elements for checks
 									list = ['format','mandatory'];
@@ -457,9 +395,7 @@ class Validate {
 									}
 									else {
 										// checks.format - optional
-										if (def[flds[i]].options.checks.format && !this.isString(def[flds[i]].options.checks.format)) {
-											this.log("form", elem + ".options.checks.format must be a string");
-										}
+										this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 										// checks.mandatory - optional
 										if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
 											this.log("form", elem + ".options.checks.mandatory must be true|false");
@@ -479,9 +415,7 @@ class Validate {
 							}
 							else {
 								// list - mandatory
-								if (!this.isString(def[flds[i]].options.list)) {
-									this.log("form", elem + ".options.list must be a string");
-								}
+								this.isString("form", def[flds[i]].options.list, form + ".fields." + flds[i] + ".options.list", true);
 								// list - must be registered
 								if (!this.field.lists[def[flds[i]].options.list]) {
 									this.log("form", elem + ".options.list is not a registered list");
@@ -489,16 +423,14 @@ class Validate {
 								// display - mandatory
 								if (this.isObject("form", def[flds[i]].options.display, form + ".fields." + flds[i] + ".options.display")) {
 									// display.select - mandatory
-									if (!this.isString(def[flds[i]].options.display.select)) {
-										this.log("form", elem + ".options.display.select must be a string");
-									}
+									this.isString("form", def[flds[i]].options.display.select, form + ".fields." + flds[i] + ".options.display.select", true);
 									// display.select - 'single' or 'multiple'
 									if (def[flds[i]].options.display.select !== 'single' && def[flds[i]].options.display.select !== 'multiple') {
 										this.log("form", elem + ".options.display.select must be single|multiple");
 									}
 									// display.height - mandatory if select is 'multiple'
-									if (def[flds[i]].options.display.select === 'multiple' && !this.isNumber(def[flds[i]].options.display.height)) {
-										this.log("form", elem + ".options.display.height must be an integer");
+									if (def[flds[i]].options.display.select === 'multiple') {
+										this.isNumber("form", def[flds[i]].options.display.height, elem + ".options.display.height", true);
 									}
 								}
 							}
@@ -520,9 +452,7 @@ class Validate {
 								}
 								else {
 									// checks.format - optional
-									if (def[flds[i]].options.checks.format && !this.isString(def[flds[i]].options.checks.format)) {
-										this.log("form", elem + ".options.checks.format must be a string");
-									}
+									this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 									// checks.mandatory - optional
 									if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
 										this.log("form", elem + ".options.checks.mandatory must be true|false");
@@ -540,13 +470,9 @@ class Validate {
 										}
 										else {
 											// min - integer optional
-											if (def[flds[i]].options.checks.range.min && !this.isNumber(def[flds[i]].options.checks.range.min)) {
-												this.log("form", elem + ".options.checks.range.min must be an integer");
-											}
+											this.isNumber("form", def[flds[i]].options.checks.range.min, form + ".fields." + flds[i] + ".options.checks.range.min", false);
 											// max - integer optional
-											if (def[flds[i]].options.checks.range.max && !this.isNumber(def[flds[i]].options.checks.range.max)) {
-												this.log("form", elem + ".options.checks.range.max must be an integer");
-											}
+											this.isNumber("form", def[flds[i]].options.checks.range.max, form + ".fields." + flds[i] + ".options.checks.range.max", false);
 											// min < max
 											if (def[flds[i]].options.checks.range.min && def[flds[i]].options.checks.range.max) {
 												if (parseInt(def[flds[i]].options.checks.range.min) >= parseInt(def[flds[i]].options.checks.range.max)) {
@@ -575,9 +501,7 @@ class Validate {
 								}
 								else {
 									// checks.format - optional
-									if (def[flds[i]].options.checks.format && !this.isString(def[flds[i]].options.checks.format)) {
-										this.log("form", elem + ".options.checks.format must be a string");
-									}
+									this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 									// checks.mandatory - optional
 									if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
 										this.log("form", elem + ".options.checks.mandatory must be true|false");
@@ -603,9 +527,7 @@ class Validate {
 									}
 									else {
 										// checks.format - optional
-										if (def[flds[i]].options.checks.format && !this.isString(def[flds[i]].options.checks.format)) {
-											this.log("form", elem + ".options.checks.format must be a string");
-										}
+										this.isString("form", def[flds[i]].options.checks.format, form + ".fields." + flds[i] + ".options.checks.format", true);
 										// checks.mandatory - optional
 										if (def[flds[i]].options.checks.mandatory && !this.isTrueFalse(def[flds[i]].options.checks.mandatory)) {
 											this.log("form", elem + ".options.checks.mandatory must be true|false");
@@ -620,9 +542,7 @@ class Validate {
 //									}
 //									else {
 										// display.height - mandatory
-										if (!this.isNumber(def[flds[i]].options.display.height)) {
-											this.log("form", elem + ".options.display.height must be an integer");
-										}
+										this.isNumber("form", def[flds[i]].options.display.height, form + ".fields." + flds[i] + ".options.display.height", true);
 									}
 								}
 							}
@@ -688,23 +608,15 @@ class Validate {
 								if (!this.isArray(this.menu.menubar[i].options[p].access)) {
 									this.log("menu", elem + ".access must be an array");
 								}
-								if (!this.isString(this.menu.menubar[i].options[p].action)) {
-									this.log("menu", elem + ".action must be a string");
-								}
-								if (!this.isString(this.menu.menubar[i].options[p].id)) {
-									this.log("menu", elem + ".id must be a string");
-								}
-								if (!this.isString(this.menu.menubar[i].options[p].title)) {
-									this.log("menu", elem + ".title must be a string");
-								}
+								this.isString("menu", this.menu.menubar[i].options[p].action, "menubar[" + i + "].action", true);
+								this.isString("menu", this.menu.menubar[i].options[p].id, "menubar[" + i + "].id", true);
+								this.isString("menu", this.menu.menubar[i].options[p].title, "menubar[" + i + "].title", true);
 							}
 						}
 					}
 					// menubar array, nested non-options array
 					else {
-						if (!this.isString(this.menu.menubar[i][keys[n]])) {
-							this.log("menu", elem + "." + keys[n] + " must be a string");
-						}
+						this.isString("menu", this.menu.menubar[i][keys[n]], "menubar[" + i + "]." + keys[n], true);
 					}
 				}
 			}
@@ -772,18 +684,40 @@ class Validate {
 	/**
 	 * @method isNumber
 	 * @memberof Validate
+	 * @param {string} type Type of data to be validated.
 	 * @param {object} data Data to be validated.
+	 * @param {string} name Name of data being validated.
+	 * @param {boolean} mand Is data element mandatory.
 	 * @description Check the data is a number.
 	 */
-	isNumber (data) {
-		return (typeof data === 'number') ? true : false;
+	isNumber (type, data, name, mand) {
+		if (data || mand) {
+			if (data) {
+				if (typeof data === 'number') {
+					return true;
+				}
+				else {
+					this.log(type, name + " must be a number");
+					return false;
+				}
+			}
+			else {
+				this.log(type, name + " is not defined");
+				return false;
+			}
+		}
+		else {
+			return true;
+		}
 	}
 
 
 	/**
 	 * @method isObject
 	 * @memberof Validate
+	 * @param {string} type Type of data to be validated.
 	 * @param {object} data Data to be validated.
+	 * @param {string} name Name of data being validated.
 	 * @description Check the data is an object.
 	 */
 	isObject (type, data, name) {
@@ -795,19 +729,40 @@ class Validate {
 			return false;
 		}
 	}
-	isObjectOrig (data) {
-		return (typeof data === 'object' && data.length === undefined) ? true : false;
-	}
+//	isObjectOrig (data) {
+//		return (typeof data === 'object' && data.length === undefined) ? true : false;
+//	}
 
 
 	/**
 	 * @method isString
 	 * @memberof Validate
-	 * @param {string} data Data to be validated.
+	 * @param {string} type Type of data to be validated.
+	 * @param {object} data Data to be validated.
+	 * @param {string} name Name of data being validated.
+	 * @param {boolean} mand Is data element mandatory.
 	 * @description Check the data is a string.
 	 */
-	isString (data) {
-		return (typeof data === 'string') ? true : false;
+	isString (type, data, name, mand) {
+		if (data || mand) {
+			if (data) {
+				if (typeof data === 'string') {
+					return true;
+				}
+				else {
+					this.log(type, name + " must be a string");
+					return false;
+				}
+			}
+			else {
+				this.log(type, name + " is not defined");
+				return false;
+			}
+		}
+		else {
+			return true;
+		}
+//		return (typeof data === 'string') ? true : false;
 	}
 
 
