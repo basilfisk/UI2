@@ -308,14 +308,8 @@ class Validate {
 				// type - mandatory
 				if (this.isString("form", def[flds[i]].type, name + ".type", true)) {
 					// type - must be a permitted value
-					if (def[flds[i]].type !== 'array' && 
-						def[flds[i]].type !== 'id' && 
-						def[flds[i]].type !== 'integer' && 
-						def[flds[i]].type !== 'list' && 
-						def[flds[i]].type !== 'password' &&
-						def[flds[i]].type !== 'text') {
-						this.log("form", name + ".type must be one of 'id|integer|list|password|text'");
-					}
+					list = ['array','id','integer','list','password','text'];
+					this.isInList("form", [def[flds[i]].type], name + ".type", list, true);
 					// array options - mandatory object
 					if (def[flds[i]].type === 'array') {
 						if (this.isObject("form", def[flds[i]].options, name + ".options", true)) {
