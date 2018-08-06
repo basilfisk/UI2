@@ -352,9 +352,8 @@ class Validate {
 									// display.select - mandatory
 									this.isString("form", def[flds[i]].options.display.select, name + ".options.display.select", true);
 									// display.select - 'single' or 'multiple'
-									if (def[flds[i]].options.display.select !== 'single' && def[flds[i]].options.display.select !== 'multiple') {
-										this.log("form", form + ".fields.options.display.select must be single|multiple");
-									}
+									list = ['single','multiple'];
+									this.isInList("form", [def[flds[i]].options.display.select], name + ".options.display.select", list, true);
 									// display.height - mandatory if select is 'multiple'
 									if (def[flds[i]].options.display.select === 'multiple') {
 										this.isNumber("form", def[flds[i]].options.display.height, form + ".fields.options.display.height", true);
