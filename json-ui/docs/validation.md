@@ -1,28 +1,41 @@
-# Validation of the Structure Files
+# Validating the Structure Files
 
 ## Running the checks
 
+A script called `example/client/check` can be run to validate the files in the sample application.
+
 ~~~bash
-example/client/check 
+JSONUI=./json-ui/js
+ROOT=../../example/client/ui
+node $JSONUI/validate.js $ROOT/forms.js $ROOT/menus.js $ROOT/fields.js
 ~~~
 
-**json-ui** uses 2 files to define the structure of the application. The structure of the menu is defined by `menu.js` and the structure of the forms called from the menu options is defined by`forms.js`.
+**json-ui** uses 3 files to define the structure of an application:
+
+- `menus.js` defines the structure of the menu and options
+- `forms.js` defines the structure of the tables and forms called from the menu options
+- `fields.js` defines the list of fields and lists referenced by `forms.js`
 
 ## Menu Definitions
 
-- `title` is mandatory and must be a string
-- `title.text` is mandatory
-- `title.class` is optional
+The table describes the structure of the data in `menus.js` that defines the menus and menu options within the application.
 
-- `menubar` is mandatory and must be an array
-- `menubar[].id` is mandatory and must be a string
-- `menubar[].menu` is mandatory and must be a string
-- `menubar[].title` is mandatory and must be a string
-- `menubar[].options` is mandatory and must be an array
-- `menubar[].options[].access` is mandatory and must be an array
-- `menubar[].options[].action` is mandatory and must be a string
-- `menubar[].options[].id` is mandatory and must be a string
-- `menubar[].options[].title` is mandatory and must be a string
+|Element|Type|Mand.|Content|
+|---|---|---|---|
+|title|Object|Yes|Application banner.|
+|title.text|String|Yes|Application name.|
+|title.class|String|No|Styling for application name.|
+|menubar|Array|Yes|Top level menus, each menu is defined in an object.|
+|menubar[]|Object|Yes|Valid keys are *id, menu, options, title*.|
+|menubar[].id|String|Yes|ID of the menu.|
+|menubar[].menu|String|Yes|ID of the ????.|
+|menubar[].title|String|Yes|Title of the menu.|
+|menubar[].options|Array|Yes|Menu options, each option is defined in an object.|
+|menubar[].options[]|Object|Yes|Valid keys are *access, action, id, title*.|
+|menubar[].options[].access|Array|Yes|User access level. Must be one of *manager, superuser, user*.|
+|menubar[].options[].action|String|Yes|Command to be invoked when the menu option is selected.|
+|menubar[].options[].id|String|Yes|ID of the menu option.|
+|menubar[].options[].title|String|Yes|Title of the menu option.|
 
 ## Form Definitions
 

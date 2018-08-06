@@ -445,48 +445,38 @@ class Validate {
 	 * @description Check the menu definitions.
 	 */
 	checkMenus () {
-		var list, keys, i, name, n, p;
+		var list, i, name, n;
 
 		// title element
-		if (!this.menu.title) {
-			this.log("menu", "Top level element 'title' is mandatory");
-		}
-		else {
-			this.isObject("menu", this.menu.title, "title", true);
+		if (this.isObject("menu", this.menu.title, "title", true)) {
 			list = ['text','class'];
-			this.isInList("menu", Object.keys(this.menu.title), "title", list, true);
+			if (this.isInList("menu", Object.keys(this.menu.title), "title", list, true)) {
+				this.isString("menu", this.menu.title.text, "title.text", true);
+				this.isString("menu", this.menu.title.class, "title.class", false);
+			}
 		}
 		
 		// menubar element
-		if (!this.menu.menubar) {
-			this.log("menu", "Top level element 'menubar' is mandatory");
-		}
-		else {
-			if (this.isArray("menu", this.menu.menubar, "menubar", true)) {
-				// menubar array objects
-				for (i=0; i<this.menu.menubar.length; i++) {
-					keys = Object.keys(this.menu.menubar[i]);
-					list = ['id','menu','options','title'];
-					name = "menubar[" + i + "]";
-					this.isInList("menu", Object.keys(this.menu.menubar[i]), name, list, true);
-					for (n=0; n<keys.length; n++) {
-						// menubar array, nested options array
-						if (keys[n] === 'options') {
-							if (this.isArray("menu", this.menu.menubar[i].options, name + ".options", true)) {
-								for (p=0; p<this.menu.menubar[i].options.length; p++) {
-									list = ['access','action','id','title'];
-									this.isInList("menu", Object.keys(this.menu.menubar[i].options[p]), name + ".options[" + p + "]", list, true);
-									// elements within nested options array
-									this.isArray("menu", this.menu.menubar[i].options[p].access, name + ".options[" + p + "].access", true);
-									this.isString("menu", this.menu.menubar[i].options[p].action, name + ".action", true);
-									this.isString("menu", this.menu.menubar[i].options[p].id, name + ".id", true);
-									this.isString("menu", this.menu.menubar[i].options[p].title, name + ".title", true);
-								}
-							}
-						}
-						// menubar array, nested non-options array
-						else {
-							this.isString("menu", this.menu.menubar[i][keys[n]], name + "." + keys[n], true);
+		if (this.isArray("menu", this.menu.menubar, "menubar", true)) {
+			// menubar array objects
+			for (i=0; i<this.menu.menubar.length; i++) {
+				list = ['id','menu','options','title'];
+				name = "menubar[" + i + "]";
+				this.isInList("menu", Object.keys(this.menu.menubar[i]), name, list, true);
+				this.isString("menu", this.menu.menubar[i].id, name + ".id", true);
+				this.isString("menu", this.menu.menubar[i].menu, name + ".menu", true);
+				this.isString("menu", this.menu.menubar[i].title, name + ".title", true);
+				// options - array
+				if (this.isArray("menu", this.menu.menubar[i].options, name + ".options", true)) {
+					for (n=0; n<this.menu.menubar[i].options.length; n++) {
+						list = ['access','action','id','title'];
+						if (this.isInList("menu", Object.keys(this.menu.menubar[i].options[n]), name + ".options[" + n + "]", list, true)) {
+							this.isString("menu", this.menu.menubar[i].options[n].action, name + ".action", true);
+							this.isString("menu", this.menu.menubar[i].options[n].id, name + ".id", true);
+							this.isString("menu", this.menu.menubar[i].options[n].title, name + ".title", true);
+							this.isArray("menu", this.menu.menubar[i].options[n].access, name + ".options[" + n + "].access", true);
+							list = ['manager','superuser','user'];
+							this.isInList("menu", this.menu.menubar[i].options[n].access, name + ".options[" + n + "].access", list, true);
 						}
 					}
 				}
@@ -523,7 +513,7 @@ class Validate {
 	 * @method isArray
 	 * @memberof Validate
 	 * @param {string} type Type of data to be validated.
-	 * @param {object} data Data to be validated.
+	 * @param {array} data Data to be validated.
 	 * @param {string} name Name of data being validated.
 	 * @param {boolean} mand Is data element mandatory.
 	 * @description Check the data is an array.
@@ -531,11 +521,11 @@ class Validate {
 	isArray (type, data, name, mand) {
 		if (data || mand) {
 			if (data) {
-				if (typeof data === 'object') {
+				if (typeof data === 'object' && data.length !== undefined) {
 					return true;
 				}
 				else {
-					this.log(type, name + " '" + data + "' must be an array");
+					this.log(type, name + " must be an array");
 					return false;
 				}
 			}
