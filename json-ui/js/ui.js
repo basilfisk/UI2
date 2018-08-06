@@ -867,7 +867,7 @@ console.log(names[i], fields[names[i]], data);
 				}
 				// Dont add top level menu if no options in menu
 				if (opt !== '') {
-					div += '<li id="' + _menus.menubar[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + _menus.menubar[i].name + '" href="#">' + _menus.menubar[i].title + '<span class="caret"></span></a>';
+					div += '<li id="' + _menus.menubar[i].id + '-menu" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#' + _menus.menubar[i].id + '" href="#">' + _menus.menubar[i].title + '<span class="caret"></span></a>';
 					div += '<ul class="dropdown-menu">';
 					div += opt;
 					div += '</ul>';
