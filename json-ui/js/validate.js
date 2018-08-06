@@ -128,8 +128,8 @@ class Validate {
 
 			// add button
 			if (def.add) {
-				// only on a table
 				name = form + ".buttons.add";
+				// only on a table
 				if (type === 'table') {
 					this.isObject("form", def.add, name, true);
 					list = ['form','button'];
@@ -151,7 +151,7 @@ class Validate {
 					}
 				}
 				else {
-					this.log("form", form + ".buttons.add button can only be on a table");
+					this.log("form", name + " button can only be on a table");
 				}
 			}
 
@@ -176,8 +176,8 @@ class Validate {
 			// delete button
 			if (def.delete) {
 				// only on a table
+				name = form + ".buttons.delete";
 				if (type === 'table') {
-					name = form + ".buttons.delete";
 					this.isObject("form", def.delete, name, true);
 					list = ['action','button','column','key'];
 					if (this.isInList("form", Object.keys(def.delete), name, list, true)) {
@@ -248,8 +248,8 @@ class Validate {
 			// ok button
 			if (def.ok) {
 				// only on a form
+				name = form + ".buttons.ok";
 				if (type === 'form') {
-					name = form + ".buttons.ok";
 					this.isObject("form", def.ok, name, true);
 					list = ['action','button'];
 					if (this.isInList("form", Object.keys(def.ok), name, list, true)) {
@@ -314,7 +314,7 @@ class Validate {
 						def[flds[i]].type !== 'list' && 
 						def[flds[i]].type !== 'password' &&
 						def[flds[i]].type !== 'text') {
-						this.log("form", form + ".fields.type must be one of 'id|integer|list|password|text'");
+						this.log("form", name + ".type must be one of 'id|integer|list|password|text'");
 					}
 					// array options - mandatory object
 					if (def[flds[i]].type === 'array') {
@@ -387,7 +387,7 @@ class Validate {
 											// min < max
 											if (def[flds[i]].options.checks.range.min && def[flds[i]].options.checks.range.max) {
 												if (parseInt(def[flds[i]].options.checks.range.min) >= parseInt(def[flds[i]].options.checks.range.max)) {
-													this.log("form", form + ".fields.options.checks.range min must be less than max");
+													this.log("form", name + ".options.checks.range min must be less than max");
 												}
 											}
 										}
