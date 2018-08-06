@@ -112,19 +112,20 @@ class Validate {
 	 * @description Check the definition of the buttons element on a single form.
 	 */
 	checkFormButtons (form, type, def) {
-		var keys, i, n, p, list;
+		var keys, i, n, p, list, name;
 
 		// 'buttons' must exist
-		if (this.isObject("form", def, form + ".buttons")) {
+		name = form + ".buttons";
+		if (this.isObject("form", def, name, true)) {
 			// Valid fields
 			list = ['add','close','delete','edit','ok'];
-			this.isInList("form", Object.keys(def), form + ".buttons", list, true);
+			this.isInList("form", Object.keys(def), name, list, true);
 
 			// add button
 			if (def.add) {
 				// only on a table
 				if (type === 'table') {
-					this.isObject("form", def.add, form + ".buttons.add");
+					this.isObject("form", def.add, form + ".buttons.add", true);
 					list = ['form','button'];
 					if (this.isInList("form", Object.keys(def.add), form + ".buttons.add", list, true)) {
 						// form string
@@ -132,7 +133,7 @@ class Validate {
 							this.isLinked("form", def.add.form, form + ".buttons.add.form", "form");
 						}
 						// button object
-						if(this.isObject("form", def.add.button, form + ".buttons.add.button")) {
+						if(this.isObject("form", def.add.button, form + ".buttons.add.button", true)) {
 							list = ['background','class'];
 							if (this.isInList("form", Object.keys(def.add.button), form + ".buttons.add.button", list, true)) {
 								this.isString("form", def.add.button.background, form + ".buttons.add.button.background", true);
@@ -148,11 +149,11 @@ class Validate {
 
 			// close button
 			if (def.close) {
-				if (this.isObject("form", def.close, form + ".buttons.close")) {
+				if (this.isObject("form", def.close, form + ".buttons.close", true)) {
 					list = ['button'];
 					if (this.isInList("form", Object.keys(def.close), form + ".buttons.close", list, true)) {
 						// close.button
-						this.isObject("form", def.close.button, form + ".buttons.close.button");
+						this.isObject("form", def.close.button, form + ".buttons.close.button", true);
 						list = ['class','image'];
 						if (this.isInList("form", Object.keys(def.close.button), form + ".buttons.close.button", list, true)) {
 							this.isString("form", def.close.button.class, form + ".buttons.close.button.class", true);
@@ -166,13 +167,13 @@ class Validate {
 			if (def.delete) {
 				// only on a table
 				if (type === 'table') {
-					this.isObject("form", def.delete, form + ".buttons.delete");
+					this.isObject("form", def.delete, form + ".buttons.delete", true);
 					list = ['action','button','column','key'];
 					if (this.isInList("form", Object.keys(def.delete), form + ".buttons.delete", list, true)) {
 						// form string
 						this.isString("form", def.delete.action, form + ".buttons.delete.action", true);
 						// button object
-						if (this.isObject("form", def.delete.button, form + ".buttons.delete.button")) {
+						if (this.isObject("form", def.delete.button, form + ".buttons.delete.button", true)) {
 							list = ['background','class'];
 							if (this.isInList("form", Object.keys(def.delete.button), form + ".buttons.delete.button", list, true)) {
 								this.isString("form", def.delete.button.background, form + ".buttons.delete.button.background", true);
@@ -180,7 +181,7 @@ class Validate {
 							}
 						}
 						// column object
-						if (this.isObject("form", def.delete.column, form + ".buttons.delete.column")) {
+						if (this.isObject("form", def.delete.column, form + ".buttons.delete.column", true)) {
 							list = ['style','title'];
 							if (this.isInList("form", Object.keys(def.delete.column), form + ".buttons.delete.column", list, true)) {
 								this.isString("form", def.delete.column.style, form + ".buttons.delete.column.style", true);
@@ -202,7 +203,7 @@ class Validate {
 			if (def.edit) {
 				// only on a table
 				if (type === 'table') {
-					this.isObject("form", def.edit, form + ".buttons.edit");
+					this.isObject("form", def.edit, form + ".buttons.edit", true);
 					list = ['form','button','column'];
 					if (this.isInList("form", Object.keys(def.edit), form + ".buttons.edit", list, true)) {
 						// form string
@@ -210,7 +211,7 @@ class Validate {
 							this.isLinked("form", def.edit.form, form + ".buttons.edit.form", "form");
 						}
 						// button object
-						if (this.isObject("form", def.edit.button, form + ".buttons.edit.button")) {
+						if (this.isObject("form", def.edit.button, form + ".buttons.edit.button", true)) {
 							list = ['background','class'];
 							if (this.isInList("form", Object.keys(def.edit.button), form + ".buttons.edit.button", list, true)) {
 								this.isString("form", def.edit.button.background, form + ".buttons.edit.button.background", true);
@@ -218,7 +219,7 @@ class Validate {
 							}
 						}
 						// column object
-						if (this.isObject("form", def.edit.column, form + ".buttons.edit.column")) {
+						if (this.isObject("form", def.edit.column, form + ".buttons.edit.column", true)) {
 							list = ['style','title'];
 							if (this.isInList("form", Object.keys(def.edit.column), form + ".buttons.edit.column", list, true)) {
 								this.isString("form", def.edit.column.style, form + ".buttons.edit.column.style", true);
@@ -236,13 +237,13 @@ class Validate {
 			if (def.ok) {
 				// only on a form
 				if (type === 'form') {
-					this.isObject("form", def.ok, form + ".buttons.ok");
+					this.isObject("form", def.ok, form + ".buttons.ok", true);
 					list = ['action','button'];
 					if (this.isInList("form", Object.keys(def.ok), form + ".buttons.ok", list, true)) {
 						// action string
 						this.isString("form", def.ok.action, form + ".buttons.ok.action", true);
 						// button object
-						if (this.isObject("form", def.ok.button, form + ".buttons.ok.button")) {
+						if (this.isObject("form", def.ok.button, form + ".buttons.ok.button", true)) {
 							list = ['background','class'];
 							if (this.isInList("form", Object.keys(def.ok.button), form + ".buttons.ok.button", list, true)) {
 								this.isString("form", def.ok.button.background, form + ".buttons.ok.button.background", true);
@@ -269,7 +270,7 @@ class Validate {
 	checkFormFields (form, def) {
 		var flds, keys, i, n, p, list;
 
-		this.isObject("form", def, form + ".fields");
+		this.isObject("form", def, form + ".fields", true);
 
 		// loop through fields
 		flds = Object.keys(def);
@@ -303,7 +304,7 @@ class Validate {
 					}
 					// array options - mandatory object
 					if (def[flds[i]].type === 'array') {
-						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options")) {
+						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options", true)) {
 							// Valid elements
 							list = ['checks','separator'];
 							if (this.isInList("form", Object.keys(def[flds[i]].options), form + ".fields." + flds[i] + ".options", list, true)) {
@@ -324,7 +325,7 @@ class Validate {
 					}
 					// list options - mandatory object
 					if (def[flds[i]].type === 'list') {
-						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options")) {
+						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options", true)) {
 							// Valid elements
 							list = ['display','list'];
 							if (this.isInList("form", Object.keys(def[flds[i]].options), form + ".fields." + flds[i] + ".options", list, true)) {
@@ -333,7 +334,7 @@ class Validate {
 								// list - must be registered
 								this.isLinked("form", def[flds[i]].options.list, form + ".fields." + flds[i] + ".options.list '" + def[flds[i]].options.list + "'", "list");
 								// display - mandatory
-								if (this.isObject("form", def[flds[i]].options.display, form + ".fields." + flds[i] + ".options.display")) {
+								if (this.isObject("form", def[flds[i]].options.display, form + ".fields." + flds[i] + ".options.display", true)) {
 									// display.select - mandatory
 									this.isString("form", def[flds[i]].options.display.select, form + ".fields." + flds[i] + ".options.display.select", true);
 									// display.select - 'single' or 'multiple'
@@ -350,7 +351,7 @@ class Validate {
 					}
 					// integer options - optional object
 					if (def[flds[i]].options && def[flds[i]].type === 'integer') {
-						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options")) {
+						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options", true)) {
 							// Valid elements
 							list = ['checks'];
 							if (this.isInList("form", Object.keys(def[flds[i]].options), form + ".fields." + flds[i] + ".options", list, true)) {
@@ -362,11 +363,7 @@ class Validate {
 									// checks.mandatory - optional
 									this.isTrueFalse("form", def[flds[i]].options.checks.mandatory, form + ".fields." + flds[i] + ".options.checks.mandatory", true);
 									// checks.range - optional
-									if (this.isObject("form", def[flds[i]].options.checks.range, form + ".fields." + flds[i] + ".options.checks.range")) {
-//		DOUBLE!!					if (def[flds[i]].options.checks.range && !this.isObject(def[flds[i]].options.checks.range)) {
-//										this.log("form", form + ".fields.options.checks.range must be an object");
-//									}
-//									else {
+									if (this.isObject("form", def[flds[i]].options.checks.range, form + ".fields." + flds[i] + ".options.checks.range", true)) {
 										// Valid elements for range
 										list = ['min','max'];
 										if (this.isInList("form", Object.keys(def[flds[i]].options.checks.range), form + ".fields." + flds[i] + ".options.checks.range", list, true)) {
@@ -388,7 +385,7 @@ class Validate {
 					}
 					// password options - optional object
 					if (def[flds[i]].options && def[flds[i]].type === 'password') {
-						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options")) {
+						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options", true)) {
 							// Valid elements
 							list = ['checks'];
 							if (this.isInList("form", Object.keys(def[flds[i]].options), form + ".fields." + flds[i] + ".options", list, true)) {
@@ -405,7 +402,7 @@ class Validate {
 					}
 					// text options - optional object
 					if (def[flds[i]].options && def[flds[i]].type === 'text') {
-						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options")) {
+						if (this.isObject("form", def[flds[i]].options, form + ".fields." + flds[i] + ".options", true)) {
 							// Valid elements
 							list = ['checks','display'];
 							if (this.isInList("form", Object.keys(def[flds[i]].options), form + ".fields." + flds[i] + ".options", list, true)) {
@@ -421,11 +418,7 @@ class Validate {
 								}
 								if (def[flds[i]].options.display) {
 									// display - mandatory
-									if (this.isObject("form", def[flds[i]].options.display, form + ".fields." + flds[i] + ".options.display")) {
-//		DOUBLE!!					if (def[flds[i]].options.display && !this.isObject(def[flds[i]].options.display)) {
-//										this.log("form", form + ".fields.options.display must be an object");
-//									}
-//									else {
+									if (this.isObject("form", def[flds[i]].options.display, form + ".fields." + flds[i] + ".options.display", true)) {
 										// display.height - mandatory
 										this.isNumber("form", def[flds[i]].options.display.height, form + ".fields." + flds[i] + ".options.display.height", true);
 									}
@@ -452,7 +445,7 @@ class Validate {
 			this.log("menu", "Top level element 'title' is mandatory");
 		}
 		else {
-			this.isObject("menu", this.menu.title, "title");
+			this.isObject("menu", this.menu.title, "title", true);
 			list = ['text','class'];
 			this.isInList("menu", Object.keys(this.menu.title), "title", list, true);
 		}
@@ -651,15 +644,27 @@ class Validate {
 	 * @param {string} type Type of data to be validated.
 	 * @param {object} data Data to be validated.
 	 * @param {string} name Name of data being validated.
+	 * @param {boolean} mand Is data element mandatory.
 	 * @description Check the data is an object.
 	 */
-	isObject (type, data, name) {
-		if (typeof data === 'object' && data.length === undefined) {
-			return true;
+	isObject (type, data, name,mand) {
+		if (data || mand) {
+			if (data) {
+				if (typeof data === 'object' && data.length === undefined) {
+					return true;
+				}
+				else {
+					this.log(type, name + " must be an object");
+					return false;
+				}
+			}
+			else {
+				this.log(type, name + " is not defined");
+				return false;
+			}
 		}
 		else {
-			this.log(type, name + " must be an object");
-			return false;
+			return true;
 		}
 	}
 
