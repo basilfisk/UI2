@@ -71,16 +71,14 @@ The table describes the structure of the elements holding the form and table def
 |title|String|Yes|Form or table title.|
 |width|Integer|No|Width of the form or table, expressed as a percentage. Must be between in the range 10 to 100.|
 |buttons|Object|Yes|Defines the set of buttons available on the form or table.|
-|columns|Object|Yes|For tables only. Defines the set of columns that make up the table.|
+|columns|Array|Yes|For tables only. Defines the set of columns that make up the table.|
 |fields|Object|Yes|For forms only. Defines the set of fields that make up the form.|
 
 The next table describes the elements within the `buttons` object. This object applies to both **tables** and **forms**.
 
 |Element|Type|Mand.|Content|
 |---|---|---|---|
-
-- `buttons` is mandatory and must be an object
-- `buttons` elements must be one of *add*, *close*, *delete*, *edit* or *ok*
+||Object|Yes|Elements within the `buttons` object are also objects. They must be identified by one of the following names: *add*, *close*, *delete*, *edit* or *ok*.|
 - `buttons.add` only applies to a *table* and must be an object
 - `buttons.add.form` is mandatory, must be a string and form must exist
 - `buttons.add.button` is a mandatory object with elements of *background* and *class*
@@ -117,16 +115,16 @@ The table below describes the elements within the `columns` object. This object 
 
 |Element|Type|Mand.|Content|
 |---|---|---|---|
-
-- `columns` only applies to a *table* and must be an array of objects
-- `columns[].id` is mandatory, must be a string and field must be in the map
-- `columns[].style` is optional and must be a string
-- `columns[].title` is mandatory and must be a string
+||Array|Yes|Elements within the `columns` array are objects. They must be identified by one of the following names: *id*, *style* or *title*.|
+|id|String|Yes|The data that will be displayed in the column. This element holds a field name that must be present in the `fields` object within `fields.js`.|
+|style|String|No|The styling to be applied to the column heading.|
+|title|String|Yes|The column heading.|
 
 The next table describes the elements within the `fields` object. This object only applies to **forms**.
 
 |Element|Type|Mand.|Content|
 |---|---|---|---|
+||Object|Yes|Elements within the `fields` object are also objects. They must be identified by one of the following names: *description*, *edit*, *options*, *title*, *type* or *visible*.|
 
 - `fields` is mandatory for the *form* type and must be an object holding objects for each field
 - `fields` must be in the map
