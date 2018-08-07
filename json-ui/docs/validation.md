@@ -48,18 +48,36 @@ The `fields.js` file holds the definition of all fields and lists referenced by 
 
 ## Form Definitions
 
-The table describes the structure of the data in `forms.js` that defines the forms within the application.
+The structure of `forms.js` is an object that contains a series of nested objects that each holds the definition of a table or foem within the application. Each nested object is identified by a unique name whose value is an object that defineds the form or table.
+
+~~~
+{
+	"formN": {
+		form definition...
+	},
+	"tableN": {
+		table definition...
+	},
+	...
+}
+~~~
+
+The table describes the structure of the elements holding the form and table definitions for the application that are held within `forms.js`.
 
 |Element|Type|Mand.|Content|
 |---|---|---|---|
-|title|Object|Yes|Application banner.|
-- `title` is mandatory and must be a string
-- `width` is optional and must be an integer between 10 and 100
-- `type` is mandatory and must be one of *form* or *table*
-- `columns` only applies to a *table* and must be an array of objects
-- `columns[].id` is mandatory, must be a string and field must be in the map
-- `columns[].style` is optional and must be a string
-- `columns[].title` is mandatory and must be a string
+||Object|Yes|Each form object must have the *type*, *title*, *buttons* and *fields* elements. Each table object must have the *type*, *title*, *buttons* and *columns* elements. Both forms and tables can have the optional *width* element.|
+|type|String|Yes|Type of structure. Must be one of *form* or *table*.|
+|title|String|Yes|Form or table title.|
+|width|Integer|No|Width of the form or table, expressed as a percentage. Must be between in the range 10 to 100.|
+|buttons|Object|Yes|Defines the set of buttons available on the form or table.|
+|columns|Object|Yes|For tables only. Defines the set of columns that make up the table.|
+|fields|Object|Yes|For forms only. Defines the set of fields that make up the form.|
+
+The next table describes the elements within the `buttons` object. This object applies to both **tables** and **forms**.
+
+|Element|Type|Mand.|Content|
+|---|---|---|---|
 
 - `buttons` is mandatory and must be an object
 - `buttons` elements must be one of *add*, *close*, *delete*, *edit* or *ok*
@@ -94,6 +112,21 @@ The table describes the structure of the data in `forms.js` that defines the for
 - `buttons.ok.button` is a mandatory object with elements of *background* and *class*
 - `buttons.ok.button.background` must be a string
 - `buttons.ok.button.class` must be a string
+
+The table below describes the elements within the `columns` object. This object only applies to **tables**.
+
+|Element|Type|Mand.|Content|
+|---|---|---|---|
+
+- `columns` only applies to a *table* and must be an array of objects
+- `columns[].id` is mandatory, must be a string and field must be in the map
+- `columns[].style` is optional and must be a string
+- `columns[].title` is mandatory and must be a string
+
+The next table describes the elements within the `fields` object. This object only applies to **forms**.
+
+|Element|Type|Mand.|Content|
+|---|---|---|---|
 
 - `fields` is mandatory for the *form* type and must be an object holding objects for each field
 - `fields` must be in the map

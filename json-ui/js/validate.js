@@ -21,6 +21,9 @@ class Validate {
 			menu: __dirname + '/' + args[1],
 			field: __dirname + '/' + args[2]
 		};
+		this.defaults = {
+			width: { min:10, max: 100 }
+		};
 
 		// Validate the arguments
 		if (args[0] === undefined || args[1] === undefined || args[2] === undefined) {
@@ -50,28 +53,27 @@ class Validate {
 		forms = Object.keys(this.form);
 		for (i=0; i<forms.length; i++) {
 			form = this.form[forms[i]];
+			name = forms[i];
 
-			// title - mandatory
-			name = forms[i] + ".title";
-			this.isString("form", form.title, name, true);
-			// width - number 10-100
-			name = forms[i] + ".width";
-			if (this.isNumber("form", form.width, name, false)) {
-				this.isInRange("form", form.width, name, 10, 100);
-			}
-			// type - mandatory
-			name = forms[i] + ".type";
-			if (this.isString("form", form.type, name, true)) {
+			// title - mandatory string
+			this.isString("form", form.title, name + ".title", true);
+			// type - mandatory string
+			if (this.isString("form", form.type, name + ".type", true)) {
 				// Valid types
 				list = ['form','table'];
-				if (this.isInList("form", [form.type], name, list, true)) {
-					// elements in form or table
-					list = ['buttons','fields','title','type','width'];
+				if (this.isInList("form", [form.type], name + ".type", list, true)) {
+					// common elements in form or table
+					list = ['buttons','title','type','width'];
+					// table/form specific elements
 					if (form.type === 'table') {
 						list.push('columns');
 					}
-					this.isInList("form", Object.keys(form), forms[i], list, true);
-
+					else {
+						list.push('fields');
+					}
+					// type - mandatory object
+					this.isInList("form", Object.keys(form), name, list, true);
+					
 					// key & column - table only
 					if (form.type === 'table') {
 						name = forms[i] + ".columns";
@@ -92,15 +94,19 @@ class Validate {
 							}
 						}
 					}
-
+					
 					// buttons element
 					this.checkFormButtons(forms[i], form.type, form.buttons);
-
+					
 					// fields element
 					if (form.type === 'form') {
 						this.checkFormFields(forms[i], form.fields);
 					}
 				}
+			}
+			// width - optional number in range
+			if (this.isNumber("form", form.width, name + ".width", false)) {
+				this.isInRange("form", form.width, name + ".width", this.defaults.min, this.defaults.max);
 			}
 		}
 
@@ -447,7 +453,7 @@ class Validate {
 	checkMenus () {
 		var list, i, name, n;
 
-		// title element
+		// title - mandatory
 		if (this.isObject("menu", this.menu.title, "title", true)) {
 			list = ['text','class'];
 			if (this.isInList("menu", Object.keys(this.menu.title), "title", list, true)) {
@@ -456,9 +462,9 @@ class Validate {
 			}
 		}
 		
-		// menubar element
+		// menubar -mandatory
 		if (this.isArray("menu", this.menu.menubar, "menubar", true)) {
-			// menubar array objects
+			// menubar array objects - all mandatory
 			for (i=0; i<this.menu.menubar.length; i++) {
 				list = ['id','menu','options','title'];
 				name = "menubar[" + i + "]";
@@ -466,7 +472,7 @@ class Validate {
 				this.isString("menu", this.menu.menubar[i].id, name + ".id", true);
 				this.isString("menu", this.menu.menubar[i].menu, name + ".menu", true);
 				this.isString("menu", this.menu.menubar[i].title, name + ".title", true);
-				// options - array
+				// options - array, mandatory
 				if (this.isArray("menu", this.menu.menubar[i].options, name + ".options", true)) {
 					for (n=0; n<this.menu.menubar[i].options.length; n++) {
 						list = ['access','action','id','title'];
