@@ -1,14 +1,4 @@
-# Validating the Structure Files
-
-## Running the checks
-
-A script called `example/client/check` can be run to validate the files in the sample application.
-
-~~~bash
-JSONUI=./json-ui/js
-ROOT=../../example/client/ui
-node $JSONUI/validate.js $ROOT/forms.js $ROOT/menus.js $ROOT/fields.js
-~~~
+# Application Definition Files
 
 **json-ui** uses 3 files to define the structure of an application:
 
@@ -37,8 +27,32 @@ The table describes the structure of the data in `menus.js` that defines the men
 |menubar[].options[].id|String|Yes|ID of the menu option.|
 |menubar[].options[].title|String|Yes|Title of the menu option.|
 
+## Field Definitions
+
+The `fields.js` file holds the definition of all fields and lists referenced by forms within the application. This file is used to check that the fields and lists referenced in forms are valid. The `fields` object is made up of the field name and the mapping to the element that holds the field data within the data object passed into the `init` function using the `tableShow` function. The `lists` object holds the name of each list with a value of `true`.
+
+~~~
+{
+	"fields": {
+		"aboutBundles": "bundles",
+		"aboutClients": "clients",
+		...
+	},
+	"lists": {
+		"bundleCommandList": true,
+		"bundleConnectorList": true,
+		...
+	}
+}
+~~~
+
 ## Form Definitions
 
+The table describes the structure of the data in `forms.js` that defines the forms within the application.
+
+|Element|Type|Mand.|Content|
+|---|---|---|---|
+|title|Object|Yes|Application banner.|
 - `title` is mandatory and must be a string
 - `width` is optional and must be an integer between 10 and 100
 - `type` is mandatory and must be one of *form* or *table*
@@ -126,3 +140,14 @@ can fields.type:id no validation yet. have checks:mandatory set?
 can fields.type:list have checks:mandatory set?
 can fields.type:integer be extended to support number|float|etc and checks?
 checkbox is supported in `_validate`
+
+# Validating the Application Definition Files
+
+A script called `example/client/check` can be run to validate the files in the sample application. The script must be run using NodeJS, and the output of the tests is written to the console.
+
+~~~bash
+JSONUI=./json-ui/js
+ROOT=../../example/client/ui
+node $JSONUI/validate.js $ROOT/forms.js $ROOT/menus.js $ROOT/fields.js
+~~~
+
