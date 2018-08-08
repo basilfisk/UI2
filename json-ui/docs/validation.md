@@ -48,7 +48,7 @@ The `fields.js` file holds the definition of all fields and lists referenced by 
 
 ## Form Definitions
 
-The structure of `forms.js` is an object that contains a series of nested objects that each holds the definition of a table or foem within the application. Each nested object is identified by a unique name whose value is an object that defineds the form or table.
+The structure of `forms.js` is an object that contains a series of nested objects that each holds the definition of a table or form within the application. Each nested object is identified by a unique name whose value is an object that defines the form or table.
 
 ~~~
 {
@@ -76,40 +76,40 @@ The table describes the structure of the elements holding the form and table def
 
 The next table describes the elements within the `buttons` object. This object applies to both **tables** and **forms**.
 
-|Element|Type|Mand.|Content|
-|---|---|---|---|
-||Object|Yes|Elements within the `buttons` object are also objects. They must be identified by one of the following names: *add*, *close*, *delete*, *edit* or *ok*.|
-- `buttons.add` only applies to a *table* and must be an object
-- `buttons.add.form` is mandatory, must be a string and form must exist
-- `buttons.add.button` is a mandatory object with elements of *background* and *class*
-- `buttons.add.button.background` must be a string
-- `buttons.add.button.class` must be a string
-- `buttons.close` must be an object
-- `buttons.close.button` is a mandatory object with elements of *class* and *image*
-- `buttons.close.button.class` must be a string
-- `buttons.close.button.image` must be a string
-- `buttons.delete` only applies to a *table* and must be an object
-- `buttons.delete.action` is mandatory and must be a string
-- `buttons.delete.button` is a mandatory object with elements of *background* and *class*
-- `buttons.delete.button.background` must be a string
-- `buttons.delete.button.class` must be a string
-- `buttons.delete.column` is a mandatory object with elements of *style* and *title*
-- `buttons.delete.column.style` must be a string
-- `buttons.delete.column.title` must be a string
-- `buttons.delete.key` only applies to a *table*, must be a string and field must be in the map
-- `buttons.edit` only applies to a *table* and must be an object
-- `buttons.edit.form` is mandatory, must be a string and form must exist
-- `buttons.edit.button` is a mandatory object with elements of *background* and *class*
-- `buttons.edit.button.background` must be a string
-- `buttons.edit.button.class` must be a string
-- `buttons.edit.column` is a mandatory object with elements of *style* and *title*
-- `buttons.edit.column.style` must be a string
-- `buttons.edit.column.title` must be a string
-- `buttons.ok` only applies to a *form* and must be an object
-- `buttons.ok.action` is mandatory and must be a string
-- `buttons.ok.button` is a mandatory object with elements of *background* and *class*
-- `buttons.ok.button.background` must be a string
-- `buttons.ok.button.class` must be a string
+|Button|Element|Type|Mand.|Content|
+|---|---|---|---|---|
+|||Object|Yes|Elements within the `buttons` object are also objects. They must be identified by one of the following names: *add*, *close*, *delete*, *edit* or *ok*.|
+|add||Object|No|Add button only applies to *tables*.|
+||form|String|Yes|Name of the form to be displayed for adding data. Value must be a top level object in `forms.js`.|
+||button|Object|Yes|Contains button styling.|
+||button.background|String|Yes|Background style for the button.|
+||button.class|String|Yes|Icon to be used for the button.|
+|close||Object|No|Close button applies to *forms* and *tables*.|
+||button|Object|Yes|Contains button styling.|
+||button.class|String|Yes|Icon to be used for the button.|
+||button.image|String|Yes|Background style for the button.|
+|delete||Object|No|Delete button only applies to *tables*.|
+||action|String|Yes|Function to be run when button is pressed.|
+||button|Object|Yes|Contains button styling.|
+||button.background|String|Yes|Background style for the button.|
+||button.class|String|Yes|Icon to be used for the button.|
+||column|Object|Yes|Contains styling for the column heading of the Delete button in the table.|
+||column.style|String|Yes|Style for the column heading.|
+||column.title|String|Yes|Column heading.|
+||key|String|Yes|Field holding the unique ID of the rows in the table. Value must be in the `fields` object in `fields.js`.|
+|edit||Object|No|Edit button only applies to *tables*.|
+||form|String|Yes|Name of the form to be displayed for editing data. Value must be a top level object in `forms.js`.|
+||button|Object|Yes|Contains button styling.|
+||button.background|String|Yes|Background style for the button.|
+||button.class|String|Yes|Icon to be used for the button.|
+||column|Object|Yes|Contains styling for the column heading of the Edit button in the table.|
+||column.style|String|Yes|Style for the column heading.|
+||column.title|String|Yes|Column heading.|
+|ok||Object|No|OK button only applies to *forms*.|
+||action|String|Yes|Function to be run when button is pressed.|
+||button|Object|Yes|Contains button styling.|
+||button.background|String|Yes|Background style for the button.|
+||button.class|String|Yes|Icon to be used for the button.|
 
 The table below describes the elements within the `columns` object. This object only applies to **tables**.
 
@@ -118,7 +118,7 @@ The table below describes the elements within the `columns` object. This object 
 ||Array|Yes|Elements within the `columns` array are objects. They must be identified by one of the following names: *id*, *style* or *title*.|
 |id|String|Yes|The data that will be displayed in the column. This element holds a field name that must be present in the `fields` object within `fields.js`.|
 |style|String|No|The styling to be applied to the column heading.|
-|title|String|Yes|The column heading.|
+|title|String|No|The column heading.|
 
 The next table describes the elements within the `fields` object. This object only applies to **forms**.
 

@@ -1002,15 +1002,25 @@ console.log(names[i], fields[names[i]], data);
 			div += _forms[id].columns[i].title + '</th>';
 		}
 
-		// Column headings for optional edit and delete columns added later
+		// Column headings for the optional edit and delete columns that are added later
 		if (_forms[id].buttons) {
-			if (_forms[id].buttons.edit && _forms[id].buttons.edit.column.title) {
-				div += (_forms[id].buttons.edit.column.style) ? '<th style="' + _forms[id].buttons.edit.column.style + '">' : '<th>'
-				div += _forms[id].buttons.edit.column.title + '</th>';
+			if (_forms[id].buttons.edit) {
+				if (_forms[id].buttons.edit.column.title) {
+					div += (_forms[id].buttons.edit.column.style) ? '<th style="' + _forms[id].buttons.edit.column.style + '">' : '<th>'
+					div += _forms[id].buttons.edit.column.title + '</th>';
+				}
+				else {
+					div += '<th></th>';
+				}
 			}
-			if (_forms[id].buttons.delete && _forms[id].buttons.delete.column.title) {
-				div += (_forms[id].buttons.delete.column.style) ? '<th style="' + _forms[id].buttons.delete.column.style + '">' : '<th>'
-				div += _forms[id].buttons.delete.column.title + '</th>';
+			if (_forms[id].buttons.delete) {
+				if (_forms[id].buttons.delete.column.title) {
+					div += (_forms[id].buttons.delete.column.style) ? '<th style="' + _forms[id].buttons.delete.column.style + '">' : '<th>'
+					div += _forms[id].buttons.delete.column.title + '</th>';
+				}
+				else {
+					div += '<th></th>';
+				}
 			}
 		}
 		div += '</tr>';
@@ -1037,29 +1047,31 @@ console.log(names[i], fields[names[i]], data);
 				}
 			}
 
-			// Add an optional edit button at the end of the row
-			if (_forms[id].buttons && _forms[id].buttons.edit) {
-				button = _forms[id].buttons.edit;
-				row += (button.column.style) ? '<td style="' + button.column.style + '">' : '<td>';
-				row += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
-				row += 'onClick="ui.tableEditForm(' + "'" + _forms[id].buttons.edit.form + "', " + i + '); return false;">';
-				row += '<span class="' + button.button.class + '"></span></button>';
-				row += '</td>';
-			}
+			if (_forms[id].buttons) {
+				// Add an optional edit button at the end of the row
+				if (_forms[id].buttons.edit) {
+					button = _forms[id].buttons.edit;
+					row += (button.column.style) ? '<td style="' + button.column.style + '">' : '<td>';
+					row += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
+					row += 'onClick="ui.tableEditForm(' + "'" + _forms[id].buttons.edit.form + "', " + i + '); return false;">';
+					row += '<span class="' + button.button.class + '"></span></button>';
+					row += '</td>';
+				}
 
-			// Add an optional delete button at the end of the row
-			if (_forms[id].buttons && _forms[id].buttons.delete) {
-				button = _forms[id].buttons.delete;
-				row += (button.column.style) ? '<td style="' + button.column.style + '">' : '<td>';
-				row += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
-				if (button.key && rows[i][button.key] && rows[i][button.key].text) {
-					row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i][button.key].text + "'" + '); return false;">';
+				// Add an optional delete button at the end of the row
+				if (_forms[id].buttons.delete) {
+					button = _forms[id].buttons.delete;
+					row += (button.column.style) ? '<td style="' + button.column.style + '">' : '<td>';
+					row += '<button type="button" class="' + button.button.background + '" data-dismiss="modal" ';
+					if (button.key && rows[i][button.key] && rows[i][button.key].text) {
+						row += 'onClick="ui.buttonDelete(' + "'" + id + "', '" + rows[i][button.key].text + "'" + '); return false;">';
+					}
+					else {
+						console.log("Delete button for '" + id + "' has no key '" + button.key + "' in data object");
+					}
+					row += '<span class="' + button.button.class + '"></span></button>';
+					row += '</td>';
 				}
-				else {
-					console.log("Delete button for '" + id + "' has no key '" + button.key + "' in data object");
-				}
-				row += '<span class="' + button.button.class + '"></span></button>';
-				row += '</td>';
 			}
 
 			// Close row and add to bottom of table
