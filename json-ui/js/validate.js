@@ -161,7 +161,7 @@ class Validate {
 				}
 			}
 
-			// close button
+			// close button - forms and tables
 			if (def.close) {
 				name = form + ".buttons.close";
 				if (this.isObject("form", def.close, name, true)) {
@@ -219,8 +219,8 @@ class Validate {
 			// edit button
 			if (def.edit) {
 				// only on a table
+				name = form + ".buttons.edit";
 				if (type === 'table') {
-					name = form + ".buttons.edit";
 					this.isObject("form", def.edit, name, true);
 					list = ['form','button','column'];
 					if (this.isInList("form", Object.keys(def.edit), name, list, true)) {
@@ -337,31 +337,6 @@ class Validate {
 							}
 						}
 					}
-					// list options - mandatory object
-					if (def[flds[i]].type === 'list') {
-						if (this.isObject("form", def[flds[i]].options, name + ".options", true)) {
-							// Valid elements
-							list = ['display','list'];
-							if (this.isInList("form", Object.keys(def[flds[i]].options), name + ".options", list, true)) {
-								// list - mandatory
-								this.isString("form", def[flds[i]].options.list, name + ".options.list", true);
-								// list - must be registered
-								this.isLinked("form", def[flds[i]].options.list, name + ".options.list '" + def[flds[i]].options.list + "'", "list");
-								// display - mandatory
-								if (this.isObject("form", def[flds[i]].options.display, name + ".options.display", true)) {
-									// display.select - mandatory
-									this.isString("form", def[flds[i]].options.display.select, name + ".options.display.select", true);
-									// display.select - 'single' or 'multiple'
-									list = ['single','multiple'];
-									this.isInList("form", [def[flds[i]].options.display.select], name + ".options.display.select", list, true);
-									// display.height - mandatory if select is 'multiple'
-									if (def[flds[i]].options.display.select === 'multiple') {
-										this.isNumber("form", def[flds[i]].options.display.height, form + ".fields.options.display.height", true);
-									}
-								}
-							}
-						}
-					}
 					// integer options - optional object
 					if (def[flds[i]].options && def[flds[i]].type === 'integer') {
 						if (this.isObject("form", def[flds[i]].options, name + ".options", true)) {
@@ -376,7 +351,7 @@ class Validate {
 									// checks.mandatory - optional
 									this.isTrueFalse("form", def[flds[i]].options.checks.mandatory, name + ".options.checks.mandatory", true);
 									// checks.range - optional
-									if (this.isObject("form", def[flds[i]].options.checks.range, name + ".options.checks.range", true)) {
+									if (this.isObject("form", def[flds[i]].options.checks.range, name + ".options.checks.range", false)) {
 										// Valid elements for range
 										list = ['min','max'];
 										if (this.isInList("form", Object.keys(def[flds[i]].options.checks.range), name + ".options.checks.range", list, true)) {
@@ -390,6 +365,34 @@ class Validate {
 													this.log("form", name + ".options.checks.range min must be less than max");
 												}
 											}
+										}
+									}
+								}
+							}
+						}
+					}
+					// list options - mandatory object
+					if (def[flds[i]].type === 'list') {
+						if (this.isObject("form", def[flds[i]].options, name + ".options", true)) {
+							// Valid elements
+							list = ['display','list'];
+							if (this.isInList("form", Object.keys(def[flds[i]].options), name + ".options", list, true)) {
+								// list - mandatory
+								this.isString("form", def[flds[i]].options.list, name + ".options.list", true);
+								// list - must be registered
+								this.isLinked("form", def[flds[i]].options.list, name + ".options.list '" + def[flds[i]].options.list + "'", "list");
+								// display - mandatory
+								if (this.isObject("form", def[flds[i]].options.display, name + ".options.display", true)) {
+									list = ['height','select'];
+									if (this.isInList("form", Object.keys(def[flds[i]].options.display), name + ".options.display", list, true)) {
+										// display.select - mandatory
+										this.isString("form", def[flds[i]].options.display.select, name + ".options.display.select", true);
+										// display.select - 'single' or 'multiple'
+										list = ['single','multiple'];
+										this.isInList("form", [def[flds[i]].options.display.select], name + ".options.display.select", list, true);
+										// display.height - mandatory if select is 'multiple'
+										if (def[flds[i]].options.display.select === 'multiple') {
+											this.isNumber("form", def[flds[i]].options.display.height, form + ".fields.options.display.height", true);
 										}
 									}
 								}
