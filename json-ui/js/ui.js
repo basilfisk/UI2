@@ -243,7 +243,6 @@ var ui = {
 
 		// Add fields
 		for (i=0; i<names.length; i++) {
-console.log(names[i], fields[names[i]], data);
 			if (fields[names[i]].type === 'list' && fields[names[i]].options.list && list[fields[names[i]].options.list]) {
 				div += this._showField(names[i], fields[names[i]], data[names[i]].text, this._sortArrayObjects(list[fields[names[i]].options.list], 'text'));
 			}
