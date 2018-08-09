@@ -169,7 +169,7 @@ The table shows the list of validation patterns that are available to test the c
 |alphaNumericSpecial|^[\\w \\-_]+$|Alphanumeric string, including space, hyphen and underscore|
 |email|[a-z0-9!#$%&\"*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\"*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|must be an email address|
 |filename|^[\\w\/\\-_]+$|Alphanumeric string, including forward slash, hyphen and underscore|
-|float|^-*\\d*\\.\\d+$|Floatng point|
+|float|^-*\\d*\\.\\d+$|Floating point|
 |integer|^-*\\d+$|Integer|
 |ipv4|^\\*$|^(?!0)(?!.*\\.$)((1?\\d?\\d|25[0-5]|2[0-4]\\d)(\\.|$)){4}$|IP v4 address or * for any client|
 |password|^[\\w \\-_]+$|Password, with alphanumeric, space, hyphen and underscore characters|
