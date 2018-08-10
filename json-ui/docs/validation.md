@@ -1,10 +1,18 @@
 # Application Definition Files
 
-**json-ui** uses 3 files to define the structure of an application:
+**json-ui** uses 3 files to build an application:
 
 - `menus.js` defines the structure of the menu and options
 - `forms.js` defines the structure of the tables and forms called from the menu options
 - `fields.js` defines the list of fields and lists referenced by `forms.js`
+
+## Missing tests
+
+can fields.type:id no validation yet. have checks:mandatory set?
+can fields.type:list have checks:mandatory set?
+can fields.type:integer be extended to support number|float|etc and checks?
+checkbox is supported in `_validate`, but needs to be validated
+id is supported in `_validate` as text, but needs to be validated
 
 ## Menu Definitions
 
@@ -161,19 +169,11 @@ The table shows the list of validation patterns that are available to test the c
 |alphaNumericSpecial|^[\\w \\-_]+$|Alphanumeric string, including space, hyphen and underscore|
 |email|[a-z0-9!#$%&\"*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\"*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|must be an email address|
 |filename|^[\\w\/\\-_]+$|Alphanumeric string, including forward slash, hyphen and underscore|
-|float|^-*\\d*\\.\\d+$|Floatng point|
+|float|^-*\\d*\\.\\d+$|Floating point|
 |integer|^-*\\d+$|Integer|
 |ipv4|^\\*$|^(?!0)(?!.*\\.$)((1?\\d?\\d|25[0-5]|2[0-4]\\d)(\\.|$)){4}$|IP v4 address or * for any client|
 |password|^[\\w \\-_]+$|Password, with alphanumeric, space, hyphen and underscore characters|
 |url|^[\\w\/\\.\\-_]+$|URL|
-
-## Missing tests
-
-can fields.type:id no validation yet. have checks:mandatory set?
-can fields.type:list have checks:mandatory set?
-can fields.type:integer be extended to support number|float|etc and checks?
-checkbox is supported in `_validate`, but needs to be validated
-id is supported in `_validate` as text, but needs to be validated
 
 # Validating the Application Definition Files
 
