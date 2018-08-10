@@ -8,8 +8,12 @@
 
 ## Issues with `json-ui`
 
+- check uniqueness of menu, form and field names/IDs
+- form.js
+	- define styles in `style.js` and substitute in `ui.js`
 - ui.js
 	- abstract out all formatting used when building HTML
+	- move all styling data to `style.js`
 - try/catch picks up later errors. How do I fix this?
 	- ui.buttonSave 
 	- admin.adminServer
@@ -25,13 +29,9 @@
 
 ## Future Enhancements
 
-- Provide a tool for validating `menu.js` and `form.js` before running
-- form.js
-	- define styles in `style.js` and substitute in `ui.js`
 - ui.js
 	- table row, allow data columns to be merged/prettified without changing underlying data
 	- remove all English text to `messages.js`
-	- move all styling data to `style.js`
 	- option to override edit/delete buttons on a per row basis
 
 # Useful References
