@@ -8,6 +8,10 @@
 
 ## Issues with `json-ui`
 
+- table must hold all fields and should support a 'hidden' attribute
+- validate
+	- if field is in an 'edit' form it must be defined in the table
+	- if field is in an 'add' form it must be defined in the table
 - check uniqueness of menu, form and field names/IDs
 - form.js
 	- define styles in `style.js` and substitute in `ui.js`
