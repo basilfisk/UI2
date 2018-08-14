@@ -8,26 +8,20 @@ The sections below describe how to install and test the server, and how to launc
 
 ## Administration Server
 
-The administration server must be installed first.
+Start by adding the URL for the application to the local hosts file, then install the SSL certificates for the application into the `/etc/veryapi` directory.
 
 ~~~bash
-cd ~/UI2/example/server/
-npm i
 sudo vi /etc/hosts
-    local.very-api.net (add to the end of the line for 127.0.0.1)
-~~~
-
-Now install the SSL certificates into the `/etc/veryapi` directory.
-
-~~~bash
+	local.very-api.net (add to the end of the line for 127.0.0.1)
 mkdir /etc/veryapi/
 sudo cp ~/UI2/example/server/ssl/local.very-api.net.* /etc/veryapi/
 ~~~
 
-Finally, start the administration server. By default, the log data is writtem to `/tmp/server.log` but this can be changed in the `config.json` file.
+Install the NodeJS modules required to run the administration server, then start the administration server. By default, the log data is writtem to `/tmp/server.log` but this can be changed in the `config.json` file.
 
 ~~~bash
 cd ~/UI2/example/server/
+npm i
 node server.js &
 ~~~
 
@@ -58,13 +52,46 @@ The sample application has 2 users:
 
 When `index.html` is opened, it loads files that are part of the sample application and files that are part of `json-ui`.
 
-## Sample Application Files
+## Client Application Files
 
-The sample application files are stored in the `example/client` directory. These files contain the logic for displaying the web interface (using `json-ui`) and for interacting with the administration server.
+The client files for the sample application are stored in the `example/client` directory. These files contain the logic for displaying the client interface (using `json-ui`) and for interacting with the administration server.
 
 |Directory|File|Purpose|
 |---|---|---|
-|functions||Scripts defining functions that are triggered from menus and forms|
+|functions||Scripts defining functions that are triggered from menus and forms.|
+||about.js|Functions for displaying the 'About' data.|
+||bundle.js|Functions for managing bundles.|
+||command.js|Functions for managing commands.|
+||company.js|Functions for managing companies.|
+||connector.js|Functions for managing connectors.|
+||report.js|Functions for reporting.|
+||user.js|Functions for managing users.|
+|support||Support functions and data files for the sample application.|
+||common.js|Functions that are used across the web application.|
+||config.js|Defines configuration settings used by the application.|
+||login.js|Functions that control the application's login process.|
+||messages.js|Returns an object holding message definitions for the application.|
+|ui||Menu and form definitions to build the user interface.|
+||fields.js|Defines the set of valid fields and lists in client application.|
+||forms.js|Defines how `json-ui` will display forms in the client application.|
+||menu.js|Defines how `json-ui` will display menus in the client application.|
+
+The structure and content of the data in the menu and form definition files in the `example/client/ui` directory can be validated prior to running the client application on a browser. The `validate.js` script will give a pass or fail message, along with an explanation of any issues found.
+
+~~~bash
+cd ~/UI2/example
+node ../json-ui/js/validate.js client/ui/forms.js client/ui/menus.js client/ui/fields.js
+~~~
+
+## Server Application Files
+
+The server files for the sample application are stored in the `example/server` directory. These files contain the logic for responding to requests from the client interface.
+
+|Directory|File|Purpose|
+|---|---|---|
+|.|config.json|Server configuration and server related messages.|
+|.|server.js|The server web interface script.|
+|calls||Scripts handling requests from the client application.|
 ||bundle.js|Functions for managing bundles.|
 ||command.js|Functions for managing commands.|
 ||company.js|Functions for managing companies.|
@@ -72,14 +99,6 @@ The sample application files are stored in the `example/client` directory. These
 ||general.js|General purpose functions.|
 ||report.js|Functions for reporting.|
 ||user.js|Functions for managing users.|
-|support||Support functions and data files for the sample application|
-||common.js|Functions that are used across the web application.|
-||config.js|Defines configuration settings used by the application.|
-||login.js|Functions that control the application's login process.|
-||messages.js|Returns an object holding message definitions for the application.|
-|ui||Menu and form definitions to build the user interface|
-||forms.js|Defines how `json-ui` will display forms in the web application.|
-||menu.js|Defines how `json-ui` will display menus in the web application.|
 
 ## Files within the `json-ui` Package
 
