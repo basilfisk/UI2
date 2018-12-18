@@ -25,7 +25,7 @@ npm i
 node server.js &
 ~~~
 
-Check the server is running and listening on the correct port.
+Check the server is running and listening on the correct port specified in `config.json`.
 
 ~~~bash
 ps -ef | grep server.js | grep -v grep
@@ -45,7 +45,7 @@ https://local.very-api.net
 
 The sample application has 2 users:
 
-- admin / password (user with access to all options)
+- admin / admin (user with access to all options)
 - client / password (user with restricted access to certain options)
 
 # How the Application Works
@@ -160,3 +160,53 @@ json-ui/packages/moment.min.js
 ||ui._checkFormat|Check the format of the supplied string against a pattern using a regular expression.|
 ||ui._checkRange|Validate the range of a number.|
 |||If all checks for all fields return `true`, the form's post-processing function is run. The name of the function to be run is held in the `buttons.save` element of the form definition, held in the `forms.js` script.|
+
+# Issues
+
+## Management UI
+
+### Build
+
+- companies form
+- command form
+- connector form
+- usage statistics
+- event summary
+- recent transactions
+- recent errors
+
+### Test
+
+- bundles form
+- users form
+
+### New Forms
+
+- configuration / channel
+	- logo.path
+	- logo.host
+	- source.file
+	- source.local
+	- source.remote
+- configuration / program
+	- bleb.local.output
+	- bleb.remote.host
+	- bleb.remote.port
+	- bleb.remote.user
+	- bleb.remote.pass
+	- bleb.remote.source
+	- xmltv.download
+	- xmltv.data
+	- xmltv.host
+	- xmltv.port
+	- xmltv.period.1d.desc
+	- xmltv.period.1d.path
+	- xmltv.period.7d.desc
+	- xmltv.period.7d.path
+- subscriber
+	- name
+	- login.username
+	- login.password
+	- jwt
+	- ???????? ACCESS CONTROL
+- page to initiate the REST commands
